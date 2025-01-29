@@ -25,7 +25,7 @@ library(asreml) # ASReml-R package.
 # ILYT_Pheno |>
 #   glimpse()
 # 
-# ### Run model ----
+### Run model ----
 # MTME_RR2.asr <- asreml(
 #   Pheno_z ~ TraitEnv,
 #   random = ~ rr(TraitEnv,2):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse),
@@ -99,7 +99,7 @@ library(asreml) # ASReml-R package.
 # 
 # save.image('Data/MTME_mod_rr.RData')
 
-# #### Update model ----
+#### Update model ----
 # load('Data/MTME_mod_rr.RData')
 # MTME_RR2.asr <- update(MTME_RR2.asr)
 # # Print model info
@@ -202,17 +202,17 @@ library(asreml) # ASReml-R package.
 # In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  :
 # Some components changed by more than 1% on the last iteration
 
-#### Update model ----
-load('Data/MTME_mod_rr.RData')
-MTME_RR2.asr <- update(MTME_RR2.asr)
-# Print model info
-print('MTME-RR2 - Update 3')
-print(summary(MTME_RR2.asr)$call)
-print('AIC')
-print(summary(MTME_RR2.asr)$aic)
-print(MTME_RR2.asr$noeff)
-print(paste('convergence =', MTME_RR2.asr$converge))
-save.image('Data/MTME_mod_rr.RData')
+# #### Update model ----
+# load('Data/MTME_mod_rr.RData')
+# MTME_RR2.asr <- update(MTME_RR2.asr)
+# # Print model info
+# print('MTME-RR2 - Update 3')
+# print(summary(MTME_RR2.asr)$call)
+# print('AIC')
+# print(summary(MTME_RR2.asr)$aic)
+# print(MTME_RR2.asr$noeff)
+# print(paste('convergence =', MTME_RR2.asr$converge))
+# save.image('Data/MTME_mod_rr.RData')
 
 # ASReml Version 4.2 17/01/2025 19:02:52
 # Multi-section model using the sigma parameterization.
@@ -241,34 +241,26 @@ save.image('Data/MTME_mod_rr.RData')
 # 115                                    188 
 # [1] "convergence = TRUE"
 
-# # Predict
+## Predict ----
+
 load('Data/MTME_mod_rr.RData')
 
-MTME_RR2.pred <- predict(MTME_RR2.asr, classify='Gkeep:TraitEnv', pworkspace='8gb')$pvals
+asreml.options(workspace='152gb')
+
+MTME_RR2.pred <- predict(MTME_RR2.asr, classify='Gkeep:TraitEnv', pworkspace='16gb')$pvals
 
 save.image('Data/MTME_mod_rr.RData')
 
-# *** caught segfault ***
-#   address 0x71a3dbf01000, cause 'memory not mapped'
-# 
-# Traceback:
-#   1: doTryCatch(return(expr), name, parentenv, handler)
-# 2: tryCatchOne(expr, names, parentenv, handlers[[1L]])
-# 3: tryCatchList(expr, classes, parentenv, handlers)
-# 4: tryCatch(expr, error = function(e) e)
-# 5: withCallingHandlers(tryCatch(expr, error = function(e) e), warning = w.handler)
-# 6: vsn.tryCatch.W.E(expr)
-# 7: vsn.tryCatch.W.E.rethrow(.Call(.NAME, ..., PACKAGE = this_info$dll_name),     call. = this_call)
-# 8: vs_Call("vs_main", data, list(info = ginverse, obj = asr_grm(ginverse,     data = data), mef = mkr(mef)), R.param, G.param, predict,     options, CORE_VERSION = ddd$core_version)
-# 9: asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,     Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse), sparse = ~TraitEnv:Gdrop,     residual = ~dsum(~ar1v(Col):ar1(Row) | TraitEnv), G.param = MTME_RR2.asr$G.param,     R.param = MTME_RR2.asr$R.param, na.action = na.method(x = "include"),     data = ILYT_Pheno, maxit = 20, workspace = "88gb", predict = list(        classify = c("Gkeep", "TraitEnv"), levels = list(), present = character(0),         ignore = "(Intercept)", use = character(0), except = character(0),         only = character(0), associate = list(), margin = FALSE,         average = list(), as.average = list(), vcov = FALSE,         sed = FALSE, parallel = FALSE, inrandom = TRUE, exrandom = FALSE,         aliased = FALSE, estimable = FALSE, design.points = list()))
-# 10: eval(newcall, parent.frame())
-# 11: eval(newcall, parent.frame())
-# 12: predict.asreml(MTME_RR2.asr, classify = "Gkeep:TraitEnv", ignore = c("(Intercept)"))
-# 13: predict(MTME_RR2.asr, classify = "Gkeep:TraitEnv", ignore = c("(Intercept)"))
-# 14: eval(statements[[idx]], envir = globalenv())
-# 15: eval(statements[[idx]], envir = globalenv())
-# 16: .rs.sourceWithProgress(script = "/home/lucasb4/Documents/MTME-SI-ILWheat/05_MTME_mod_rr.R",     encoding = "UTF-8", con = stdout(), importRdata = NULL, exportRdata = NULL)
-# An irrecoverable exception occurred. R is aborting now ...
+# ASReml Version 4.2 22/01/2025 03:45:03
+# Multi-section model using the sigma parameterization.
+# LogLik        Sigma2     DF     wall
+# 1      14564.14           1.0  38450   05:38:59
+# 2      14564.14           1.0  38450   05:52:17
+# Error in asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  : 
+# Error   : Insufficient workspace available when calculating predictions.
+# : Please try increasing the amount available via the pworkspace option
+# Calls: .rs.sourceWithProgress ... eval -> asreml -> vs_Call -> vsn.tryCatch.W.E.rethrow
+# Execution halted
 
 ## RR3() ----
 
@@ -305,4 +297,3 @@ save.image('Data/MTME_mod_rr.RData')
 # print(paste('convergence =', MTME_RR3.asr$converge))
 # 
 # save.image('Data/MTME_mod_rr.RData')
-
