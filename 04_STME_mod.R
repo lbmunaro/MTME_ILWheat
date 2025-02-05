@@ -127,6 +127,7 @@ print(paste('convergence =',TW_STME_fa1.asr$converge))
 
 save.image('Data/STME_mod.RData')
 
+load('Data/STME_mod.RData')
 ### fa2----
 # Run model
 TW_STME_fa2.asr <- asreml(
@@ -400,73 +401,6 @@ print(summary(MAT_STME_fa1.asr)$call)
 print('AIC')
 print(summary(MAT_STME_fa1.asr)$aic)
 print(paste('convergence =',MAT_STME_fa1.asr$converge))
-
-save.image('Data/STME_mod.RData')
-
-### fa2----
-# Run model
-MAT_STME_fa2.asr <- asreml(
-  Pheno_z ~ Env,
-  random = ~ fa(Env,2):vm(Gkeep, Ginv.sparse),
-  residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
-  sparse = ~ Env:Gdrop,
-  data = ILYT_Pheno |> filter(Trait == 'MAT') |> droplevels(),
-  na.action = na.method(x = "include"),
-  maxit = 20,
-  workspace = '16gb'
-)
-
-# Print model info
-print('MAT_STME_fa2')
-print(summary(MAT_STME_fa2.asr)$call)
-print('AIC')
-print(summary(MAT_STME_fa2.asr)$aic)
-print(paste('convergence =',MAT_STME_fa2.asr$converge))
-
-save.image('Data/STME_mod.RData')
-
-# Update model
-MAT_STME_fa2.asr <- update(MAT_STME_fa2.asr)
-
-# Print model info
-print('MAT_STME_fa2-update1')
-print(summary(MAT_STME_fa2.asr)$call)
-print('AIC')
-print(summary(MAT_STME_fa2.asr)$aic)
-print(paste('convergence =',MAT_STME_fa2.asr$converge))
-
-save.image('Data/STME_mod.RData')
-
-### fa3----
-# Run model
-MAT_STME_fa3.asr <- asreml(
-  Pheno_z ~ Env,
-  random = ~ fa(Env,3):vm(Gkeep, Ginv.sparse),
-  residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
-  sparse = ~ Env:Gdrop,
-  data = ILYT_Pheno |> filter(Trait == 'MAT') |> droplevels(),
-  na.action = na.method(x = "include"),
-  maxit = 20, ai.sing = TRUE,
-  workspace = '20gb'
-)
-# Print model info
-print('MAT_STME_fa3')
-print(summary(MAT_STME_fa3.asr)$call)
-print('AIC')
-print(summary(MAT_STME_fa3.asr)$aic)
-print(paste('convergence =',MAT_STME_fa3.asr$converge))
-
-save.image('Data/STME_mod.RData')
-
-# Update model
-MAT_STME_fa3.asr <- update(MAT_STME_fa3.asr)
-
-# Print model info
-print('MAT_STME_fa3-update1')
-print(summary(MAT_STME_fa3.asr)$call)
-print('AIC')
-print(summary(MAT_STME_fa3.asr)$aic)
-print(paste('convergence =',MAT_STME_fa3.asr$converge))
 
 save.image('Data/STME_mod.RData')
 
