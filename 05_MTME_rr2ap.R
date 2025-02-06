@@ -36,7 +36,7 @@ print('AIC')
 print(summary(MTME_RR2ap.asr)$aic)
 print(paste('convergence =', MTME_RR2ap.asr$converge))
 
-save.image('MTME_rr2ap.RData')
+save.image('Data/MTME_rr2ap.RData')
 
 ## Update1 model ----
 MTME_RR2ap.asr <- update(MTME_RR2ap.asr)
@@ -48,28 +48,4 @@ print('AIC')
 print(summary(MTME_RR2ap.asr)$aic)
 print(paste('convergence =', MTME_RR2ap.asr$converge))
 
-save.image('MTME_rr2ap.RData')
-
-## Update2 model ----
-MTME_RR2ap.asr <- update(MTME_RR2ap.asr)
-
-# Print model info
-print('MTME-RR2ap - Update 2')
-print(summary(MTME_RR2ap.asr)$call)
-print('AIC')
-print(summary(MTME_RR2ap.asr)$aic)
-print(paste('convergence =', MTME_RR2ap.asr$converge))
-
-save.image('MTME_rr2ap.RData')
-
-## Update3 model ----
-MTME_RR2ap.asr <- update(MTME_RR2ap.asr)
-
-# Print model info
-print('MTME-RR2ap - Update 3')
-print(summary(MTME_RR2ap.asr)$call)
-print('AIC')
-print(summary(MTME_RR2ap.asr)$aic)
-print(paste('convergence =', MTME_RR2ap.asr$converge))
-
-save.image('MTME_rr2ap.RData')
+save.image('Data/MTME_rr2ap.RData')
