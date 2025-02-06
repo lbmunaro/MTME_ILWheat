@@ -11,6 +11,9 @@ rm(list = objects())  # Removes all objects from the environment.
 library(tidyverse) # R packages for data science.
 library(asreml) # ASReml-R package.
 
+# Use for HPC only
+setwd('~/MTME_ILWheat/')
+
 # Load data ----
 ## Pheno & Ginv
 load('Data/ILYT_Pheno-Gmatrix.RData')
@@ -21,7 +24,7 @@ load('Data/ILYT_Pheno-Gmatrix.RData')
 ### fa1----
 # Run model
 GY_STME_fa1.asr <- asreml(
-  Pheno_z ~ Env,
+  Pheno ~ Env,
   random = ~ fa(Env,1):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
@@ -42,7 +45,7 @@ save.image('Data/STME_mod.RData')
 ### fa2----
 # Run model
 GY_STME_fa2.asr <- asreml(
-  Pheno_z ~ Env,
+  Pheno ~ Env,
   random = ~ fa(Env,2):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
@@ -75,7 +78,7 @@ save.image('Data/STME_mod.RData')
 ### fa3----
 # Run model
 GY_STME_fa3.asr <- asreml(
-  Pheno_z ~ Env,
+  Pheno ~ Env,
   random = ~ fa(Env,3):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
@@ -109,7 +112,7 @@ save.image('Data/STME_mod.RData')
 ### fa1----
 # Run model
 TW_STME_fa1.asr <- asreml(
-  Pheno_z ~ Env,
+  Pheno ~ Env,
   random = ~ fa(Env,1):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
@@ -131,7 +134,7 @@ load('Data/STME_mod.RData')
 ### fa2----
 # Run model
 TW_STME_fa2.asr <- asreml(
-  Pheno_z ~ Env,
+  Pheno ~ Env,
   random = ~ fa(Env,2):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
@@ -164,7 +167,7 @@ save.image('Data/STME_mod.RData')
 ### fa3----
 # Run model
 TW_STME_fa3.asr <- asreml(
-  Pheno_z ~ Env,
+  Pheno ~ Env,
   random = ~ fa(Env,3):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
@@ -210,7 +213,7 @@ save.image('Data/STME_mod.RData')
 ### fa1----
 # Run model
 HD_STME_fa1.asr <- asreml(
-  Pheno_z ~ Env,
+  Pheno ~ Env,
   random = ~ fa(Env,1):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
@@ -231,7 +234,7 @@ save.image('Data/STME_mod.RData')
 ### fa2----
 # Run model
 HD_STME_fa2.asr <- asreml(
-  Pheno_z ~ Env,
+  Pheno ~ Env,
   random = ~ fa(Env,2):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
@@ -264,7 +267,7 @@ save.image('Data/STME_mod.RData')
 ### fa3----
 # Run model
 HD_STME_fa3.asr <- asreml(
-  Pheno_z ~ Env,
+  Pheno ~ Env,
   random = ~ fa(Env,3):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
@@ -298,7 +301,7 @@ save.image('Data/STME_mod.RData')
 ### fa1----
 # Run model
 HT_STME_fa1.asr <- asreml(
-  Pheno_z ~ Env,
+  Pheno ~ Env,
   random = ~ fa(Env,1):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
@@ -319,7 +322,7 @@ save.image('Data/STME_mod.RData')
 ### fa2----
 # Run model
 HT_STME_fa2.asr <- asreml(
-  Pheno_z ~ Env,
+  Pheno ~ Env,
   random = ~ fa(Env,2):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
@@ -352,7 +355,7 @@ save.image('Data/STME_mod.RData')
 ### fa3----
 # Run model
 HT_STME_fa3.asr <- asreml(
-  Pheno_z ~ Env,
+  Pheno ~ Env,
   random = ~ fa(Env,3):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
@@ -386,7 +389,7 @@ save.image('Data/STME_mod.RData')
 ### fa1----
 # Run model
 MAT_STME_fa1.asr <- asreml(
-  Pheno_z ~ Env,
+  Pheno ~ Env,
   random = ~ fa(Env,1):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,

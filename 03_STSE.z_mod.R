@@ -21,8 +21,8 @@ ILYT_Pheno |> glimpse()
 # Fit model ----
 ## Run the model ----
 
-STSE.asr <- asreml(
-  Pheno ~ TraitEnv,
+STSE.z.asr <- asreml(
+  Pheno_z ~ TraitEnv,
   random = ~ diag(TraitEnv):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
   sparse = ~ TraitEnv:Gdrop,
@@ -31,15 +31,15 @@ STSE.asr <- asreml(
   maxit = 20,
   workspace = '12gb'
 )
-print('STSE')
-print(summary(STSE.asr)$call)
-STSE.asr$loglik
+print('STSE.z')
+print(summary(STSE.z.asr)$call)
+STSE.z.asr$loglik
 print('AIC')
-print(summary(STSE.asr)$aic)
-print(paste('convergence =',STSE.asr$converge))
+print(summary(STSE.z.asr)$aic)
+print(paste('convergence =',STSE.z.asr$converge))
 
 # Heritability ----
-STSE_varcomp_df <- summary(STSE.asr)$varcomp |>
+STSE.z_varcomp_df <- summary(STSE.z.asr)$varcomp |>
   as.data.frame() |>
   rownames_to_column() |>
   glimpse()
@@ -67,25 +67,25 @@ calculate_heritability <- function(varcomp_df, asreml_model) {
   return(vpredict_results)
 }
 
-STSE_h2 <- cbind(
+STSE.z_h2 <- cbind(
   unique(ILYT_Pheno$TraitEnv),
-  calculate_heritability(varcomp_df = STSE_varcomp_df, asreml_model = STSE.asr)
+  calculate_heritability(varcomp_df = STSE.z_varcomp_df, asreml_model = STSE.z.asr)
 )
 
 # Save data ----
-save.image('Data/STSE_mod.RData')
+save.image('Data/STSE.z_mod.RData')
 
-# load('Data/STSE_mod.RData')
+# load('Data/STSE.z_mod.RData')
 # 
-# print(STSE.asr$call)
+# print(STSE.z.asr$call)
 # 
-# STSE.asr <- update(STSE.asr, workspace = '80gb')
+# STSE.z.asr <- update(STSE.z.asr, workspace = '80gb')
 # 
-# print(STSE.asr$call)
+# print(STSE.z.asr$call)
 # 
-# STSE_blup <- predict.asreml(STSE.asr, classify = 'TraitEnv:Gkeep',
+# STSE.z_blup <- predict.asreml(STSE.z.asr, classify = 'TraitEnv:Gkeep',
 #                ignore = c('(Intercept)','TraitEnv'))
 # 
-# save.image('Data/STSE_mod.RData')
+# save.image('Data/STSE.z_mod.RData')
 
 
