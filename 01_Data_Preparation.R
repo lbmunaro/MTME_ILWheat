@@ -1,10 +1,6 @@
 # Data wrangling ----
 # This script organizes and checks phenotypic data for further analysis.
 
-# Objective ----
-# - Load raw phenotypic data, clean it, perform transformations, and reshape the data.
-# - Save the cleaned dataset for downstream analysis.
-
 # Clean workspace
 rm(list = objects())  # Removes all objects from the environment.
 
@@ -107,7 +103,7 @@ ILYT_Pheno <- ILYT_Pheno_w |>
   # Create a new factor combining trait and environment.
   mutate(TraitEnv=as.factor(paste(Trait,Env,sep = '-'))) |>
   # Select relevant columns.
-  dplyr::select(Pheno, Pheno_SI, Pheno_std, Pheno_z, Pheno_mean, Pheno_sd,
+  dplyr::select(Pheno, Pheno_SI, Pheno_z,Pheno_std, Pheno_mean, Pheno_sd,
                 TraitEnv,Trait,Env,Year,Loc,Block,Col,Row,Plot,IDEU,Gen) |>
   # Display the dataset.
   glimpse()

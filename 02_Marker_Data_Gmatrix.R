@@ -2,12 +2,6 @@
 # This script subsets the phenotypic and genotypic data, performs quality control, 
 # and creates a genomic relationship matrix (G matrix) for further analysis.
 
-# Objective ----
-# - Subset phenotypic and genotypic data to include only relevant genotypes.
-# - Filter and clean marker data.
-# - Create a molecular matrix and compute the genomic relationship matrix (G).
-# - Prepare the inverse of the G matrix for use in mixed models.
-
 # Clean workspace
 rm(list = objects())  # Removes all objects from the environment.
 
@@ -65,9 +59,8 @@ check_G <- kinship.diagnostics(K = Gg, duplicate.thr = 0.95)
 #check_G$list.diagonal
 #check_G$list.duplicate
 
-check_G$plot.diag
-check_G$plot.offdiag
-
+#check_G$plot.diag
+#check_G$plot.offdiag
 
 # Find the row and column indices of off-diagonal values > 2
 off_diag_indices <- which(Gg > 1.75 & row(Gg) != col(Gg), arr.ind = TRUE)
@@ -86,12 +79,10 @@ Gg <- Gg[setdiff(rownames(Gg), to_remove), setdiff(colnames(Gg), to_remove)]
 
 check_G <- kinship.diagnostics(K = Gg, duplicate.thr = 0.95)
 
-check_G$list.duplicate
+#check_G$list.duplicate
 
-check_G$plot.diag
-check_G$plot.offdiag
-
-# heatmapGg <- kinship.heatmap(K = Gg, dendrogram = TRUE, row.label = FALSE, col.label = FALSE)
+#check_G$plot.diag
+#check_G$plot.offdiag
 
 Gg.blend <- G.tuneup(G = Gg, blend = T, pblend=0.05)$Gb
 Gg.blend[1:5,1:5]
