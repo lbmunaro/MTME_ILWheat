@@ -1,9 +1,6 @@
 # Single-Trait Multi-Environment models ----
 # This script fits Single-Trait Multi-Environment models
 
-# Objective ----
-# - 
-
 # Clean workspace
 rm(list = objects())  # Removes all objects from the environment.
 
