@@ -26,7 +26,7 @@ ILYT_Pheno_w <-
   # Select relevant variables.
   dplyr::select(
     study_name, study_year, location_name, germplasm_name,
-    block_number, col_number, row_number,
+    block_number, col_number, row_number, plot_number,
     grain_yield_kg_ha_co_321_0001218, grain_test_weight_g_l_co_321_0001210,
     heading_time_julian_date_jd_co_321_0001233, plant_height_cm_co_321_0001301,
     maturity_time_spike_estimation_julian_date_jd_co_321_0501101
@@ -34,7 +34,8 @@ ILYT_Pheno_w <-
   # Simplify study name and convert it to a factor.
   mutate(study_name=as.factor(gsub("^YT_", "", study_name)),
          study_name=as.factor(gsub("^Addie_", "Adv_", study_name)),
-         study_name=str_replace(study_name, "(\\w+)_(\\d+)", "\\2-\\1")) |>
+         study_name=str_replace(study_name, "(\\w+)_(\\d+)", "\\2-\\1"),
+         ) |>
   # Rename columns for easier reference.
   rename(
     Env=study_name,
@@ -44,6 +45,7 @@ ILYT_Pheno_w <-
     Block=block_number,
     Col=col_number,
     Row=row_number,
+    Plot=plot_number,
     GY=grain_yield_kg_ha_co_321_0001218,
     TW=grain_test_weight_g_l_co_321_0001210,
     HD=heading_time_julian_date_jd_co_321_0001233,
@@ -92,14 +94,21 @@ ILYT_Pheno <- ILYT_Pheno_w |>
   mutate(Pheno= ifelse(Trait=='TW' & Env=="24-Neo" & Col=="8" & Row=="6", NA, Pheno)) |>
   # Standardize phenotypic values (Z-scores) for each trait.
   group_by(Trait) |>
-  mutate(Pheno_z = as.vector(scale(Pheno, center = T)),
+  mutate(Pheno_SI = Pheno, # standard units
+         Pheno = ifelse(Trait=='GY', Pheno/c(60 * 0.453592 * 2.47105), Pheno), # GY in bu/ac and TW in lbs/bu
+         Pheno = ifelse(Trait=='TW', Pheno/1000 *2.2046 *35.2391, Pheno),
+         Pheno_z = as.vector(scale(Pheno, center = T)),
+         Pheno_std = as.vector(scale(Pheno, center = F)),
          Pheno_mean = mean(Pheno, na.rm = TRUE),
-         Pheno_sd = sd(Pheno, na.rm = TRUE)) |>
+         Pheno_sd = sd(Pheno, na.rm = TRUE),
+         IDEU = paste(Env,Plot, sep='_')
+         ) |>
   ungroup() |>
   # Create a new factor combining trait and environment.
   mutate(TraitEnv=as.factor(paste(Trait,Env,sep = '-'))) |>
   # Select relevant columns.
-  dplyr::select(Pheno_z, Pheno_mean, Pheno_sd, Pheno,Trait,Env,TraitEnv,Year,Loc,Col,Row,Block,Gen) |>
+  dplyr::select(Pheno, Pheno_SI, Pheno_std, Pheno_z, Pheno_mean, Pheno_sd,
+                TraitEnv,Trait,Env,Year,Loc,Block,Col,Row,Plot,IDEU,Gen) |>
   # Display the dataset.
   glimpse()
 
