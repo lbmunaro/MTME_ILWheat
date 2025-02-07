@@ -51,7 +51,7 @@ ILYT_Pheno_w <-
   # Arrange data by Env, Col, and Row.
   arrange(Env,Col,Row) |>
   # Convert specific columns to factors.
-  mutate_at(vars(Env:Row),as.factor) |>
+  mutate_at(vars(Env:Plot),as.factor) |>
   # Convert trait data to numeric format.
   mutate_at(vars(GY:MAT), as.numeric) |>
   # Replace zero values with NA in trait columns.
@@ -93,11 +93,11 @@ ILYT_Pheno <- ILYT_Pheno_w |>
   mutate(Pheno_SI = Pheno, # standard units
          Pheno = ifelse(Trait=='GY', Pheno/c(60 * 0.453592 * 2.47105), Pheno), # GY in bu/ac and TW in lbs/bu
          Pheno = ifelse(Trait=='TW', Pheno/1000 *2.2046 *35.2391, Pheno),
-         Pheno_z = as.vector(scale(Pheno, center = T)),
-         Pheno_std = as.vector(scale(Pheno, center = F)),
-         Pheno_mean = mean(Pheno, na.rm = TRUE),
-         Pheno_sd = sd(Pheno, na.rm = TRUE),
-         IDEU = paste(Env,Plot, sep='_')
+         Pheno_z = as.vector(scale(Pheno_SI, center = T)),
+         Pheno_std = as.vector(scale(Pheno_SI, center = F)),
+         Pheno_mean = mean(Pheno_SI, na.rm = TRUE),
+         Pheno_sd = sd(Pheno_SI, na.rm = TRUE),
+         IDEU = as.factor(paste(Env,Plot, sep='_'))
          ) |>
   ungroup() |>
   # Create a new factor combining trait and environment.

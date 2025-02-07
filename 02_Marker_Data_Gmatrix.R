@@ -87,6 +87,8 @@ check_G <- kinship.diagnostics(K = Gg, duplicate.thr = 0.95)
 Gg.blend <- G.tuneup(G = Gg, blend = T, pblend=0.05)$Gb
 Gg.blend[1:5,1:5]
 
+check_Gg.blend <- kinship.diagnostics(K = Gg.blend, duplicate.thr = 0.95)
+
 Ginv <- G.inverse(G = Gg.blend)$Ginv  # Compute the inverse of the bent G matrix.
 
 Ginv.sparse <- G.inverse(G = Gg.blend, sparseform = T)$Ginv.sparse  # Compute the inverse of the bent G matrix.

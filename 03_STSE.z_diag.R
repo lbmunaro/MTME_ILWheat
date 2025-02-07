@@ -29,7 +29,7 @@ STSE.z.asr <- asreml(
   data = ILYT_Pheno,
   na.action = na.method(x = "include"),
   maxit = 20,
-  workspace = '12gb'
+  workspace = '96gb'
 )
 print('STSE.z')
 print(summary(STSE.z.asr)$call)
@@ -44,11 +44,11 @@ STSE.z_varcomp_df <- summary(STSE.z.asr)$varcomp |>
   rownames_to_column() |>
   glimpse()
 
-calculate_heritability <- function(varcomp_df, asreml_model) {
+calculate_heritability <- function(varcomp_df, asreml_diagel) {
   # Function to perform one-by-one vpredict calculations
-  vpredict_individual <- function(asreml_model, i, j) {
+  vpredict_individual <- function(asreml_diagel, i, j) {
     formula <- as.formula(paste0("V", i, "~V", i, "/(V", i, "+V", j, ")"))
-    result <- vpredict(asreml_model, formula)
+    result <- vpredict(asreml_diagel, formula)
     return(data.frame(Index = i, Formula = paste0("V", i, "~V", i, "/(V", i, "+V", j, ")"), Result = result))
   }
 
@@ -59,7 +59,7 @@ calculate_heritability <- function(varcomp_df, asreml_model) {
   for (i in 1:39) {
     j <- 37 + i * 3
     if (j <= 154) {
-      result <- vpredict_individual(asreml_model, i, j)
+      result <- vpredict_individual(asreml_diagel, i, j)
       vpredict_results <- rbind(vpredict_results, result)
     }
   }
@@ -69,23 +69,14 @@ calculate_heritability <- function(varcomp_df, asreml_model) {
 
 STSE.z_h2 <- cbind(
   unique(ILYT_Pheno$TraitEnv),
-  calculate_heritability(varcomp_df = STSE.z_varcomp_df, asreml_model = STSE.z.asr)
+  calculate_heritability(varcomp_df = STSE.z_varcomp_df, asreml_diagel = STSE.z.asr)
 )
 
 # Save data ----
-save.image('Data/STSE.z_mod.RData')
+save.image('Data/STSE.z_diag.RData')
 
-# load('Data/STSE.z_mod.RData')
-# 
-# print(STSE.z.asr$call)
-# 
-# STSE.z.asr <- update(STSE.z.asr, workspace = '80gb')
-# 
-# print(STSE.z.asr$call)
-# 
-# STSE.z_blup <- predict.asreml(STSE.z.asr, classify = 'TraitEnv:Gkeep',
-#                ignore = c('(Intercept)','TraitEnv'))
-# 
-# save.image('Data/STSE.z_mod.RData')
+STSE.z_blup0 <- predict.asreml(STSE.z.asr, classify = 'TraitEnv:Gkeep')
+
+save.image('Data/STSE.z_diag.RData')
 
 

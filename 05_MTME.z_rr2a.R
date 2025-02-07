@@ -15,36 +15,36 @@ setwd('~/MTME_ILWheat/')
 ## Pheno & Ginv
 load('Data/ILYT_Pheno-Gmatrix.RData')
 
-# Fit RR3a model ----
+# Fit rr2a model ----
 ## Run model ----
-MTME.std_RR3a.asr <- asreml(
-  Pheno_std ~ TraitEnv,
-  random = ~ rr(TraitEnv,3):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse),
+MTME.z_rr2a.asr <- asreml(
+  Pheno_z ~ TraitEnv,
+  random = ~ rr(TraitEnv,2):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
   sparse = ~ TraitEnv:Gdrop,
   data = ILYT_Pheno,
   na.action = na.method(x = "include"),
   maxit = 20,
-  workspace = '120gb'
+  workspace = '88gb'
 )
 
 # Print model info
-print('MTME.std-RR3a')
-print(summary(MTME.std_RR3a.asr)$call)
+print('MTME.z-rr2a')
+print(summary(MTME.z_rr2a.asr)$call)
 print('AIC')
-print(summary(MTME.std_RR3a.asr)$aic)
-print(paste('convergence =', MTME.std_RR3a.asr$converge))
+print(summary(MTME.z_rr2a.asr)$aic)
+print(paste('convergence =', MTME.z_rr2a.asr$converge))
 
-save.image('Data/MTME.std_rr3a.RData')
+save.image('Data/MTME.z_rr2a.RData')
 
 ## Update1 model ----
-MTME.std_RR3a.asr <- update(MTME.std_RR3a.asr)
+MTME.z_rr2a.asr <- update(MTME.z_rr2a.asr)
 
 # Print model info
-print('MTME.std-RR3a - Update 1')
-print(summary(MTME.std_RR3a.asr)$call)
+print('MTME.z-rr2a - Update 1')
+print(summary(MTME.z_rr2a.asr)$call)
 print('AIC')
-print(summary(MTME.std_RR3a.asr)$aic)
-print(paste('convergence =', MTME.std_RR3a.asr$converge))
+print(summary(MTME.z_rr2a.asr)$aic)
+print(paste('convergence =', MTME.z_rr2a.asr$converge))
 
-save.image('Data/MTME.std_rr3a.RData')
+save.image('Data/MTME.z_rr2a.RData')

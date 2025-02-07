@@ -37,7 +37,7 @@ print('AIC')
 print(summary(GY_STME.z_fa1.asr)$aic)
 print(paste('convergence =',GY_STME.z_fa1.asr$converge))
 
-save.image('Data/STME.z_mod.RData')
+save.image('Data/STME.z_fa.RData')
 
 ### fa2----
 # Run model
@@ -58,7 +58,7 @@ print('AIC')
 print(summary(GY_STME.z_fa2.asr)$aic)
 print(paste('convergence =',GY_STME.z_fa2.asr$converge))
 
-save.image('Data/STME.z_mod.RData')
+save.image('Data/STME.z_fa.RData')
 
 # Update model
 GY_STME.z_fa2.asr <- update(GY_STME.z_fa2.asr)
@@ -70,7 +70,7 @@ print('AIC')
 print(summary(GY_STME.z_fa2.asr)$aic)
 print(paste('convergence =',GY_STME.z_fa2.asr$converge))
 
-save.image('Data/STME.z_mod.RData')
+save.image('Data/STME.z_fa.RData')
 
 ### fa3----
 # Run model
@@ -91,7 +91,7 @@ print('AIC')
 print(summary(GY_STME.z_fa3.asr)$aic)
 print(paste('convergence =',GY_STME.z_fa3.asr$converge))
 
-save.image('Data/STME.z_mod.RData')
+save.image('Data/STME.z_fa.RData')
 
 # Update model
 GY_STME.z_fa3.asr <- update(GY_STME.z_fa3.asr)
@@ -103,7 +103,7 @@ print('AIC')
 print(summary(GY_STME.z_fa3.asr)$aic)
 print(paste('convergence =',GY_STME.z_fa3.asr$converge))
 
-save.image('Data/STME.z_mod.RData')
+save.image('Data/STME.z_fa.RData')
 
 ## TW ----
 ### fa1----
@@ -125,9 +125,9 @@ print('AIC')
 print(summary(TW_STME.z_fa1.asr)$aic)
 print(paste('convergence =',TW_STME.z_fa1.asr$converge))
 
-save.image('Data/STME.z_mod.RData')
+save.image('Data/STME.z_fa.RData')
 
-load('Data/STME.z_mod.RData')
+load('Data/STME.z_fa.RData')
 ### fa2----
 # Run model
 TW_STME.z_fa2.asr <- asreml(
@@ -147,7 +147,7 @@ print('AIC')
 print(summary(TW_STME.z_fa2.asr)$aic)
 print(paste('convergence =',TW_STME.z_fa2.asr$converge))
 
-save.image('Data/STME.z_mod.RData')
+save.image('Data/STME.z_fa.RData')
 
 # Update model
 TW_STME.z_fa2.asr <- update(TW_STME.z_fa2.asr)
@@ -159,7 +159,7 @@ print('AIC')
 print(summary(TW_STME.z_fa2.asr)$aic)
 print(paste('convergence =',TW_STME.z_fa2.asr$converge))
 
-save.image('Data/STME.z_mod.RData')
+save.image('Data/STME.z_fa.RData')
 
 ### fa3----
 # Run model
@@ -180,7 +180,7 @@ print('AIC')
 print(summary(TW_STME.z_fa3.asr)$aic)
 print(paste('convergence =',TW_STME.z_fa3.asr$converge))
 
-save.image('Data/STME.z_mod.RData')
+save.image('Data/STME.z_fa.RData')
 
 # Update model
 TW_STME.z_fa3.asr <- update(TW_STME.z_fa3.asr)
@@ -192,7 +192,7 @@ print('AIC')
 print(summary(TW_STME.z_fa3.asr)$aic)
 print(paste('convergence =',TW_STME.z_fa3.asr$converge))
 
-save.image('Data/STME.z_mod.RData')
+save.image('Data/STME.z_fa.RData')
 
 # Update model
 TW_STME.z_fa3.asr <- update(TW_STME.z_fa3.asr)
@@ -204,7 +204,7 @@ print('AIC')
 print(summary(TW_STME.z_fa3.asr)$aic)
 print(paste('convergence =',TW_STME.z_fa3.asr$converge))
 
-save.image('Data/STME.z_mod.RData')
+save.image('Data/STME.z_fa.RData')
 
 ## HD ----
 ### fa1----
@@ -226,7 +226,7 @@ print('AIC')
 print(summary(HD_STME.z_fa1.asr)$aic)
 print(paste('convergence =',HD_STME.z_fa1.asr$converge))
 
-save.image('Data/STME.z_mod.RData')
+save.image('Data/STME.z_fa.RData')
 
 ### fa2----
 # Run model
@@ -247,7 +247,7 @@ print('AIC')
 print(summary(HD_STME.z_fa2.asr)$aic)
 print(paste('convergence =',HD_STME.z_fa2.asr$converge))
 
-save.image('Data/STME.z_mod.RData')
+save.image('Data/STME.z_fa.RData')
 
 # Update model
 HD_STME.z_fa2.asr <- update(HD_STME.z_fa2.asr)
@@ -259,7 +259,7 @@ print('AIC')
 print(summary(HD_STME.z_fa2.asr)$aic)
 print(paste('convergence =',HD_STME.z_fa2.asr$converge))
 
-save.image('Data/STME.z_mod.RData')
+save.image('Data/STME.z_fa.RData')
 
 ### fa3----
 # Run model
@@ -280,7 +280,7 @@ print('AIC')
 print(summary(HD_STME.z_fa3.asr)$aic)
 print(paste('convergence =',HD_STME.z_fa3.asr$converge))
 
-save.image('Data/STME.z_mod.RData')
+save.image('Data/STME.z_fa.RData')
 
 # Update model
 HD_STME.z_fa3.asr <- update(HD_STME.z_fa3.asr)
@@ -292,7 +292,7 @@ print('AIC')
 print(summary(HD_STME.z_fa3.asr)$aic)
 print(paste('convergence =',HD_STME.z_fa3.asr$converge))
 
-save.image('Data/STME.z_mod.RData')
+save.image('Data/STME.z_fa.RData')
 
 ## HT ----
 ### fa1----
@@ -314,7 +314,7 @@ print('AIC')
 print(summary(HT_STME.z_fa1.asr)$aic)
 print(paste('convergence =',HT_STME.z_fa1.asr$converge))
 
-save.image('Data/STME.z_mod.RData')
+save.image('Data/STME.z_fa.RData')
 
 ### fa2----
 # Run model
@@ -335,7 +335,7 @@ print('AIC')
 print(summary(HT_STME.z_fa2.asr)$aic)
 print(paste('convergence =',HT_STME.z_fa2.asr$converge))
 
-save.image('Data/STME.z_mod.RData')
+save.image('Data/STME.z_fa.RData')
 
 # Update model
 HT_STME.z_fa2.asr <- update(HT_STME.z_fa2.asr)
@@ -347,7 +347,7 @@ print('AIC')
 print(summary(HT_STME.z_fa2.asr)$aic)
 print(paste('convergence =',HT_STME.z_fa2.asr$converge))
 
-save.image('Data/STME.z_mod.RData')
+save.image('Data/STME.z_fa.RData')
 
 ### fa3----
 # Run model
@@ -368,7 +368,7 @@ print('AIC')
 print(summary(HT_STME.z_fa3.asr)$aic)
 print(paste('convergence =',HT_STME.z_fa3.asr$converge))
 
-save.image('Data/STME.z_mod.RData')
+save.image('Data/STME.z_fa.RData')
 
 # Update model
 HT_STME.z_fa3.asr <- update(HT_STME.z_fa3.asr)
@@ -380,7 +380,7 @@ print('AIC')
 print(summary(HT_STME.z_fa3.asr)$aic)
 print(paste('convergence =',HT_STME.z_fa3.asr$converge))
 
-save.image('Data/STME.z_mod.RData')
+save.image('Data/STME.z_fa.RData')
 
 ## MAT ----
 ### fa1----
@@ -402,39 +402,6 @@ print('AIC')
 print(summary(MAT_STME.z_fa1.asr)$aic)
 print(paste('convergence =',MAT_STME.z_fa1.asr$converge))
 
-save.image('Data/STME.z_mod.RData')
+save.image('Data/STME.z_fa.RData')
 
 # # End ----
-# 
-# rm(list = objects())
-# 
-# load('Data/STME.z_mod.RData')
-# 
-# Model selection ----
-# # GY
-# lrt.asreml(GY_STME.z_fa1.asr, GY_STME.z_fa2.asr, GY_STME.z_fa3.asr)
-# summary(GY_STME.z_fa1.asr)$aic; summary(GY_STME.z_fa2.asr)$aic; summary(GY_STME.z_fa3.asr)$aic
-# # fa3
-# 
-# # TW
-# lrt.asreml(TW_STME.z_fa1.asr, TW_STME.z_fa2.asr, TW_STME.z_fa3.asr)
-# summary(TW_STME.z_fa1.asr)$aic; summary(TW_STME.z_fa2.asr)$aic; summary(TW_STME.z_fa3.asr)$aic
-# # fa3
-# 
-# # HD
-# lrt.asreml(HD_STME.z_fa1.asr, HD_STME.z_fa2.asr, HD_STME.z_fa3.asr)
-# summary(HD_STME.z_fa1.asr)$aic; summary(HD_STME.z_fa2.asr)$aic; summary(HD_STME.z_fa3.asr)$aic
-# # fa2
-# 
-# lrt.asreml(HT_STME.z_fa1.asr, HT_STME.z_fa2.asr, HT_STME.z_fa3.asr)
-# summary(HT_STME.z_fa1.asr)$aic; summary(HT_STME.z_fa2.asr)$aic; summary(HT_STME.z_fa3.asr)$aic
-# # fa2
-# 
-# MAT
-# Only FA1 fit
-# lrt.asreml(MAT_STME.z_fa1.asr, MAT_STME.z_fa2.asr, MAT_STME.z_fa3.asr)
-# summary(MAT_STME.z_fa1.asr)$aic; summary(MAT_STME.z_fa2.asr)$aic; summary(MAT_STME.z_fa3.asr)$aic
-
-# # GEBVs ----
-# 
-# load('Data/STME.z_mod.RData')
