@@ -77,14 +77,8 @@ library(asreml) # ASReml-R package.
 
 load('Data/STSE_mod.RData')
 
-print(STSE.asr$call)
-
-STSE.asr <- update(STSE.asr, workspace = '80gb')
-
-print(STSE.asr$call)
-
 STSE.blup <- predict.asreml(STSE.asr, classify = 'TraitEnv:Gkeep',
-               ignore = c('(Intercept)','TraitEnv'))
+               ignore = c('(Intercept)','TraitEnv'), pworkspace ='16gb')
 
 save.image('Data/STSE_mod.RData')
 
