@@ -3,7 +3,7 @@
 #SBATCH --time=01-04:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=16
-#SBATCH --mem=128G
+#SBATCH --mem=36G
 #SBATCH --job-name=STSE.z_diag
 #SBATCH --account=aces
 #SBATCH --partition=aces
