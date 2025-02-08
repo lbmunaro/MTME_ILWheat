@@ -32,10 +32,11 @@ GY_STME.z_rr1.asr <- asreml(
 )
 # Print model info
 print('GY_STME.z_rr1')
-print(summary(GY_STME.z_rr1.asr)$call)
 print('AIC')
 print(summary(GY_STME.z_rr1.asr)$aic)
 print(paste('convergence =',GY_STME.z_rr1.asr$converge))
+GY_STME.z_rr1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/STME.z_rr.RData')
 
@@ -53,10 +54,11 @@ GY_STME.z_rr2.asr <- asreml(
 )
 # Print model info
 print('GY_STME.z_rr2')
-print(summary(GY_STME.z_rr2.asr)$call)
 print('AIC')
 print(summary(GY_STME.z_rr2.asr)$aic)
 print(paste('convergence =',GY_STME.z_rr2.asr$converge))
+GY_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/STME.z_rr.RData')
 
@@ -65,10 +67,24 @@ GY_STME.z_rr2.asr <- update(GY_STME.z_rr2.asr)
 
 # Print model info
 print('GY_STME.z_rr2-update1')
-print(summary(GY_STME.z_rr2.asr)$call)
 print('AIC')
 print(summary(GY_STME.z_rr2.asr)$aic)
 print(paste('convergence =',GY_STME.z_rr2.asr$converge))
+GY_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
+
+save.image('Data/STME.z_rr.RData')
+
+# Update model
+GY_STME.z_rr2.asr <- update(GY_STME.z_rr2.asr)
+
+# Print model info
+print('GY_STME.z_rr2-update2')
+print('AIC')
+print(summary(GY_STME.z_rr2.asr)$aic)
+print(paste('convergence =',GY_STME.z_rr2.asr$converge))
+GY_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/STME.z_rr.RData')
 
@@ -86,10 +102,11 @@ GY_STME.z_rr3.asr <- asreml(
 )
 # Print model info
 print('GY_STME.z_rr3')
-print(summary(GY_STME.z_rr3.asr)$call)
 print('AIC')
 print(summary(GY_STME.z_rr3.asr)$aic)
 print(paste('convergence =',GY_STME.z_rr3.asr$converge))
+GY_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/STME.z_rr.RData')
 
@@ -98,10 +115,24 @@ GY_STME.z_rr3.asr <- update(GY_STME.z_rr3.asr)
 
 # Print model info
 print('GY_STME.z_rr3-update1')
-print(summary(GY_STME.z_rr3.asr)$call)
 print('AIC')
 print(summary(GY_STME.z_rr3.asr)$aic)
 print(paste('convergence =',GY_STME.z_rr3.asr$converge))
+GY_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
+
+save.image('Data/STME.z_rr.RData')
+
+# Update model
+GY_STME.z_rr3.asr <- update(GY_STME.z_rr3.asr)
+
+# Print model info
+print('GY_STME.z_rr3-update2')
+print('AIC')
+print(summary(GY_STME.z_rr3.asr)$aic)
+print(paste('convergence =',GY_STME.z_rr3.asr$converge))
+GY_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/STME.z_rr.RData')
 
@@ -120,14 +151,14 @@ TW_STME.z_rr1.asr <- asreml(
 )
 # Print model info
 print('TW_STME.z_rr1')
-print(summary(TW_STME.z_rr1.asr)$call)
 print('AIC')
 print(summary(TW_STME.z_rr1.asr)$aic)
 print(paste('convergence =',TW_STME.z_rr1.asr$converge))
+TW_STME.z_rr1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/STME.z_rr.RData')
 
-load('Data/STME.z_rr.RData')
 ### rr2----
 # Run model
 TW_STME.z_rr2.asr <- asreml(
@@ -142,10 +173,11 @@ TW_STME.z_rr2.asr <- asreml(
 )
 # Print model info
 print('TW_STME.z_rr2')
-print(summary(TW_STME.z_rr2.asr)$call)
 print('AIC')
 print(summary(TW_STME.z_rr2.asr)$aic)
 print(paste('convergence =',TW_STME.z_rr2.asr$converge))
+TW_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/STME.z_rr.RData')
 
@@ -154,10 +186,24 @@ TW_STME.z_rr2.asr <- update(TW_STME.z_rr2.asr)
 
 # Print model info
 print('TW_STME.z_rr2-update1')
-print(summary(TW_STME.z_rr2.asr)$call)
 print('AIC')
 print(summary(TW_STME.z_rr2.asr)$aic)
 print(paste('convergence =',TW_STME.z_rr2.asr$converge))
+TW_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
+
+save.image('Data/STME.z_rr.RData')
+
+# Update model
+TW_STME.z_rr2.asr <- update(TW_STME.z_rr2.asr)
+
+# Print model info
+print('TW_STME.z_rr2-update2')
+print('AIC')
+print(summary(TW_STME.z_rr2.asr)$aic)
+print(paste('convergence =',TW_STME.z_rr2.asr$converge))
+TW_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/STME.z_rr.RData')
 
@@ -175,10 +221,11 @@ TW_STME.z_rr3.asr <- asreml(
 )
 # Print model info
 print('TW_STME.z_rr3')
-print(summary(TW_STME.z_rr3.asr)$call)
 print('AIC')
 print(summary(TW_STME.z_rr3.asr)$aic)
 print(paste('convergence =',TW_STME.z_rr3.asr$converge))
+TW_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/STME.z_rr.RData')
 
@@ -187,10 +234,11 @@ TW_STME.z_rr3.asr <- update(TW_STME.z_rr3.asr)
 
 # Print model info
 print('TW_STME.z_rr3-update1')
-print(summary(TW_STME.z_rr3.asr)$call)
 print('AIC')
 print(summary(TW_STME.z_rr3.asr)$aic)
 print(paste('convergence =',TW_STME.z_rr3.asr$converge))
+TW_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/STME.z_rr.RData')
 
@@ -199,10 +247,24 @@ TW_STME.z_rr3.asr <- update(TW_STME.z_rr3.asr)
 
 # Print model info
 print('TW_STME.z_rr3-update2')
-print(summary(TW_STME.z_rr3.asr)$call)
 print('AIC')
 print(summary(TW_STME.z_rr3.asr)$aic)
 print(paste('convergence =',TW_STME.z_rr3.asr$converge))
+TW_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
+
+save.image('Data/STME.z_rr.RData')
+
+# Update model
+TW_STME.z_rr3.asr <- update(TW_STME.z_rr3.asr)
+
+# Print model info
+print('TW_STME.z_rr3-update3')
+print('AIC')
+print(summary(TW_STME.z_rr3.asr)$aic)
+print(paste('convergence =',TW_STME.z_rr3.asr$converge))
+TW_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/STME.z_rr.RData')
 
@@ -221,10 +283,11 @@ HD_STME.z_rr1.asr <- asreml(
 )
 # Print model info
 print('HD_STME.z_rr1')
-print(summary(HD_STME.z_rr1.asr)$call)
 print('AIC')
 print(summary(HD_STME.z_rr1.asr)$aic)
 print(paste('convergence =',HD_STME.z_rr1.asr$converge))
+HD_STME.z_rr1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/STME.z_rr.RData')
 
@@ -242,10 +305,11 @@ HD_STME.z_rr2.asr <- asreml(
 )
 # Print model info
 print('HD_STME.z_rr2')
-print(summary(HD_STME.z_rr2.asr)$call)
 print('AIC')
 print(summary(HD_STME.z_rr2.asr)$aic)
 print(paste('convergence =',HD_STME.z_rr2.asr$converge))
+HD_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/STME.z_rr.RData')
 
@@ -254,10 +318,11 @@ HD_STME.z_rr2.asr <- update(HD_STME.z_rr2.asr)
 
 # Print model info
 print('HD_STME.z_rr2-update1')
-print(summary(HD_STME.z_rr2.asr)$call)
 print('AIC')
 print(summary(HD_STME.z_rr2.asr)$aic)
 print(paste('convergence =',HD_STME.z_rr2.asr$converge))
+HD_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/STME.z_rr.RData')
 
@@ -275,10 +340,11 @@ HD_STME.z_rr3.asr <- asreml(
 )
 # Print model info
 print('HD_STME.z_rr3')
-print(summary(HD_STME.z_rr3.asr)$call)
 print('AIC')
 print(summary(HD_STME.z_rr3.asr)$aic)
 print(paste('convergence =',HD_STME.z_rr3.asr$converge))
+HD_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/STME.z_rr.RData')
 
@@ -287,10 +353,11 @@ HD_STME.z_rr3.asr <- update(HD_STME.z_rr3.asr)
 
 # Print model info
 print('HD_STME.z_rr3-update1')
-print(summary(HD_STME.z_rr3.asr)$call)
 print('AIC')
 print(summary(HD_STME.z_rr3.asr)$aic)
 print(paste('convergence =',HD_STME.z_rr3.asr$converge))
+HD_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/STME.z_rr.RData')
 
@@ -309,10 +376,11 @@ HT_STME.z_rr1.asr <- asreml(
 )
 # Print model info
 print('HT_STME.z_rr1')
-print(summary(HT_STME.z_rr1.asr)$call)
 print('AIC')
 print(summary(HT_STME.z_rr1.asr)$aic)
 print(paste('convergence =',HT_STME.z_rr1.asr$converge))
+HT_STME.z_rr1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/STME.z_rr.RData')
 
@@ -330,10 +398,11 @@ HT_STME.z_rr2.asr <- asreml(
 )
 # Print model info
 print('HT_STME.z_rr2')
-print(summary(HT_STME.z_rr2.asr)$call)
 print('AIC')
 print(summary(HT_STME.z_rr2.asr)$aic)
 print(paste('convergence =',HT_STME.z_rr2.asr$converge))
+HT_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/STME.z_rr.RData')
 
@@ -342,10 +411,11 @@ HT_STME.z_rr2.asr <- update(HT_STME.z_rr2.asr)
 
 # Print model info
 print('HT_STME.z_rr2-update1')
-print(summary(HT_STME.z_rr2.asr)$call)
 print('AIC')
 print(summary(HT_STME.z_rr2.asr)$aic)
 print(paste('convergence =',HT_STME.z_rr2.asr$converge))
+HT_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/STME.z_rr.RData')
 
@@ -363,10 +433,11 @@ HT_STME.z_rr3.asr <- asreml(
 )
 # Print model info
 print('HT_STME.z_rr3')
-print(summary(HT_STME.z_rr3.asr)$call)
 print('AIC')
 print(summary(HT_STME.z_rr3.asr)$aic)
 print(paste('convergence =',HT_STME.z_rr3.asr$converge))
+HT_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/STME.z_rr.RData')
 
@@ -375,10 +446,24 @@ HT_STME.z_rr3.asr <- update(HT_STME.z_rr3.asr)
 
 # Print model info
 print('HT_STME.z_rr3-update1')
-print(summary(HT_STME.z_rr3.asr)$call)
 print('AIC')
 print(summary(HT_STME.z_rr3.asr)$aic)
 print(paste('convergence =',HT_STME.z_rr3.asr$converge))
+HT_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
+
+save.image('Data/STME.z_rr.RData')
+
+# Update model
+HT_STME.z_rr3.asr <- update(HT_STME.z_rr3.asr)
+
+# Print model info
+print('HT_STME.z_rr3-update2')
+print('AIC')
+print(summary(HT_STME.z_rr3.asr)$aic)
+print(paste('convergence =',HT_STME.z_rr3.asr$converge))
+HT_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/STME.z_rr.RData')
 
@@ -397,10 +482,11 @@ MAT_STME.z_rr1.asr <- asreml(
 )
 # Print model info
 print('MAT_STME.z_rr1')
-print(summary(MAT_STME.z_rr1.asr)$call)
 print('AIC')
 print(summary(MAT_STME.z_rr1.asr)$aic)
 print(paste('convergence =',MAT_STME.z_rr1.asr$converge))
+MAT_STME.z_rr1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/STME.z_rr.RData')
 
