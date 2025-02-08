@@ -9,7 +9,7 @@ library(tidyverse) # R packages for data science.
 library(asreml) # ASReml-R package.
 
 # Use for HPC only
-#setwd('~/MTME_ILWheat/')
+setwd('~/MTME_ILWheat/')
 
 # Load data ----
 ## Pheno & Ginv
@@ -29,14 +29,19 @@ STSE.z.asr <- asreml(
   data = ILYT_Pheno,
   na.action = na.method(x = "include"),
   maxit = 20,
-  workspace = '96gb'
+  workspace = '20gb'
 )
 print('STSE.z')
 print(summary(STSE.z.asr)$call)
-STSE.z.asr$loglik
+print(STSE.z.asr$loglik)
 print('AIC')
 print(summary(STSE.z.asr)$aic)
 print(paste('convergence =',STSE.z.asr$converge))
+STSE.z.asr$trace |>
+  as.data.frame() |>
+  rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |>
+  print()
 
 # Heritability ----
 STSE.z_varcomp_df <- summary(STSE.z.asr)$varcomp |>
@@ -74,9 +79,5 @@ STSE.z_h2 <- cbind(
 
 # Save data ----
 save.image('Data/STSE.z_diag.RData')
-
-STSE.z_blup0 <- predict.asreml(STSE.z.asr, classify = 'TraitEnv:Gkeep')
-
-save.image('Data/STSE.z_diag.RData')
-
+load('Data/STSE.z_diag.RData')
 

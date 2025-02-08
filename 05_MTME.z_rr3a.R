@@ -34,6 +34,11 @@ print(summary(MTME.z_rr3a.asr)$call)
 print('AIC')
 print(summary(MTME.z_rr3a.asr)$aic)
 print(paste('convergence =', MTME.z_rr3a.asr$converge))
+MTME.z_rr3a.asr$trace |>
+  as.data.frame() |>
+  rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |>
+  print()
 
 save.image('Data/MTME.z_rr3a.RData')
 
@@ -46,5 +51,10 @@ print(summary(MTME.z_rr3a.asr)$call)
 print('AIC')
 print(summary(MTME.z_rr3a.asr)$aic)
 print(paste('convergence =', MTME.z_rr3a.asr$converge))
+MTME.z_rr3a.asr$trace |>
+  as.data.frame() |>
+  rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |>
+  print()
 
 save.image('Data/MTME.z_rr3a.RData')

@@ -19,7 +19,7 @@ load('Data/ILYT_Pheno-Gmatrix.RData')
 ## Run model ----
 MTME.z_rr4a.asr <- asreml(
   Pheno_z ~ TraitEnv,
-  random = ~ rr(TraitEnv,3):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse),
+  random = ~ rr(TraitEnv,4):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
   sparse = ~ TraitEnv:Gdrop,
   data = ILYT_Pheno,
@@ -34,6 +34,11 @@ print(summary(MTME.z_rr4a.asr)$call)
 print('AIC')
 print(summary(MTME.z_rr4a.asr)$aic)
 print(paste('convergence =', MTME.z_rr4a.asr$converge))
+MTME.z_rr4a.asr$trace |>
+  as.data.frame() |>
+  rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |>
+  print()
 
 save.image('Data/MTME.z_rr4a.RData')
 
@@ -46,5 +51,10 @@ print(summary(MTME.z_rr4a.asr)$call)
 print('AIC')
 print(summary(MTME.z_rr4a.asr)$aic)
 print(paste('convergence =', MTME.z_rr4a.asr$converge))
+MTME.z_rr4a.asr$trace |>
+  as.data.frame() |>
+  rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |>
+  print()
 
 save.image('Data/MTME.z_rr4a.RData')

@@ -18,11 +18,11 @@ load('Data/ILYT_Pheno-Gmatrix.RData')
 # Fit models ----
 
 ## GY ----
-### fa1----
+### rr1----
 # Run model
-GY_STME.z_fa1.asr <- asreml(
+GY_STME.z_rr1.asr <- asreml(
   Pheno_z ~ Env,
-  random = ~ fa(Env,1):vm(Gkeep, Ginv.sparse),
+  random = ~ rr(Env,1):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'GY') |> droplevels(),
@@ -31,19 +31,19 @@ GY_STME.z_fa1.asr <- asreml(
   workspace = '16gb'
 )
 # Print model info
-print('GY_STME.z_fa1')
-print(summary(GY_STME.z_fa1.asr)$call)
+print('GY_STME.z_rr1')
+print(summary(GY_STME.z_rr1.asr)$call)
 print('AIC')
-print(summary(GY_STME.z_fa1.asr)$aic)
-print(paste('convergence =',GY_STME.z_fa1.asr$converge))
+print(summary(GY_STME.z_rr1.asr)$aic)
+print(paste('convergence =',GY_STME.z_rr1.asr$converge))
 
-save.image('Data/STME.z_fa.RData')
+save.image('Data/STME.z_rr.RData')
 
-### fa2----
+### rr2----
 # Run model
-GY_STME.z_fa2.asr <- asreml(
+GY_STME.z_rr2.asr <- asreml(
   Pheno_z ~ Env,
-  random = ~ fa(Env,2):vm(Gkeep, Ginv.sparse),
+  random = ~ rr(Env,2):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'GY') |> droplevels(),
@@ -52,31 +52,31 @@ GY_STME.z_fa2.asr <- asreml(
   workspace = '16gb'
 )
 # Print model info
-print('GY_STME.z_fa2')
-print(summary(GY_STME.z_fa2.asr)$call)
+print('GY_STME.z_rr2')
+print(summary(GY_STME.z_rr2.asr)$call)
 print('AIC')
-print(summary(GY_STME.z_fa2.asr)$aic)
-print(paste('convergence =',GY_STME.z_fa2.asr$converge))
+print(summary(GY_STME.z_rr2.asr)$aic)
+print(paste('convergence =',GY_STME.z_rr2.asr$converge))
 
-save.image('Data/STME.z_fa.RData')
+save.image('Data/STME.z_rr.RData')
 
 # Update model
-GY_STME.z_fa2.asr <- update(GY_STME.z_fa2.asr)
+GY_STME.z_rr2.asr <- update(GY_STME.z_rr2.asr)
 
 # Print model info
-print('GY_STME.z_fa2-update1')
-print(summary(GY_STME.z_fa2.asr)$call)
+print('GY_STME.z_rr2-update1')
+print(summary(GY_STME.z_rr2.asr)$call)
 print('AIC')
-print(summary(GY_STME.z_fa2.asr)$aic)
-print(paste('convergence =',GY_STME.z_fa2.asr$converge))
+print(summary(GY_STME.z_rr2.asr)$aic)
+print(paste('convergence =',GY_STME.z_rr2.asr$converge))
 
-save.image('Data/STME.z_fa.RData')
+save.image('Data/STME.z_rr.RData')
 
-### fa3----
+### rr3----
 # Run model
-GY_STME.z_fa3.asr <- asreml(
+GY_STME.z_rr3.asr <- asreml(
   Pheno_z ~ Env,
-  random = ~ fa(Env,3):vm(Gkeep, Ginv.sparse),
+  random = ~ rr(Env,3):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'GY') |> droplevels(),
@@ -85,32 +85,32 @@ GY_STME.z_fa3.asr <- asreml(
   workspace = '20gb'
 )
 # Print model info
-print('GY_STME.z_fa3')
-print(summary(GY_STME.z_fa3.asr)$call)
+print('GY_STME.z_rr3')
+print(summary(GY_STME.z_rr3.asr)$call)
 print('AIC')
-print(summary(GY_STME.z_fa3.asr)$aic)
-print(paste('convergence =',GY_STME.z_fa3.asr$converge))
+print(summary(GY_STME.z_rr3.asr)$aic)
+print(paste('convergence =',GY_STME.z_rr3.asr$converge))
 
-save.image('Data/STME.z_fa.RData')
+save.image('Data/STME.z_rr.RData')
 
 # Update model
-GY_STME.z_fa3.asr <- update(GY_STME.z_fa3.asr)
+GY_STME.z_rr3.asr <- update(GY_STME.z_rr3.asr)
 
 # Print model info
-print('GY_STME.z_fa3-update1')
-print(summary(GY_STME.z_fa3.asr)$call)
+print('GY_STME.z_rr3-update1')
+print(summary(GY_STME.z_rr3.asr)$call)
 print('AIC')
-print(summary(GY_STME.z_fa3.asr)$aic)
-print(paste('convergence =',GY_STME.z_fa3.asr$converge))
+print(summary(GY_STME.z_rr3.asr)$aic)
+print(paste('convergence =',GY_STME.z_rr3.asr$converge))
 
-save.image('Data/STME.z_fa.RData')
+save.image('Data/STME.z_rr.RData')
 
 ## TW ----
-### fa1----
+### rr1----
 # Run model
-TW_STME.z_fa1.asr <- asreml(
+TW_STME.z_rr1.asr <- asreml(
   Pheno_z ~ Env,
-  random = ~ fa(Env,1):vm(Gkeep, Ginv.sparse),
+  random = ~ rr(Env,1):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'TW') |> droplevels(),
@@ -119,20 +119,20 @@ TW_STME.z_fa1.asr <- asreml(
   workspace = '16gb'
 )
 # Print model info
-print('TW_STME.z_fa1')
-print(summary(TW_STME.z_fa1.asr)$call)
+print('TW_STME.z_rr1')
+print(summary(TW_STME.z_rr1.asr)$call)
 print('AIC')
-print(summary(TW_STME.z_fa1.asr)$aic)
-print(paste('convergence =',TW_STME.z_fa1.asr$converge))
+print(summary(TW_STME.z_rr1.asr)$aic)
+print(paste('convergence =',TW_STME.z_rr1.asr$converge))
 
-save.image('Data/STME.z_fa.RData')
+save.image('Data/STME.z_rr.RData')
 
-load('Data/STME.z_fa.RData')
-### fa2----
+load('Data/STME.z_rr.RData')
+### rr2----
 # Run model
-TW_STME.z_fa2.asr <- asreml(
+TW_STME.z_rr2.asr <- asreml(
   Pheno_z ~ Env,
-  random = ~ fa(Env,2):vm(Gkeep, Ginv.sparse),
+  random = ~ rr(Env,2):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'TW') |> droplevels(),
@@ -141,31 +141,31 @@ TW_STME.z_fa2.asr <- asreml(
   workspace = '16gb'
 )
 # Print model info
-print('TW_STME.z_fa2')
-print(summary(TW_STME.z_fa2.asr)$call)
+print('TW_STME.z_rr2')
+print(summary(TW_STME.z_rr2.asr)$call)
 print('AIC')
-print(summary(TW_STME.z_fa2.asr)$aic)
-print(paste('convergence =',TW_STME.z_fa2.asr$converge))
+print(summary(TW_STME.z_rr2.asr)$aic)
+print(paste('convergence =',TW_STME.z_rr2.asr$converge))
 
-save.image('Data/STME.z_fa.RData')
+save.image('Data/STME.z_rr.RData')
 
 # Update model
-TW_STME.z_fa2.asr <- update(TW_STME.z_fa2.asr)
+TW_STME.z_rr2.asr <- update(TW_STME.z_rr2.asr)
 
 # Print model info
-print('TW_STME.z_fa2-update1')
-print(summary(TW_STME.z_fa2.asr)$call)
+print('TW_STME.z_rr2-update1')
+print(summary(TW_STME.z_rr2.asr)$call)
 print('AIC')
-print(summary(TW_STME.z_fa2.asr)$aic)
-print(paste('convergence =',TW_STME.z_fa2.asr$converge))
+print(summary(TW_STME.z_rr2.asr)$aic)
+print(paste('convergence =',TW_STME.z_rr2.asr$converge))
 
-save.image('Data/STME.z_fa.RData')
+save.image('Data/STME.z_rr.RData')
 
-### fa3----
+### rr3----
 # Run model
-TW_STME.z_fa3.asr <- asreml(
+TW_STME.z_rr3.asr <- asreml(
   Pheno_z ~ Env,
-  random = ~ fa(Env,3):vm(Gkeep, Ginv.sparse),
+  random = ~ rr(Env,3):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'TW') |> droplevels(),
@@ -174,44 +174,44 @@ TW_STME.z_fa3.asr <- asreml(
   workspace = '20gb'
 )
 # Print model info
-print('TW_STME.z_fa3')
-print(summary(TW_STME.z_fa3.asr)$call)
+print('TW_STME.z_rr3')
+print(summary(TW_STME.z_rr3.asr)$call)
 print('AIC')
-print(summary(TW_STME.z_fa3.asr)$aic)
-print(paste('convergence =',TW_STME.z_fa3.asr$converge))
+print(summary(TW_STME.z_rr3.asr)$aic)
+print(paste('convergence =',TW_STME.z_rr3.asr$converge))
 
-save.image('Data/STME.z_fa.RData')
+save.image('Data/STME.z_rr.RData')
 
 # Update model
-TW_STME.z_fa3.asr <- update(TW_STME.z_fa3.asr)
+TW_STME.z_rr3.asr <- update(TW_STME.z_rr3.asr)
 
 # Print model info
-print('TW_STME.z_fa3-update1')
-print(summary(TW_STME.z_fa3.asr)$call)
+print('TW_STME.z_rr3-update1')
+print(summary(TW_STME.z_rr3.asr)$call)
 print('AIC')
-print(summary(TW_STME.z_fa3.asr)$aic)
-print(paste('convergence =',TW_STME.z_fa3.asr$converge))
+print(summary(TW_STME.z_rr3.asr)$aic)
+print(paste('convergence =',TW_STME.z_rr3.asr$converge))
 
-save.image('Data/STME.z_fa.RData')
+save.image('Data/STME.z_rr.RData')
 
 # Update model
-TW_STME.z_fa3.asr <- update(TW_STME.z_fa3.asr)
+TW_STME.z_rr3.asr <- update(TW_STME.z_rr3.asr)
 
 # Print model info
-print('TW_STME.z_fa3-update2')
-print(summary(TW_STME.z_fa3.asr)$call)
+print('TW_STME.z_rr3-update2')
+print(summary(TW_STME.z_rr3.asr)$call)
 print('AIC')
-print(summary(TW_STME.z_fa3.asr)$aic)
-print(paste('convergence =',TW_STME.z_fa3.asr$converge))
+print(summary(TW_STME.z_rr3.asr)$aic)
+print(paste('convergence =',TW_STME.z_rr3.asr$converge))
 
-save.image('Data/STME.z_fa.RData')
+save.image('Data/STME.z_rr.RData')
 
 ## HD ----
-### fa1----
+### rr1----
 # Run model
-HD_STME.z_fa1.asr <- asreml(
+HD_STME.z_rr1.asr <- asreml(
   Pheno_z ~ Env,
-  random = ~ fa(Env,1):vm(Gkeep, Ginv.sparse),
+  random = ~ rr(Env,1):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'HD') |> droplevels(),
@@ -220,19 +220,19 @@ HD_STME.z_fa1.asr <- asreml(
   workspace = '16gb'
 )
 # Print model info
-print('HD_STME.z_fa1')
-print(summary(HD_STME.z_fa1.asr)$call)
+print('HD_STME.z_rr1')
+print(summary(HD_STME.z_rr1.asr)$call)
 print('AIC')
-print(summary(HD_STME.z_fa1.asr)$aic)
-print(paste('convergence =',HD_STME.z_fa1.asr$converge))
+print(summary(HD_STME.z_rr1.asr)$aic)
+print(paste('convergence =',HD_STME.z_rr1.asr$converge))
 
-save.image('Data/STME.z_fa.RData')
+save.image('Data/STME.z_rr.RData')
 
-### fa2----
+### rr2----
 # Run model
-HD_STME.z_fa2.asr <- asreml(
+HD_STME.z_rr2.asr <- asreml(
   Pheno_z ~ Env,
-  random = ~ fa(Env,2):vm(Gkeep, Ginv.sparse),
+  random = ~ rr(Env,2):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'HD') |> droplevels(),
@@ -241,31 +241,31 @@ HD_STME.z_fa2.asr <- asreml(
   workspace = '16gb'
 )
 # Print model info
-print('HD_STME.z_fa2')
-print(summary(HD_STME.z_fa2.asr)$call)
+print('HD_STME.z_rr2')
+print(summary(HD_STME.z_rr2.asr)$call)
 print('AIC')
-print(summary(HD_STME.z_fa2.asr)$aic)
-print(paste('convergence =',HD_STME.z_fa2.asr$converge))
+print(summary(HD_STME.z_rr2.asr)$aic)
+print(paste('convergence =',HD_STME.z_rr2.asr$converge))
 
-save.image('Data/STME.z_fa.RData')
+save.image('Data/STME.z_rr.RData')
 
 # Update model
-HD_STME.z_fa2.asr <- update(HD_STME.z_fa2.asr)
+HD_STME.z_rr2.asr <- update(HD_STME.z_rr2.asr)
 
 # Print model info
-print('HD_STME.z_fa2-update1')
-print(summary(HD_STME.z_fa2.asr)$call)
+print('HD_STME.z_rr2-update1')
+print(summary(HD_STME.z_rr2.asr)$call)
 print('AIC')
-print(summary(HD_STME.z_fa2.asr)$aic)
-print(paste('convergence =',HD_STME.z_fa2.asr$converge))
+print(summary(HD_STME.z_rr2.asr)$aic)
+print(paste('convergence =',HD_STME.z_rr2.asr$converge))
 
-save.image('Data/STME.z_fa.RData')
+save.image('Data/STME.z_rr.RData')
 
-### fa3----
+### rr3----
 # Run model
-HD_STME.z_fa3.asr <- asreml(
+HD_STME.z_rr3.asr <- asreml(
   Pheno_z ~ Env,
-  random = ~ fa(Env,3):vm(Gkeep, Ginv.sparse),
+  random = ~ rr(Env,3):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'HD') |> droplevels(),
@@ -274,32 +274,32 @@ HD_STME.z_fa3.asr <- asreml(
   workspace = '20gb'
 )
 # Print model info
-print('HD_STME.z_fa3')
-print(summary(HD_STME.z_fa3.asr)$call)
+print('HD_STME.z_rr3')
+print(summary(HD_STME.z_rr3.asr)$call)
 print('AIC')
-print(summary(HD_STME.z_fa3.asr)$aic)
-print(paste('convergence =',HD_STME.z_fa3.asr$converge))
+print(summary(HD_STME.z_rr3.asr)$aic)
+print(paste('convergence =',HD_STME.z_rr3.asr$converge))
 
-save.image('Data/STME.z_fa.RData')
+save.image('Data/STME.z_rr.RData')
 
 # Update model
-HD_STME.z_fa3.asr <- update(HD_STME.z_fa3.asr)
+HD_STME.z_rr3.asr <- update(HD_STME.z_rr3.asr)
 
 # Print model info
-print('HD_STME.z_fa3-update1')
-print(summary(HD_STME.z_fa3.asr)$call)
+print('HD_STME.z_rr3-update1')
+print(summary(HD_STME.z_rr3.asr)$call)
 print('AIC')
-print(summary(HD_STME.z_fa3.asr)$aic)
-print(paste('convergence =',HD_STME.z_fa3.asr$converge))
+print(summary(HD_STME.z_rr3.asr)$aic)
+print(paste('convergence =',HD_STME.z_rr3.asr$converge))
 
-save.image('Data/STME.z_fa.RData')
+save.image('Data/STME.z_rr.RData')
 
 ## HT ----
-### fa1----
+### rr1----
 # Run model
-HT_STME.z_fa1.asr <- asreml(
+HT_STME.z_rr1.asr <- asreml(
   Pheno_z ~ Env,
-  random = ~ fa(Env,1):vm(Gkeep, Ginv.sparse),
+  random = ~ rr(Env,1):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'HT') |> droplevels(),
@@ -308,19 +308,19 @@ HT_STME.z_fa1.asr <- asreml(
   workspace = '16gb'
 )
 # Print model info
-print('HT_STME.z_fa1')
-print(summary(HT_STME.z_fa1.asr)$call)
+print('HT_STME.z_rr1')
+print(summary(HT_STME.z_rr1.asr)$call)
 print('AIC')
-print(summary(HT_STME.z_fa1.asr)$aic)
-print(paste('convergence =',HT_STME.z_fa1.asr$converge))
+print(summary(HT_STME.z_rr1.asr)$aic)
+print(paste('convergence =',HT_STME.z_rr1.asr$converge))
 
-save.image('Data/STME.z_fa.RData')
+save.image('Data/STME.z_rr.RData')
 
-### fa2----
+### rr2----
 # Run model
-HT_STME.z_fa2.asr <- asreml(
+HT_STME.z_rr2.asr <- asreml(
   Pheno_z ~ Env,
-  random = ~ fa(Env,2):vm(Gkeep, Ginv.sparse),
+  random = ~ rr(Env,2):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'HT') |> droplevels(),
@@ -329,31 +329,31 @@ HT_STME.z_fa2.asr <- asreml(
   workspace = '16gb'
 )
 # Print model info
-print('HT_STME.z_fa2')
-print(summary(HT_STME.z_fa2.asr)$call)
+print('HT_STME.z_rr2')
+print(summary(HT_STME.z_rr2.asr)$call)
 print('AIC')
-print(summary(HT_STME.z_fa2.asr)$aic)
-print(paste('convergence =',HT_STME.z_fa2.asr$converge))
+print(summary(HT_STME.z_rr2.asr)$aic)
+print(paste('convergence =',HT_STME.z_rr2.asr$converge))
 
-save.image('Data/STME.z_fa.RData')
+save.image('Data/STME.z_rr.RData')
 
 # Update model
-HT_STME.z_fa2.asr <- update(HT_STME.z_fa2.asr)
+HT_STME.z_rr2.asr <- update(HT_STME.z_rr2.asr)
 
 # Print model info
-print('HT_STME.z_fa2-update1')
-print(summary(HT_STME.z_fa2.asr)$call)
+print('HT_STME.z_rr2-update1')
+print(summary(HT_STME.z_rr2.asr)$call)
 print('AIC')
-print(summary(HT_STME.z_fa2.asr)$aic)
-print(paste('convergence =',HT_STME.z_fa2.asr$converge))
+print(summary(HT_STME.z_rr2.asr)$aic)
+print(paste('convergence =',HT_STME.z_rr2.asr$converge))
 
-save.image('Data/STME.z_fa.RData')
+save.image('Data/STME.z_rr.RData')
 
-### fa3----
+### rr3----
 # Run model
-HT_STME.z_fa3.asr <- asreml(
+HT_STME.z_rr3.asr <- asreml(
   Pheno_z ~ Env,
-  random = ~ fa(Env,3):vm(Gkeep, Ginv.sparse),
+  random = ~ rr(Env,3):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'HT') |> droplevels(),
@@ -362,32 +362,32 @@ HT_STME.z_fa3.asr <- asreml(
   workspace = '20gb'
 )
 # Print model info
-print('HT_STME.z_fa3')
-print(summary(HT_STME.z_fa3.asr)$call)
+print('HT_STME.z_rr3')
+print(summary(HT_STME.z_rr3.asr)$call)
 print('AIC')
-print(summary(HT_STME.z_fa3.asr)$aic)
-print(paste('convergence =',HT_STME.z_fa3.asr$converge))
+print(summary(HT_STME.z_rr3.asr)$aic)
+print(paste('convergence =',HT_STME.z_rr3.asr$converge))
 
-save.image('Data/STME.z_fa.RData')
+save.image('Data/STME.z_rr.RData')
 
 # Update model
-HT_STME.z_fa3.asr <- update(HT_STME.z_fa3.asr)
+HT_STME.z_rr3.asr <- update(HT_STME.z_rr3.asr)
 
 # Print model info
-print('HT_STME.z_fa3-update1')
-print(summary(HT_STME.z_fa3.asr)$call)
+print('HT_STME.z_rr3-update1')
+print(summary(HT_STME.z_rr3.asr)$call)
 print('AIC')
-print(summary(HT_STME.z_fa3.asr)$aic)
-print(paste('convergence =',HT_STME.z_fa3.asr$converge))
+print(summary(HT_STME.z_rr3.asr)$aic)
+print(paste('convergence =',HT_STME.z_rr3.asr$converge))
 
-save.image('Data/STME.z_fa.RData')
+save.image('Data/STME.z_rr.RData')
 
 ## MAT ----
-### fa1----
+### rr1----
 # Run model
-MAT_STME.z_fa1.asr <- asreml(
+MAT_STME.z_rr1.asr <- asreml(
   Pheno_z ~ Env,
-  random = ~ fa(Env,1):vm(Gkeep, Ginv.sparse),
+  random = ~ rr(Env,1):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'MAT') |> droplevels(),
@@ -396,12 +396,12 @@ MAT_STME.z_fa1.asr <- asreml(
   workspace = '16gb'
 )
 # Print model info
-print('MAT_STME.z_fa1')
-print(summary(MAT_STME.z_fa1.asr)$call)
+print('MAT_STME.z_rr1')
+print(summary(MAT_STME.z_rr1.asr)$call)
 print('AIC')
-print(summary(MAT_STME.z_fa1.asr)$aic)
-print(paste('convergence =',MAT_STME.z_fa1.asr$converge))
+print(summary(MAT_STME.z_rr1.asr)$aic)
+print(paste('convergence =',MAT_STME.z_rr1.asr$converge))
 
-save.image('Data/STME.z_fa.RData')
+save.image('Data/STME.z_rr.RData')
 
 # # End ----
