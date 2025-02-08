@@ -1,0 +1,746 @@
+
+R version 4.4.2 (2024-10-31) -- "Pile of Leaves"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: x86_64-redhat-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Single-Trait Multi-Environment models ----
+> # This script fits Single-Trait Multi-Environment models
+> 
+> # Clean workspace
+> rm(list = objects())  # Removes all objects from the environment.
+> 
+> # Packages ----
+> library(tidyverse) # R packages for data science.
+── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+> library(asreml) # ASReml-R package.
+Loading required package: Matrix
+
+Attaching package: ‘Matrix’
+
+The following objects are masked from ‘package:tidyr’:
+
+    expand, pack, unpack
+
+Online License checked out Fri Feb  7 11:13:44 2025
+Loading ASReml-R version 4.2
+
+> 
+> # Use for HPC only
+> setwd('~/MTME_ILWheat/')
+> 
+> # Load data ----
+> ## Pheno & Ginv
+> load('Data/ILYT_Pheno-Gmatrix.RData')
+> 
+> # Fit models ----
+> 
+> ## GY ----
+> ### rr1----
+> # Run model
+> GY_STME.z_rr1.asr <- asreml(
++   Pheno_z ~ Env,
++   random = ~ rr(Env,1):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
++   sparse = ~ Env:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'GY') |> droplevels(),
++   na.action = na.method(x = "include"),
++   maxit = 20,
++   workspace = '16gb'
++ )
+> # Print model info
+> print('GY_STME.z_rr1')
+[1] "GY_STME.z_rr1"
+> print(summary(GY_STME.z_rr1.asr)$call)
+asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 1):vm(Gkeep, 
+    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
+    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
+    data = droplevels(filter(ILYT_Pheno, Trait == "GY")), maxit = 20, 
+    workspace = "16gb")
+> print('AIC')
+[1] "AIC"
+> print(summary(GY_STME.z_rr1.asr)$aic)
+[1] -6498.048
+attr(,"parameters")
+[1] 60
+> print(paste('convergence =',GY_STME.z_rr1.asr$converge))
+[1] "convergence = TRUE"
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> ### rr2----
+> # Run model
+> GY_STME.z_rr2.asr <- asreml(
++   Pheno_z ~ Env,
++   random = ~ rr(Env,2):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
++   sparse = ~ Env:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'GY') |> droplevels(),
++   na.action = na.method(x = "include"),
++   maxit = 20,
++   workspace = '16gb'
++ )
+Warning message:
+In asreml(Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep, Ginv.sparse) +  :
+  Some components changed by more than 1% on the last iteration
+> # Print model info
+> print('GY_STME.z_rr2')
+[1] "GY_STME.z_rr2"
+> print(summary(GY_STME.z_rr2.asr)$call)
+asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep, 
+    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
+    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
+    data = droplevels(filter(ILYT_Pheno, Trait == "GY")), maxit = 20, 
+    workspace = "16gb")
+> print('AIC')
+[1] "AIC"
+> print(summary(GY_STME.z_rr2.asr)$aic)
+[1] -6684.782
+attr(,"parameters")
+[1] 71
+> print(paste('convergence =',GY_STME.z_rr2.asr$converge))
+[1] "convergence = TRUE"
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> # Update model
+> GY_STME.z_rr2.asr <- update(GY_STME.z_rr2.asr)
+Warning message:
+In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> 
+> # Print model info
+> print('GY_STME.z_rr2-update1')
+[1] "GY_STME.z_rr2-update1"
+> print(summary(GY_STME.z_rr2.asr)$call)
+asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep, 
+    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
+    residual = ~dsum(~ar1(Col):ar1(Row) | Env), G.param = GY_STME.z_rr2.asr$G.param, 
+    R.param = GY_STME.z_rr2.asr$R.param, na.action = na.method(x = "include"), 
+    data = droplevels(filter(ILYT_Pheno, Trait == "GY")), maxit = 20, 
+    workspace = "16gb")
+> print('AIC')
+[1] "AIC"
+> print(summary(GY_STME.z_rr2.asr)$aic)
+[1] -6684.783
+attr(,"parameters")
+[1] 71
+> print(paste('convergence =',GY_STME.z_rr2.asr$converge))
+[1] "convergence = TRUE"
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> ### rr3----
+> # Run model
+> GY_STME.z_rr3.asr <- asreml(
++   Pheno_z ~ Env,
++   random = ~ rr(Env,3):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
++   sparse = ~ Env:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'GY') |> droplevels(),
++   na.action = na.method(x = "include"),
++   maxit = 20,
++   workspace = '20gb'
++ )
+Warning messages:
+1: In asreml(Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep, Ginv.sparse) +  :
+  Log-likelihood not converged
+2: In asreml(Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep, Ginv.sparse) +  :
+  Some components changed by more than 1% on the last iteration
+> # Print model info
+> print('GY_STME.z_rr3')
+[1] "GY_STME.z_rr3"
+> print(summary(GY_STME.z_rr3.asr)$call)
+asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep, 
+    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
+    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
+    data = droplevels(filter(ILYT_Pheno, Trait == "GY")), maxit = 20, 
+    workspace = "20gb")
+> print('AIC')
+[1] "AIC"
+> print(summary(GY_STME.z_rr3.asr)$aic)
+[1] -6705.955
+attr(,"parameters")
+[1] 81
+> print(paste('convergence =',GY_STME.z_rr3.asr$converge))
+[1] "convergence = FALSE"
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> # Update model
+> GY_STME.z_rr3.asr <- update(GY_STME.z_rr3.asr)
+Warning message:
+In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> 
+> # Print model info
+> print('GY_STME.z_rr3-update1')
+[1] "GY_STME.z_rr3-update1"
+> print(summary(GY_STME.z_rr3.asr)$call)
+asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep, 
+    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
+    residual = ~dsum(~ar1(Col):ar1(Row) | Env), G.param = GY_STME.z_rr3.asr$G.param, 
+    R.param = GY_STME.z_rr3.asr$R.param, na.action = na.method(x = "include"), 
+    data = droplevels(filter(ILYT_Pheno, Trait == "GY")), maxit = 20, 
+    workspace = "20gb")
+> print('AIC')
+[1] "AIC"
+> print(summary(GY_STME.z_rr3.asr)$aic)
+[1] -6705.959
+attr(,"parameters")
+[1] 81
+> print(paste('convergence =',GY_STME.z_rr3.asr$converge))
+[1] "convergence = TRUE"
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> ## TW ----
+> ### rr1----
+> # Run model
+> TW_STME.z_rr1.asr <- asreml(
++   Pheno_z ~ Env,
++   random = ~ rr(Env,1):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
++   sparse = ~ Env:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'TW') |> droplevels(),
++   na.action = na.method(x = "include"),
++   maxit = 20,
++   workspace = '16gb'
++ )
+> # Print model info
+> print('TW_STME.z_rr1')
+[1] "TW_STME.z_rr1"
+> print(summary(TW_STME.z_rr1.asr)$call)
+asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 1):vm(Gkeep, 
+    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
+    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
+    data = droplevels(filter(ILYT_Pheno, Trait == "TW")), maxit = 20, 
+    workspace = "16gb")
+> print('AIC')
+[1] "AIC"
+> print(summary(TW_STME.z_rr1.asr)$aic)
+[1] -12950.67
+attr(,"parameters")
+[1] 60
+> print(paste('convergence =',TW_STME.z_rr1.asr$converge))
+[1] "convergence = TRUE"
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> load('Data/STME.z_rr.RData')
+> ### rr2----
+> # Run model
+> TW_STME.z_rr2.asr <- asreml(
++   Pheno_z ~ Env,
++   random = ~ rr(Env,2):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
++   sparse = ~ Env:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'TW') |> droplevels(),
++   na.action = na.method(x = "include"),
++   maxit = 20,
++   workspace = '16gb'
++ )
+Warning messages:
+1: In asreml(Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep, Ginv.sparse) +  :
+  Log-likelihood not converged
+2: In asreml(Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep, Ginv.sparse) +  :
+  Some components changed by more than 1% on the last iteration
+> # Print model info
+> print('TW_STME.z_rr2')
+[1] "TW_STME.z_rr2"
+> print(summary(TW_STME.z_rr2.asr)$call)
+asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep, 
+    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
+    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
+    data = droplevels(filter(ILYT_Pheno, Trait == "TW")), maxit = 20, 
+    workspace = "16gb")
+> print('AIC')
+[1] "AIC"
+> print(summary(TW_STME.z_rr2.asr)$aic)
+[1] -13129.23
+attr(,"parameters")
+[1] 71
+> print(paste('convergence =',TW_STME.z_rr2.asr$converge))
+[1] "convergence = FALSE"
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> # Update model
+> TW_STME.z_rr2.asr <- update(TW_STME.z_rr2.asr)
+Warning message:
+In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> 
+> # Print model info
+> print('TW_STME.z_rr2-update1')
+[1] "TW_STME.z_rr2-update1"
+> print(summary(TW_STME.z_rr2.asr)$call)
+asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep, 
+    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
+    residual = ~dsum(~ar1(Col):ar1(Row) | Env), G.param = TW_STME.z_rr2.asr$G.param, 
+    R.param = TW_STME.z_rr2.asr$R.param, na.action = na.method(x = "include"), 
+    data = droplevels(filter(ILYT_Pheno, Trait == "TW")), maxit = 20, 
+    workspace = "16gb")
+> print('AIC')
+[1] "AIC"
+> print(summary(TW_STME.z_rr2.asr)$aic)
+[1] -13129.35
+attr(,"parameters")
+[1] 71
+> print(paste('convergence =',TW_STME.z_rr2.asr$converge))
+[1] "convergence = TRUE"
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> ### rr3----
+> # Run model
+> TW_STME.z_rr3.asr <- asreml(
++   Pheno_z ~ Env,
++   random = ~ rr(Env,3):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
++   sparse = ~ Env:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'TW') |> droplevels(),
++   na.action = na.method(x = "include"),
++   maxit = 20,
++   workspace = '20gb'
++ )
+Warning messages:
+1: In asreml(Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep, Ginv.sparse) +  :
+  Log-likelihood not converged
+2: In asreml(Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep, Ginv.sparse) +  :
+  Some components changed by more than 1% on the last iteration
+> # Print model info
+> print('TW_STME.z_rr3')
+[1] "TW_STME.z_rr3"
+> print(summary(TW_STME.z_rr3.asr)$call)
+asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep, 
+    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
+    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
+    data = droplevels(filter(ILYT_Pheno, Trait == "TW")), maxit = 20, 
+    workspace = "20gb")
+> print('AIC')
+[1] "AIC"
+> print(summary(TW_STME.z_rr3.asr)$aic)
+[1] -13220.09
+attr(,"parameters")
+[1] 81
+> print(paste('convergence =',TW_STME.z_rr3.asr$converge))
+[1] "convergence = FALSE"
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> # Update model
+> TW_STME.z_rr3.asr <- update(TW_STME.z_rr3.asr)
+Warning message:
+In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> 
+> # Print model info
+> print('TW_STME.z_rr3-update1')
+[1] "TW_STME.z_rr3-update1"
+> print(summary(TW_STME.z_rr3.asr)$call)
+asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep, 
+    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
+    residual = ~dsum(~ar1(Col):ar1(Row) | Env), G.param = TW_STME.z_rr3.asr$G.param, 
+    R.param = TW_STME.z_rr3.asr$R.param, na.action = na.method(x = "include"), 
+    data = droplevels(filter(ILYT_Pheno, Trait == "TW")), maxit = 20, 
+    workspace = "20gb")
+> print('AIC')
+[1] "AIC"
+> print(summary(TW_STME.z_rr3.asr)$aic)
+[1] -13220.1
+attr(,"parameters")
+[1] 81
+> print(paste('convergence =',TW_STME.z_rr3.asr$converge))
+[1] "convergence = TRUE"
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> # Update model
+> TW_STME.z_rr3.asr <- update(TW_STME.z_rr3.asr)
+Warning message:
+In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> 
+> # Print model info
+> print('TW_STME.z_rr3-update2')
+[1] "TW_STME.z_rr3-update2"
+> print(summary(TW_STME.z_rr3.asr)$call)
+asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep, 
+    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
+    residual = ~dsum(~ar1(Col):ar1(Row) | Env), G.param = TW_STME.z_rr3.asr$G.param, 
+    R.param = TW_STME.z_rr3.asr$R.param, na.action = na.method(x = "include"), 
+    data = droplevels(filter(ILYT_Pheno, Trait == "TW")), maxit = 20, 
+    workspace = "20gb")
+> print('AIC')
+[1] "AIC"
+> print(summary(TW_STME.z_rr3.asr)$aic)
+[1] -13220.1
+attr(,"parameters")
+[1] 81
+> print(paste('convergence =',TW_STME.z_rr3.asr$converge))
+[1] "convergence = TRUE"
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> ## HD ----
+> ### rr1----
+> # Run model
+> HD_STME.z_rr1.asr <- asreml(
++   Pheno_z ~ Env,
++   random = ~ rr(Env,1):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
++   sparse = ~ Env:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'HD') |> droplevels(),
++   na.action = na.method(x = "include"),
++   maxit = 20,
++   workspace = '16gb'
++ )
+> # Print model info
+> print('HD_STME.z_rr1')
+[1] "HD_STME.z_rr1"
+> print(summary(HD_STME.z_rr1.asr)$call)
+asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 1):vm(Gkeep, 
+    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
+    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
+    data = droplevels(filter(ILYT_Pheno, Trait == "HD")), maxit = 20, 
+    workspace = "16gb")
+> print('AIC')
+[1] "AIC"
+> print(summary(HD_STME.z_rr1.asr)$aic)
+[1] -15105.18
+attr(,"parameters")
+[1] 30
+> print(paste('convergence =',HD_STME.z_rr1.asr$converge))
+[1] "convergence = TRUE"
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> ### rr2----
+> # Run model
+> HD_STME.z_rr2.asr <- asreml(
++   Pheno_z ~ Env,
++   random = ~ rr(Env,2):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
++   sparse = ~ Env:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'HD') |> droplevels(),
++   na.action = na.method(x = "include"),
++   maxit = 20,
++   workspace = '16gb'
++ )
+Warning messages:
+1: In asreml(Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep, Ginv.sparse) +  :
+  Log-likelihood not converged
+2: In asreml(Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep, Ginv.sparse) +  :
+  Some components changed by more than 1% on the last iteration
+> # Print model info
+> print('HD_STME.z_rr2')
+[1] "HD_STME.z_rr2"
+> print(summary(HD_STME.z_rr2.asr)$call)
+asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep, 
+    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
+    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
+    data = droplevels(filter(ILYT_Pheno, Trait == "HD")), maxit = 20, 
+    workspace = "16gb")
+> print('AIC')
+[1] "AIC"
+> print(summary(HD_STME.z_rr2.asr)$aic)
+[1] -15151.28
+attr(,"parameters")
+[1] 35
+> print(paste('convergence =',HD_STME.z_rr2.asr$converge))
+[1] "convergence = FALSE"
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> # Update model
+> HD_STME.z_rr2.asr <- update(HD_STME.z_rr2.asr)
+> 
+> # Print model info
+> print('HD_STME.z_rr2-update1')
+[1] "HD_STME.z_rr2-update1"
+> print(summary(HD_STME.z_rr2.asr)$call)
+asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep, 
+    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
+    residual = ~dsum(~ar1(Col):ar1(Row) | Env), G.param = HD_STME.z_rr2.asr$G.param, 
+    R.param = HD_STME.z_rr2.asr$R.param, na.action = na.method(x = "include"), 
+    data = droplevels(filter(ILYT_Pheno, Trait == "HD")), maxit = 20, 
+    workspace = "16gb")
+> print('AIC')
+[1] "AIC"
+> print(summary(HD_STME.z_rr2.asr)$aic)
+[1] -15154.93
+attr(,"parameters")
+[1] 35
+> print(paste('convergence =',HD_STME.z_rr2.asr$converge))
+[1] "convergence = TRUE"
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> ### rr3----
+> # Run model
+> HD_STME.z_rr3.asr <- asreml(
++   Pheno_z ~ Env,
++   random = ~ rr(Env,3):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
++   sparse = ~ Env:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'HD') |> droplevels(),
++   na.action = na.method(x = "include"),
++   maxit = 20,
++   workspace = '20gb'
++ )
+> # Print model info
+> print('HD_STME.z_rr3')
+[1] "HD_STME.z_rr3"
+> print(summary(HD_STME.z_rr3.asr)$call)
+asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep, 
+    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
+    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
+    data = droplevels(filter(ILYT_Pheno, Trait == "HD")), maxit = 20, 
+    workspace = "20gb")
+> print('AIC')
+[1] "AIC"
+> print(summary(HD_STME.z_rr3.asr)$aic)
+[1] -15150.13
+attr(,"parameters")
+[1] 39
+> print(paste('convergence =',HD_STME.z_rr3.asr$converge))
+[1] "convergence = TRUE"
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> # Update model
+> HD_STME.z_rr3.asr <- update(HD_STME.z_rr3.asr)
+> 
+> # Print model info
+> print('HD_STME.z_rr3-update1')
+[1] "HD_STME.z_rr3-update1"
+> print(summary(HD_STME.z_rr3.asr)$call)
+asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep, 
+    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
+    residual = ~dsum(~ar1(Col):ar1(Row) | Env), G.param = HD_STME.z_rr3.asr$G.param, 
+    R.param = HD_STME.z_rr3.asr$R.param, na.action = na.method(x = "include"), 
+    data = droplevels(filter(ILYT_Pheno, Trait == "HD")), maxit = 20, 
+    workspace = "20gb")
+> print('AIC')
+[1] "AIC"
+> print(summary(HD_STME.z_rr3.asr)$aic)
+[1] -15150.13
+attr(,"parameters")
+[1] 39
+> print(paste('convergence =',HD_STME.z_rr3.asr$converge))
+[1] "convergence = TRUE"
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> ## HT ----
+> ### rr1----
+> # Run model
+> HT_STME.z_rr1.asr <- asreml(
++   Pheno_z ~ Env,
++   random = ~ rr(Env,1):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
++   sparse = ~ Env:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'HT') |> droplevels(),
++   na.action = na.method(x = "include"),
++   maxit = 20,
++   workspace = '16gb'
++ )
+> # Print model info
+> print('HT_STME.z_rr1')
+[1] "HT_STME.z_rr1"
+> print(summary(HT_STME.z_rr1.asr)$call)
+asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 1):vm(Gkeep, 
+    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
+    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
+    data = droplevels(filter(ILYT_Pheno, Trait == "HT")), maxit = 20, 
+    workspace = "16gb")
+> print('AIC')
+[1] "AIC"
+> print(summary(HT_STME.z_rr1.asr)$aic)
+[1] 388.5436
+attr(,"parameters")
+[1] 35
+> print(paste('convergence =',HT_STME.z_rr1.asr$converge))
+[1] "convergence = TRUE"
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> ### rr2----
+> # Run model
+> HT_STME.z_rr2.asr <- asreml(
++   Pheno_z ~ Env,
++   random = ~ rr(Env,2):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
++   sparse = ~ Env:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'HT') |> droplevels(),
++   na.action = na.method(x = "include"),
++   maxit = 20,
++   workspace = '16gb'
++ )
+> # Print model info
+> print('HT_STME.z_rr2')
+[1] "HT_STME.z_rr2"
+> print(summary(HT_STME.z_rr2.asr)$call)
+asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep, 
+    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
+    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
+    data = droplevels(filter(ILYT_Pheno, Trait == "HT")), maxit = 20, 
+    workspace = "16gb")
+> print('AIC')
+[1] "AIC"
+> print(summary(HT_STME.z_rr2.asr)$aic)
+[1] 370.3221
+attr(,"parameters")
+[1] 41
+> print(paste('convergence =',HT_STME.z_rr2.asr$converge))
+[1] "convergence = TRUE"
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> # Update model
+> HT_STME.z_rr2.asr <- update(HT_STME.z_rr2.asr)
+> 
+> # Print model info
+> print('HT_STME.z_rr2-update1')
+[1] "HT_STME.z_rr2-update1"
+> print(summary(HT_STME.z_rr2.asr)$call)
+asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep, 
+    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
+    residual = ~dsum(~ar1(Col):ar1(Row) | Env), G.param = HT_STME.z_rr2.asr$G.param, 
+    R.param = HT_STME.z_rr2.asr$R.param, na.action = na.method(x = "include"), 
+    data = droplevels(filter(ILYT_Pheno, Trait == "HT")), maxit = 20, 
+    workspace = "16gb")
+> print('AIC')
+[1] "AIC"
+> print(summary(HT_STME.z_rr2.asr)$aic)
+[1] 370.3217
+attr(,"parameters")
+[1] 41
+> print(paste('convergence =',HT_STME.z_rr2.asr$converge))
+[1] "convergence = TRUE"
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> ### rr3----
+> # Run model
+> HT_STME.z_rr3.asr <- asreml(
++   Pheno_z ~ Env,
++   random = ~ rr(Env,3):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
++   sparse = ~ Env:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'HT') |> droplevels(),
++   na.action = na.method(x = "include"),
++   maxit = 20,
++   workspace = '20gb'
++ )
+Warning messages:
+1: In asreml(Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep, Ginv.sparse) +  :
+  Log-likelihood not converged
+2: In asreml(Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep, Ginv.sparse) +  :
+  Some components changed by more than 1% on the last iteration
+> # Print model info
+> print('HT_STME.z_rr3')
+[1] "HT_STME.z_rr3"
+> print(summary(HT_STME.z_rr3.asr)$call)
+asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep, 
+    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
+    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
+    data = droplevels(filter(ILYT_Pheno, Trait == "HT")), maxit = 20, 
+    workspace = "20gb")
+> print('AIC')
+[1] "AIC"
+> print(summary(HT_STME.z_rr3.asr)$aic)
+[1] 374.1792
+attr(,"parameters")
+[1] 46
+> print(paste('convergence =',HT_STME.z_rr3.asr$converge))
+[1] "convergence = FALSE"
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> # Update model
+> HT_STME.z_rr3.asr <- update(HT_STME.z_rr3.asr)
+Warning message:
+In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> 
+> # Print model info
+> print('HT_STME.z_rr3-update1')
+[1] "HT_STME.z_rr3-update1"
+> print(summary(HT_STME.z_rr3.asr)$call)
+asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep, 
+    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
+    residual = ~dsum(~ar1(Col):ar1(Row) | Env), G.param = HT_STME.z_rr3.asr$G.param, 
+    R.param = HT_STME.z_rr3.asr$R.param, na.action = na.method(x = "include"), 
+    data = droplevels(filter(ILYT_Pheno, Trait == "HT")), maxit = 20, 
+    workspace = "20gb")
+> print('AIC')
+[1] "AIC"
+> print(summary(HT_STME.z_rr3.asr)$aic)
+[1] 374.1647
+attr(,"parameters")
+[1] 46
+> print(paste('convergence =',HT_STME.z_rr3.asr$converge))
+[1] "convergence = TRUE"
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> ## MAT ----
+> ### rr1----
+> # Run model
+> MAT_STME.z_rr1.asr <- asreml(
++   Pheno_z ~ Env,
++   random = ~ rr(Env,1):vm(Gkeep, Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse),
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
++   sparse = ~ Env:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'MAT') |> droplevels(),
++   na.action = na.method(x = "include"),
++   maxit = 20,
++   workspace = '16gb'
++ )
+> # Print model info
+> print('MAT_STME.z_rr1')
+[1] "MAT_STME.z_rr1"
+> print(summary(MAT_STME.z_rr1.asr)$call)
+asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 1):vm(Gkeep, 
+    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
+    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
+    data = droplevels(filter(ILYT_Pheno, Trait == "MAT")), maxit = 20, 
+    workspace = "16gb")
+> print('AIC')
+[1] "AIC"
+> print(summary(MAT_STME.z_rr1.asr)$aic)
+[1] 555.3933
+attr(,"parameters")
+[1] 10
+> print(paste('convergence =',MAT_STME.z_rr1.asr$converge))
+[1] "convergence = TRUE"
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> # # End ----
+> 
+> proc.time()
+     user    system   elapsed 
+119669.16   4669.52  45395.51 

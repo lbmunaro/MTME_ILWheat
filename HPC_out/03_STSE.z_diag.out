@@ -1,0 +1,160 @@
+
+R version 4.4.2 (2024-10-31) -- "Pile of Leaves"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: x86_64-redhat-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Single-Trait Single-Environment model ----
+> # This script fits single-trait single-environment models
+> 
+> # Clean workspace
+> rm(list = objects())  # Removes all objects from the environment.
+> 
+> # Packages ----
+> library(tidyverse) # R packages for data science.
+── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+> library(asreml) # ASReml-R package.
+Loading required package: Matrix
+
+Attaching package: ‘Matrix’
+
+The following objects are masked from ‘package:tidyr’:
+
+    expand, pack, unpack
+
+Online License checked out Fri Feb  7 15:32:47 2025
+Loading ASReml-R version 4.2
+
+> 
+> # Use for HPC only
+> setwd('~/MTME_ILWheat/')
+> 
+> # Load data ----
+> ## Pheno & Ginv
+> load('Data/ILYT_Pheno-Gmatrix.RData')
+> 
+> 
+> ILYT_Pheno |> glimpse()
+Rows: 38,792
+Columns: 19
+$ Pheno      <dbl> 78.59641, 68.89870, 81.15132, 70.65704, 75.58693, 74.82189,…
+$ Pheno_SI   <dbl> 5285.68, 4633.50, 5457.50, 4751.75, 5083.29, 5031.84, 5024.…
+$ Pheno_z    <dbl> -1.0986845, -1.6762186, -0.9465304, -1.5715031, -1.2779098,…
+$ Pheno_std  <dbl> 0.7980023, 0.6995399, 0.8239428, 0.7173926, 0.7674466, 0.75…
+$ Pheno_mean <dbl> 6526.369, 6526.369, 6526.369, 6526.369, 6526.369, 6526.369,…
+$ Pheno_sd   <dbl> 1129.249, 1129.249, 1129.249, 1129.249, 1129.249, 1129.249,…
+$ TraitEnv   <fct> GY-22-Adv, GY-22-Adv, GY-22-Adv, GY-22-Adv, GY-22-Adv, GY-2…
+$ Trait      <fct> GY, GY, GY, GY, GY, GY, GY, GY, GY, GY, GY, GY, GY, GY, GY,…
+$ Env        <fct> 22-Adv, 22-Adv, 22-Adv, 22-Adv, 22-Adv, 22-Adv, 22-Adv, 22-…
+$ Year       <fct> 2022, 2022, 2022, 2022, 2022, 2022, 2022, 2022, 2022, 2022,…
+$ Loc        <fct> "Addieville, IL", "Addieville, IL", "Addieville, IL", "Addi…
+$ Block      <fct> 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2,…
+$ Col        <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+$ Row        <fct> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, …
+$ Plot       <fct> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, …
+$ IDEU       <fct> 22-Adv_1, 22-Adv_2, 22-Adv_3, 22-Adv_4, 22-Adv_5, 22-Adv_6,…
+$ Gen        <fct> 2020-5361, 2020-9242, IL16LCSDH-06-T-2661-52, IL16LCSDH-09-…
+$ Gkeep      <fct> 2020-5361, 2020-9242, IL16LCSDH-06-T-2661-52, IL16LCSDH-09-…
+$ Gdrop      <fct> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+> 
+> # Fit model ----
+> ## Run the model ----
+> 
+> STSE.z.asr <- asreml(
++   Pheno_z ~ TraitEnv,
++   random = ~ diag(TraitEnv):vm(Gkeep, Ginv.sparse),
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
++   sparse = ~ TraitEnv:Gdrop,
++   data = ILYT_Pheno,
++   na.action = na.method(x = "include"),
++   maxit = 20,
++   workspace = '20gb'
++ )
+> print('STSE.z')
+[1] "STSE.z"
+> print(summary(STSE.z.asr)$call)
+asreml(fixed = Pheno_z ~ TraitEnv, random = ~diag(TraitEnv):vm(Gkeep, 
+    Ginv.sparse), sparse = ~TraitEnv:Gdrop, residual = ~dsum(~ar1(Col):ar1(Row) | 
+    TraitEnv), na.action = na.method(x = "include"), data = ILYT_Pheno, 
+    maxit = 20, workspace = "20gb")
+> STSE.z.asr$loglik
+[1] 13260.07
+> print('AIC')
+[1] "AIC"
+> print(summary(STSE.z.asr)$aic)
+[1] -26208.14
+attr(,"parameters")
+[1] 156
+> print(paste('convergence =',STSE.z.asr$converge))
+[1] "convergence = TRUE"
+> 
+> # Heritability ----
+> STSE.z_varcomp_df <- summary(STSE.z.asr)$varcomp |>
++   as.data.frame() |>
++   rownames_to_column() |>
++   glimpse()
+Rows: 156
+Columns: 6
+$ rowname   <chr> "TraitEnv:vm(Gkeep, Ginv.sparse)!TraitEnv_GY-22-Adv", "Trait…
+$ component <dbl> 0.06795188, 0.11983912, 0.11203748, 0.15763479, 0.06858262, …
+$ std.error <dbl> 0.008699837, 0.010057853, 0.010305379, 0.009511795, 0.008308…
+$ z.ratio   <dbl> 7.810707, 11.914980, 10.871748, 16.572559, 8.254739, 8.98980…
+$ bound     <chr> "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", …
+$ `%ch`     <dbl> 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.1, 0.0, 0.0, 0.0, 0.0, …
+> 
+> calculate_heritability <- function(varcomp_df, asreml_diagel) {
++   # Function to perform one-by-one vpredict calculations
++   vpredict_individual <- function(asreml_diagel, i, j) {
++     formula <- as.formula(paste0("V", i, "~V", i, "/(V", i, "+V", j, ")"))
++     result <- vpredict(asreml_diagel, formula)
++     return(data.frame(Index = i, Formula = paste0("V", i, "~V", i, "/(V", i, "+V", j, ")"), Result = result))
++   }
++ 
++   # Initialize an empty dataframe to store results
++   vpredict_results <- data.frame()
++ 
++   # Loop through each pair of indices (V1 to V39 and V40 to V154 incrementing by 3)
++   for (i in 1:39) {
++     j <- 37 + i * 3
++     if (j <= 154) {
++       result <- vpredict_individual(asreml_diagel, i, j)
++       vpredict_results <- rbind(vpredict_results, result)
++     }
++   }
++ 
++   return(vpredict_results)
++ }
+> 
+> STSE.z_h2 <- cbind(
++   unique(ILYT_Pheno$TraitEnv),
++   calculate_heritability(varcomp_df = STSE.z_varcomp_df, asreml_diagel = STSE.z.asr)
++ )
+> 
+> # Save data ----
+> save.image('Data/STSE.z_diag.RData')
+> 
+> 
+> 
+> proc.time()
+    user   system  elapsed 
+5674.065  313.060 1629.061 

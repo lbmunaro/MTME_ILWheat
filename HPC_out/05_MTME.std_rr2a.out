@@ -65,3 +65,14 @@ Loading ASReml-R version 4.2
 +   maxit = 20,
 +   workspace = '120gb'
 + )
+Error in asreml(Pheno_std ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  : 
+  Error   : The estimation was aborted; too many exceptions.
+Calls: asreml -> vs_Call -> vsn.tryCatch.W.E.rethrow
+In addition: Warning messages:
+1: In asreml(Pheno_std ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  :
+  Warning : Log-likelihood decreased to -15997.3; trying with reduced updates 0.213418
+2: In asreml(Pheno_std ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  :
+  Warning : Log-likelihood decreased to 31684.2; trying with reduced updates 0.479235E-01
+3: In asreml(Pheno_std ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  :
+  Warning : Log-likelihood decreased to 33447.9; trying with reduced updates 0.494784E-02
+Execution halted

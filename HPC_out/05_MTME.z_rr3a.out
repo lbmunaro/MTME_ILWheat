@@ -15,6 +15,9 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
+Online License checked out Fri Feb  7 16:26:07 2025
+[Previously saved workspace restored]
+
 > # Multi-Trait Multi-Environment models ----
 > # This script fits Multi-Trait Multi-Environment models
 > 
@@ -42,7 +45,6 @@ The following objects are masked from ‘package:tidyr’:
 
     expand, pack, unpack
 
-Online License checked out Thu Feb  6 22:27:53 2025
 Loading ASReml-R version 4.2
 
 > 
@@ -53,27 +55,15 @@ Loading ASReml-R version 4.2
 > ## Pheno & Ginv
 > load('Data/ILYT_Pheno-Gmatrix.RData')
 > 
-> # Fit RR2ap model ----
+> # Fit rr3a model ----
 > ## Run model ----
-> MTME.std_RR2ap.asr <- asreml(
-+   Pheno_std ~ TraitEnv,
-+   random = ~ rr(TraitEnv,2):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
-+     rr(TraitEnv,2):ide(Gkeep) + diag(TraitEnv):ide(Gkeep),
+> MTME.z_rr3a.asr <- asreml(
++   Pheno_z ~ TraitEnv,
++   random = ~ rr(TraitEnv,3):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse),
 +   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
 +   sparse = ~ TraitEnv:Gdrop,
 +   data = ILYT_Pheno,
 +   na.action = na.method(x = "include"),
 +   maxit = 20,
-+   workspace = '120gb'
++   workspace = '96gb'
 + )
-Error in asreml(Pheno_std ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  : 
-  Error   : The estimation was aborted; too many exceptions.
-Calls: asreml -> vs_Call -> vsn.tryCatch.W.E.rethrow
-In addition: Warning messages:
-1: In asreml(Pheno_std ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  :
-  Warning : Log-likelihood decreased to 78711.8; trying with reduced updates 0.259782
-2: In asreml(Pheno_std ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  :
-  Warning : Log-likelihood decreased to 87652.6; trying with reduced updates 0.110097
-3: In asreml(Pheno_std ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  :
-  Warning : Log-likelihood decreased to 87624.8; trying with reduced updates 0.106162
-Execution halted

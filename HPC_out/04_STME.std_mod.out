@@ -15,17 +15,8 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> # Single-Trait Multi-Environment models ----
-> # This script fits Single-Trait Multi-Environment models
-> 
-> # Objective ----
-> # - 
-> 
-> # Clean workspace
-> rm(list = objects())  # Removes all objects from the environment.
-> 
-> # Packages ----
-> library(tidyverse) # R packages for data science.
+> # Load required libraries
+> library(tidyverse)
 ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ✔ dplyr     1.1.4     ✔ readr     2.1.5
 ✔ forcats   1.0.0     ✔ stringr   1.5.1
@@ -36,7 +27,7 @@ Type 'q()' to quit R.
 ✖ dplyr::filter() masks stats::filter()
 ✖ dplyr::lag()    masks stats::lag()
 ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-> library(asreml) # ASReml-R package.
+> library(asreml)
 Loading required package: Matrix
 
 Attaching package: ‘Matrix’
@@ -45,120 +36,70 @@ The following objects are masked from ‘package:tidyr’:
 
     expand, pack, unpack
 
-Online License checked out Thu Feb  6 15:10:08 2025
+Online License checked out Fri Feb  7 00:27:56 2025
 Loading ASReml-R version 4.2
 
+> library(doParallel)
+Loading required package: foreach
+
+Attaching package: ‘foreach’
+
+The following objects are masked from ‘package:purrr’:
+
+    accumulate, when
+
+Loading required package: iterators
+Loading required package: parallel
+> library(foreach)
 > 
-> # Use for HPC only
+> # Set working directory (HPC-specific)
 > setwd('~/MTME_ILWheat/')
 > 
-> # Load data ----
-> ## Pheno & Ginv
+> # Load data
 > load('Data/ILYT_Pheno-Gmatrix.RData')
 > 
-> # Fit models ----
+> # Define function to fit models with error handling
+> fit_model <- function(trait, factor_analysis, workspace_size = '20gb') {
++   result <- tryCatch({
++     model <- asreml(
++       Pheno_std ~ Env,
++       random = as.formula(paste0("~ fa(Env,", factor_analysis, "):vm(Gkeep, Ginv.sparse)")),
++       residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
++       sparse = ~ Env:Gdrop,
++       data = ILYT_Pheno |> filter(Trait == trait) |> droplevels(),
++       na.action = na.method(x = "include"),
++       maxit = 20,
++       workspace = workspace_size
++     )
++     
++     # Save model output
++     save(model, file = paste0("Data/STME.std_", trait, "_fa", factor_analysis, ".RData"))
++     
++     # Return model summary
++     list(
++       trait = trait,
++       fa = factor_analysis,
++       aic = summary(model)$aic,
++       convergence = model$converge
++     )
++   }, error = function(e) {
++     # Log error and return a message
++     error_msg <- paste(Sys.time(), "- Error fitting", trait, "fa", factor_analysis, ":", e$message)
++     write(error_msg, file = "STME_errors.log", append = TRUE)
++     return(error_msg)
++   })
++   
++   return(result)
++ }
 > 
-> ## GY ----
-> ### fa1----
-> # Run model
-> GY_STME.std_fa1.asr <- asreml(
-+   Pheno_std ~ Env,
-+   random = ~ fa(Env,1):vm(Gkeep, Ginv.sparse),
-+   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
-+   sparse = ~ Env:Gdrop,
-+   data = ILYT_Pheno |> filter(Trait == 'GY') |> droplevels(),
-+   na.action = na.method(x = "include"),
-+   maxit = 20,
-+   workspace = '16gb'
-+ )
-> # Print model info
-> print('GY_STME.std_fa1')
-[1] "GY_STME.std_fa1"
-> print(summary(GY_STME.std_fa1.asr)$call)
-asreml(fixed = Pheno_std ~ Env, random = ~fa(Env, 1):vm(Gkeep, 
-    Ginv.sparse), sparse = ~Env:Gdrop, residual = ~dsum(~ar1(Col):ar1(Row) | 
-    Env), na.action = na.method(x = "include"), data = droplevels(filter(ILYT_Pheno, 
-    Trait == "GY")), maxit = 20, workspace = "16gb")
-> print('AIC')
-[1] "AIC"
-> print(summary(GY_STME.std_fa1.asr)$aic)
-[1] -44805.96
-attr(,"parameters")
-[1] 60
-> print(paste('convergence =',GY_STME.std_fa1.asr$converge))
-[1] "convergence = TRUE"
+> # Define traits and factor analyses
+> traits <- c("GY", "TW", "HD", "HT", "MAT")
+> factor_analyses <- c(1, 2, 3)
 > 
-> save.image('Data/STME.std_mod.RData')
-> 
-> ### fa2----
-> # Run model
-> GY_STME.std_fa2.asr <- asreml(
-+   Pheno_std ~ Env,
-+   random = ~ fa(Env,2):vm(Gkeep, Ginv.sparse),
-+   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
-+   sparse = ~ Env:Gdrop,
-+   data = ILYT_Pheno |> filter(Trait == 'GY') |> droplevels(),
-+   na.action = na.method(x = "include"),
-+   maxit = 20,
-+   workspace = '16gb'
-+ )
-Warning message:
-In asreml(Pheno_std ~ Env, random = ~fa(Env, 2):vm(Gkeep, Ginv.sparse),  :
-  Some components changed by more than 1% on the last iteration
-> # Print model info
-> print('GY_STME.std_fa2')
-[1] "GY_STME.std_fa2"
-> print(summary(GY_STME.std_fa2.asr)$call)
-asreml(fixed = Pheno_std ~ Env, random = ~fa(Env, 2):vm(Gkeep, 
-    Ginv.sparse), sparse = ~Env:Gdrop, residual = ~dsum(~ar1(Col):ar1(Row) | 
-    Env), na.action = na.method(x = "include"), data = droplevels(filter(ILYT_Pheno, 
-    Trait == "GY")), maxit = 20, workspace = "16gb")
-> print('AIC')
-[1] "AIC"
-> print(summary(GY_STME.std_fa2.asr)$aic)
-[1] -44992.7
-attr(,"parameters")
-[1] 71
-> print(paste('convergence =',GY_STME.std_fa2.asr$converge))
-[1] "convergence = TRUE"
-> 
-> save.image('Data/STME.std_mod.RData')
-> 
-> # Update model
-> GY_STME.std_fa2.asr <- update(GY_STME.std_fa2.asr)
-Warning message:
-In asreml(fixed = Pheno_std ~ Env, random = ~fa(Env, 2):vm(Gkeep,  :
-  Some components changed by more than 1% on the last iteration
-> 
-> # Print model info
-> print('GY_STME.std_fa2-update1')
-[1] "GY_STME.std_fa2-update1"
-> print(summary(GY_STME.std_fa2.asr)$call)
-asreml(fixed = Pheno_std ~ Env, random = ~fa(Env, 2):vm(Gkeep, 
-    Ginv.sparse), sparse = ~Env:Gdrop, residual = ~dsum(~ar1(Col):ar1(Row) | 
-    Env), G.param = GY_STME.std_fa2.asr$G.param, R.param = GY_STME.std_fa2.asr$R.param, 
-    na.action = na.method(x = "include"), data = droplevels(filter(ILYT_Pheno, 
-        Trait == "GY")), maxit = 20, workspace = "16gb")
-> print('AIC')
-[1] "AIC"
-> print(summary(GY_STME.std_fa2.asr)$aic)
-[1] -44992.7
-attr(,"parameters")
-[1] 71
-> print(paste('convergence =',GY_STME.std_fa2.asr$converge))
-[1] "convergence = TRUE"
-> 
-> save.image('Data/STME.std_mod.RData')
-> 
-> ### fa3----
-> # Run model
-> GY_STME.std_fa3.asr <- asreml(
-+   Pheno_std ~ Env,
-+   random = ~ fa(Env,3):vm(Gkeep, Ginv.sparse),
-+   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
-+   sparse = ~ Env:Gdrop,
-+   data = ILYT_Pheno |> filter(Trait == 'GY') |> droplevels(),
-+   na.action = na.method(x = "include"),
-+   maxit = 20,
-+   workspace = '20gb'
-+ )
+> # Setup parallel processing
+> num_cores <- detectCores() - 1  # Use one less than available cores
+> cl <- makeCluster(num_cores)
+Error in socketAccept(socket = socket, blocking = TRUE, open = "a+b",  : 
+  all 128 connections are in use
+Calls: makeCluster -> makePSOCKcluster -> socketAccept
+Execution halted
