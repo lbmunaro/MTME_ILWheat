@@ -15,11 +15,12 @@ setwd('~/MTME_ILWheat/')
 ## Pheno & Ginv
 load('Data/ILYT_Pheno-Gmatrix.RData')
 
-# Fit rr1a model ----
+# Fit rr1ap model ----
 ## Run model ----
-MTME.z_rr1a.asr <- asreml(
+MTME.z_rr1ap.asr <- asreml(
   Pheno_z ~ TraitEnv,
-  random = ~ rr(TraitEnv,1):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse),
+  random = ~ rr(TraitEnv,1):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
+    rr(TraitEnv,1):ide(Gkeep) + diag(TraitEnv):ide(Gkeep),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
   sparse = ~ TraitEnv:Gdrop,
   data = ILYT_Pheno,
@@ -29,54 +30,54 @@ MTME.z_rr1a.asr <- asreml(
 )
 
 # Print model info
-print('MTME.z-rr1a')
+print('MTME.z-rr1ap')
 print('AIC')
-print(summary(MTME.z_rr1a.asr)$aic)
-print(paste('convergence =', MTME.z_rr1a.asr$converge))
-MTME.z_rr1a.asr$trace |>
+print(summary(MTME.z_rr1ap.asr)$aic)
+print(paste('convergence =', MTME.z_rr1ap.asr$converge))
+MTME.z_rr1ap.asr$trace |>
   as.data.frame() |> rownames_to_column('Iteration') |>
   filter(Iteration=='LogLik') |> print()
 
-save.image('Data/MTME.z_rr1a.RData')
+save.image('Data/MTME.z_rr1ap.RData')
 
 ## Update1 model ----
-MTME.z_rr1a.asr <- update(MTME.z_rr1a.asr)
+MTME.z_rr1ap.asr <- update(MTME.z_rr1ap.asr)
 
 # Print model info
-print('MTME.z-rr1a - Update 1')
+print('MTME.z-rr1ap - Update 1')
 print('AIC')
-print(summary(MTME.z_rr1a.asr)$aic)
-print(paste('convergence =', MTME.z_rr1a.asr$converge))
-MTME.z_rr1a.asr$trace |>
+print(summary(MTME.z_rr1ap.asr)$aic)
+print(paste('convergence =', MTME.z_rr1ap.asr$converge))
+MTME.z_rr1ap.asr$trace |>
   as.data.frame() |> rownames_to_column('Iteration') |>
   filter(Iteration=='LogLik') |> print()
 
-save.image('Data/MTME.z_rr1a.RData')
+save.image('Data/MTME.z_rr1ap.RData')
 
 ## Update2 model ----
-MTME.z_rr1a.asr <- update(MTME.z_rr1a.asr)
+MTME.z_rr1ap.asr <- update(MTME.z_rr1ap.asr)
 
 # Print model info
-print('MTME.z-rr1a - Update 2')
+print('MTME.z-rr1ap - Update 2')
 print('AIC')
-print(summary(MTME.z_rr1a.asr)$aic)
-print(paste('convergence =', MTME.z_rr1a.asr$converge))
-MTME.z_rr1a.asr$trace |>
+print(summary(MTME.z_rr1ap.asr)$aic)
+print(paste('convergence =', MTME.z_rr1ap.asr$converge))
+MTME.z_rr1ap.asr$trace |>
   as.data.frame() |> rownames_to_column('Iteration') |>
   filter(Iteration=='LogLik') |> print()
 
-save.image('Data/MTME.z_rr1a.RData')
+save.image('Data/MTME.z_rr1ap.RData')
 
 ## Update3 model ----
-MTME.z_rr1a.asr <- update(MTME.z_rr1a.asr)
+MTME.z_rr1ap.asr <- update(MTME.z_rr1ap.asr)
 
 # Print model info
-print('MTME.z-rr1a - Update 3')
+print('MTME.z-rr1ap - Update 3')
 print('AIC')
-print(summary(MTME.z_rr1a.asr)$aic)
-print(paste('convergence =', MTME.z_rr1a.asr$converge))
-MTME.z_rr1a.asr$trace |>
+print(summary(MTME.z_rr1ap.asr)$aic)
+print(paste('convergence =', MTME.z_rr1ap.asr$converge))
+MTME.z_rr1ap.asr$trace |>
   as.data.frame() |> rownames_to_column('Iteration') |>
   filter(Iteration=='LogLik') |> print()
 
-save.image('Data/MTME.z_rr1a.RData')
+save.image('Data/MTME.z_rr1ap.RData')
