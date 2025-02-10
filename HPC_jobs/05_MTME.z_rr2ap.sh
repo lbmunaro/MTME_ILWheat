@@ -4,7 +4,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=20
 #SBATCH --mem=48G
-#SBATCH --job-name=MTzrr2a
+#SBATCH --job-name=MTzrr2ap
 #SBATCH --account=aces
 #SBATCH --partition=aces
 #
@@ -18,7 +18,7 @@ JOBS_DIR=$BASE_DIR/HPC_jobs
 OUTPUT_DIR=$BASE_DIR/HPC_out
 
 # Job name
-JOB_NAME="05_MTME.z_rr2a"
+JOB_NAME="05_MTME.z_rr2ap"
 
 {
   echo "$JOB_NAME.sh started on $(hostname) at $(date)"
