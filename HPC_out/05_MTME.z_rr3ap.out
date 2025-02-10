@@ -15,7 +15,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-Online License checked out Sat Feb  8 21:05:34 2025
+Online License checked out Sun Feb  9 17:13:20 2025
 [Previously saved workspace restored]
 
 > # Multi-Trait Multi-Environment models ----
@@ -55,53 +55,27 @@ Loading ASReml-R version 4.2
 > ## Pheno & Ginv
 > load('Data/ILYT_Pheno-Gmatrix.RData')
 > 
-> # Fit rr4a model ----
+> # Fit rr3ap model ----
 > ## Run model ----
-> MTME.z_rr4a.asr <- asreml(
+> MTME.z_rr3ap.asr <- asreml(
 +   Pheno_z ~ TraitEnv,
-+   random = ~ rr(TraitEnv,4):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse),
++   random = ~ rr(TraitEnv,3):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
++     rr(TraitEnv,1):ide(Gkeep) + diag(TraitEnv):ide(Gkeep),
 +   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
 +   sparse = ~ TraitEnv:Gdrop,
 +   data = ILYT_Pheno,
 +   na.action = na.method(x = "include"),
 +   maxit = 20,
-+   workspace = '96gb'
++   workspace = '48gb'
 + )
-Warning messages:
-1: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 4):vm(Gkeep,  :
-  Log-likelihood not converged
-2: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 4):vm(Gkeep,  :
-  Some components changed by more than 1% on the last iteration
-> 
-> # Print model info
-> print('MTME.z-rr4a')
-[1] "MTME.z-rr4a"
-> print(summary(MTME.z_rr4a.asr)$call)
-asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 4):vm(Gkeep, 
-    Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse), sparse = ~TraitEnv:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | TraitEnv), na.action = na.method(x = "include"), 
-    data = ILYT_Pheno, maxit = 20, workspace = "96gb")
-> print('AIC')
-[1] "AIC"
-> print(summary(MTME.z_rr4a.asr)$aic)
-[1] -31864.54
-attr(,"parameters")
-[1] 306
-> print(paste('convergence =', MTME.z_rr4a.asr$converge))
-[1] "convergence = FALSE"
-> MTME.z_rr4a.asr$trace |>
-+   as.data.frame() |>
-+   rownames_to_column('Iteration') |>
-+   filter(Iteration=='LogLik') |>
-+   print()
-  Iteration       1        2       3        4       5        6       7        8
-1    LogLik 8833.62 11812.01 14215.8 15130.59 15676.1 15901.58 16003.3 16056.16
-         9       10       11       12       13       14       15       16
-1 16089.71 16114.63 16140.06 16160.71 16177.08 16190.78 16201.57 16210.35
-        17       18       19       20       21
-1 16218.29 16225.75 16233.02 16238.27 16238.27
-> 
-> save.image('Data/MTME.z_rr4a.RData')
-> 
-> ## Update1 model ----
-> MTME.z_rr4a.asr <- update(MTME.z_rr4a.asr)
+Error in asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  : 
+  Error   : The estimation was aborted; too many exceptions.
+Calls: asreml -> vs_Call -> vsn.tryCatch.W.E.rethrow
+In addition: Warning messages:
+1: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
+  Warning : Log-likelihood decreased to 11232.7; trying with reduced updates 0.202187
+2: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
+  Warning : Log-likelihood decreased to 11332.2; trying with reduced updates 0.118719
+3: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
+  Warning : Log-likelihood decreased to 11471.1; trying with reduced updates 0.641299E-01
+Execution halted

@@ -15,6 +15,9 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
+Online License checked out Sat Feb  8 11:57:16 2025
+[Previously saved workspace restored]
+
 > # Single-Trait Multi-Environment models ----
 > # This script fits Single-Trait Multi-Environment models
 > 
@@ -42,7 +45,6 @@ The following objects are masked from ‘package:tidyr’:
 
     expand, pack, unpack
 
-Online License checked out Fri Feb  7 11:13:44 2025
 Loading ASReml-R version 4.2
 
 > 
@@ -71,12 +73,6 @@ Loading ASReml-R version 4.2
 > # Print model info
 > print('GY_STME.z_rr1')
 [1] "GY_STME.z_rr1"
-> print(summary(GY_STME.z_rr1.asr)$call)
-asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 1):vm(Gkeep, 
-    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
-    data = droplevels(filter(ILYT_Pheno, Trait == "GY")), maxit = 20, 
-    workspace = "16gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(GY_STME.z_rr1.asr)$aic)
@@ -85,6 +81,14 @@ attr(,"parameters")
 [1] 60
 > print(paste('convergence =',GY_STME.z_rr1.asr$converge))
 [1] "convergence = TRUE"
+> GY_STME.z_rr1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 1391.558 2162.693 2820.629 3132.055 3263.125 3296.062 3305.067
+         8      9       10      11       12       13       14       15       16
+1 3307.757 3308.6 3308.876 3308.97 3309.004 3309.016 3309.021 3309.023 3309.024
+        17
+1 3309.024
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -106,12 +110,6 @@ In asreml(Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep, Ginv.sparse) +  :
 > # Print model info
 > print('GY_STME.z_rr2')
 [1] "GY_STME.z_rr2"
-> print(summary(GY_STME.z_rr2.asr)$call)
-asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep, 
-    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
-    data = droplevels(filter(ILYT_Pheno, Trait == "GY")), maxit = 20, 
-    workspace = "16gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(GY_STME.z_rr2.asr)$aic)
@@ -120,6 +118,14 @@ attr(,"parameters")
 [1] 71
 > print(paste('convergence =',GY_STME.z_rr2.asr$converge))
 [1] "convergence = TRUE"
+> GY_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 1371.732 2298.823 2973.164 3261.054 3373.964 3401.163 3408.966
+         8       9       10       11       12      13       14       15      16
+1 3411.656 3412.69 3413.103 3413.273 3413.342 3413.37 3413.382 3413.388 3413.39
+        17       18
+1 3413.391 3413.391
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -132,13 +138,6 @@ In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep,  :
 > # Print model info
 > print('GY_STME.z_rr2-update1')
 [1] "GY_STME.z_rr2-update1"
-> print(summary(GY_STME.z_rr2.asr)$call)
-asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep, 
-    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | Env), G.param = GY_STME.z_rr2.asr$G.param, 
-    R.param = GY_STME.z_rr2.asr$R.param, na.action = na.method(x = "include"), 
-    data = droplevels(filter(ILYT_Pheno, Trait == "GY")), maxit = 20, 
-    workspace = "16gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(GY_STME.z_rr2.asr)$aic)
@@ -147,6 +146,34 @@ attr(,"parameters")
 [1] 71
 > print(paste('convergence =',GY_STME.z_rr2.asr$converge))
 [1] "convergence = TRUE"
+> GY_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3
+1    LogLik 3413.391 3413.391 3413.391
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> # Update model
+> GY_STME.z_rr2.asr <- update(GY_STME.z_rr2.asr)
+Warning message:
+In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> 
+> # Print model info
+> print('GY_STME.z_rr2-update2')
+[1] "GY_STME.z_rr2-update2"
+> print('AIC')
+[1] "AIC"
+> print(summary(GY_STME.z_rr2.asr)$aic)
+[1] -6684.783
+attr(,"parameters")
+[1] 71
+> print(paste('convergence =',GY_STME.z_rr2.asr$converge))
+[1] "convergence = TRUE"
+> GY_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3
+1    LogLik 3413.391 3413.391 3413.391
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -170,12 +197,6 @@ Warning messages:
 > # Print model info
 > print('GY_STME.z_rr3')
 [1] "GY_STME.z_rr3"
-> print(summary(GY_STME.z_rr3.asr)$call)
-asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep, 
-    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
-    data = droplevels(filter(ILYT_Pheno, Trait == "GY")), maxit = 20, 
-    workspace = "20gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(GY_STME.z_rr3.asr)$aic)
@@ -184,6 +205,14 @@ attr(,"parameters")
 [1] 81
 > print(paste('convergence =',GY_STME.z_rr3.asr$converge))
 [1] "convergence = FALSE"
+> GY_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3        4        5       6        7
+1    LogLik 1260.198 2320.034 3016.996 3289.146 3392.223 3416.84 3425.272
+         8        9      10       11       12      13       14       15
+1 3429.047 3431.023 3432.06 3432.766 3433.296 3433.59 3433.742 3433.852
+        16       17       18       19       20       21
+1 3433.922 3433.955 3433.968 3433.975 3433.978 3433.978
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -196,13 +225,6 @@ In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep,  :
 > # Print model info
 > print('GY_STME.z_rr3-update1')
 [1] "GY_STME.z_rr3-update1"
-> print(summary(GY_STME.z_rr3.asr)$call)
-asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep, 
-    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | Env), G.param = GY_STME.z_rr3.asr$G.param, 
-    R.param = GY_STME.z_rr3.asr$R.param, na.action = na.method(x = "include"), 
-    data = droplevels(filter(ILYT_Pheno, Trait == "GY")), maxit = 20, 
-    workspace = "20gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(GY_STME.z_rr3.asr)$aic)
@@ -211,6 +233,34 @@ attr(,"parameters")
 [1] 81
 > print(paste('convergence =',GY_STME.z_rr3.asr$converge))
 [1] "convergence = TRUE"
+> GY_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3
+1    LogLik 3433.979 3433.979 3433.979
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> # Update model
+> GY_STME.z_rr3.asr <- update(GY_STME.z_rr3.asr)
+Warning message:
+In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> 
+> # Print model info
+> print('GY_STME.z_rr3-update2')
+[1] "GY_STME.z_rr3-update2"
+> print('AIC')
+[1] "AIC"
+> print(summary(GY_STME.z_rr3.asr)$aic)
+[1] -6705.96
+attr(,"parameters")
+[1] 81
+> print(paste('convergence =',GY_STME.z_rr3.asr$converge))
+[1] "convergence = TRUE"
+> GY_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration       1       2       3
+1    LogLik 3433.98 3433.98 3433.98
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -230,12 +280,6 @@ attr(,"parameters")
 > # Print model info
 > print('TW_STME.z_rr1')
 [1] "TW_STME.z_rr1"
-> print(summary(TW_STME.z_rr1.asr)$call)
-asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 1):vm(Gkeep, 
-    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
-    data = droplevels(filter(ILYT_Pheno, Trait == "TW")), maxit = 20, 
-    workspace = "16gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(TW_STME.z_rr1.asr)$aic)
@@ -244,10 +288,17 @@ attr(,"parameters")
 [1] 60
 > print(paste('convergence =',TW_STME.z_rr1.asr$converge))
 [1] "convergence = TRUE"
+> TW_STME.z_rr1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration       1        2        3        4        5        6        7
+1    LogLik 4700.78 5845.793 6241.264 6425.443 6505.664 6526.743 6532.647
+         8        9       10       11       12       13       14       15
+1 6534.425 6535.005 6535.209 6535.285 6535.314 6535.326 6535.331 6535.333
+        16       17
+1 6535.334 6535.334
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
-> load('Data/STME.z_rr.RData')
 > ### rr2----
 > # Run model
 > TW_STME.z_rr2.asr <- asreml(
@@ -268,12 +319,6 @@ Warning messages:
 > # Print model info
 > print('TW_STME.z_rr2')
 [1] "TW_STME.z_rr2"
-> print(summary(TW_STME.z_rr2.asr)$call)
-asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep, 
-    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
-    data = droplevels(filter(ILYT_Pheno, Trait == "TW")), maxit = 20, 
-    workspace = "16gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(TW_STME.z_rr2.asr)$aic)
@@ -282,6 +327,14 @@ attr(,"parameters")
 [1] 71
 > print(paste('convergence =',TW_STME.z_rr2.asr$converge))
 [1] "convergence = FALSE"
+> TW_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1       2       3        4        5        6        7
+1    LogLik 4471.151 5979.92 6416.56 6555.989 6599.085 6620.054 6626.614
+         8       9       10       11      12       13       14       15
+1 6629.564 6631.43 6632.588 6633.362 6633.99 6634.523 6634.924 6635.195
+        16       17       18       19       20       21
+1 6635.366 6635.473 6635.541 6635.585 6635.615 6635.615
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -294,13 +347,6 @@ In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep,  :
 > # Print model info
 > print('TW_STME.z_rr2-update1')
 [1] "TW_STME.z_rr2-update1"
-> print(summary(TW_STME.z_rr2.asr)$call)
-asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep, 
-    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | Env), G.param = TW_STME.z_rr2.asr$G.param, 
-    R.param = TW_STME.z_rr2.asr$R.param, na.action = na.method(x = "include"), 
-    data = droplevels(filter(ILYT_Pheno, Trait == "TW")), maxit = 20, 
-    workspace = "16gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(TW_STME.z_rr2.asr)$aic)
@@ -309,6 +355,36 @@ attr(,"parameters")
 [1] 71
 > print(paste('convergence =',TW_STME.z_rr2.asr$converge))
 [1] "convergence = TRUE"
+> TW_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1       2        3        4        5        6        7
+1    LogLik 6635.635 6635.64 6635.652 6635.661 6635.667 6635.671 6635.675
+         8        9
+1 6635.677 6635.677
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> # Update model
+> TW_STME.z_rr2.asr <- update(TW_STME.z_rr2.asr)
+Warning message:
+In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> 
+> # Print model info
+> print('TW_STME.z_rr2-update2')
+[1] "TW_STME.z_rr2-update2"
+> print('AIC')
+[1] "AIC"
+> print(summary(TW_STME.z_rr2.asr)$aic)
+[1] -13129.36
+attr(,"parameters")
+[1] 71
+> print(paste('convergence =',TW_STME.z_rr2.asr$converge))
+[1] "convergence = TRUE"
+> TW_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3
+1    LogLik 6635.678 6635.679 6635.679
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -332,12 +408,6 @@ Warning messages:
 > # Print model info
 > print('TW_STME.z_rr3')
 [1] "TW_STME.z_rr3"
-> print(summary(TW_STME.z_rr3.asr)$call)
-asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep, 
-    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
-    data = droplevels(filter(ILYT_Pheno, Trait == "TW")), maxit = 20, 
-    workspace = "20gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(TW_STME.z_rr3.asr)$aic)
@@ -346,6 +416,14 @@ attr(,"parameters")
 [1] 81
 > print(paste('convergence =',TW_STME.z_rr3.asr$converge))
 [1] "convergence = FALSE"
+> TW_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 4113.573 5978.064 6382.123 6561.284 6643.655 6669.237 6679.544
+         8        9       10       11       12       13       14       15
+1 6684.877 6687.306 6688.605 6689.417 6690.097 6690.563 6690.822 6690.949
+        16       17       18       19       20       21
+1 6691.002 6691.025 6691.036 6691.042 6691.045 6691.045
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -358,13 +436,6 @@ In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep,  :
 > # Print model info
 > print('TW_STME.z_rr3-update1')
 [1] "TW_STME.z_rr3-update1"
-> print(summary(TW_STME.z_rr3.asr)$call)
-asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep, 
-    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | Env), G.param = TW_STME.z_rr3.asr$G.param, 
-    R.param = TW_STME.z_rr3.asr$R.param, na.action = na.method(x = "include"), 
-    data = droplevels(filter(ILYT_Pheno, Trait == "TW")), maxit = 20, 
-    workspace = "20gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(TW_STME.z_rr3.asr)$aic)
@@ -373,6 +444,10 @@ attr(,"parameters")
 [1] 81
 > print(paste('convergence =',TW_STME.z_rr3.asr$converge))
 [1] "convergence = TRUE"
+> TW_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3        4        5        6
+1    LogLik 6691.047 6691.048 6691.048 6691.049 6691.049 6691.049
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -385,13 +460,6 @@ In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep,  :
 > # Print model info
 > print('TW_STME.z_rr3-update2')
 [1] "TW_STME.z_rr3-update2"
-> print(summary(TW_STME.z_rr3.asr)$call)
-asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep, 
-    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | Env), G.param = TW_STME.z_rr3.asr$G.param, 
-    R.param = TW_STME.z_rr3.asr$R.param, na.action = na.method(x = "include"), 
-    data = droplevels(filter(ILYT_Pheno, Trait == "TW")), maxit = 20, 
-    workspace = "20gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(TW_STME.z_rr3.asr)$aic)
@@ -400,6 +468,34 @@ attr(,"parameters")
 [1] 81
 > print(paste('convergence =',TW_STME.z_rr3.asr$converge))
 [1] "convergence = TRUE"
+> TW_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration       1       2       3
+1    LogLik 6691.05 6691.05 6691.05
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> # Update model
+> TW_STME.z_rr3.asr <- update(TW_STME.z_rr3.asr)
+Warning message:
+In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> 
+> # Print model info
+> print('TW_STME.z_rr3-update3')
+[1] "TW_STME.z_rr3-update3"
+> print('AIC')
+[1] "AIC"
+> print(summary(TW_STME.z_rr3.asr)$aic)
+[1] -13220.1
+attr(,"parameters")
+[1] 81
+> print(paste('convergence =',TW_STME.z_rr3.asr$converge))
+[1] "convergence = TRUE"
+> TW_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3
+1    LogLik 6691.051 6691.051 6691.051
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -419,12 +515,6 @@ attr(,"parameters")
 > # Print model info
 > print('HD_STME.z_rr1')
 [1] "HD_STME.z_rr1"
-> print(summary(HD_STME.z_rr1.asr)$call)
-asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 1):vm(Gkeep, 
-    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
-    data = droplevels(filter(ILYT_Pheno, Trait == "HD")), maxit = 20, 
-    workspace = "16gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(HD_STME.z_rr1.asr)$aic)
@@ -433,6 +523,12 @@ attr(,"parameters")
 [1] 30
 > print(paste('convergence =',HD_STME.z_rr1.asr$converge))
 [1] "convergence = TRUE"
+> HD_STME.z_rr1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3       4        5        6        7
+1    LogLik 5205.106 6815.856 7113.145 7420.99 7542.131 7576.249 7581.388
+         8        9       10       11       12       13       14
+1 7582.322 7582.525 7582.573 7582.584 7582.587 7582.588 7582.588
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -456,12 +552,6 @@ Warning messages:
 > # Print model info
 > print('HD_STME.z_rr2')
 [1] "HD_STME.z_rr2"
-> print(summary(HD_STME.z_rr2.asr)$call)
-asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep, 
-    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
-    data = droplevels(filter(ILYT_Pheno, Trait == "HD")), maxit = 20, 
-    workspace = "16gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(HD_STME.z_rr2.asr)$aic)
@@ -470,6 +560,14 @@ attr(,"parameters")
 [1] 35
 > print(paste('convergence =',HD_STME.z_rr2.asr$converge))
 [1] "convergence = FALSE"
+> HD_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3       4        5        6        7
+1    LogLik 5026.196 6994.176 7208.042 7435.34 7536.108 7576.743 7587.938
+         8        9      10       11       12       13       14       15
+1 7590.607 7593.445 7596.05 7598.916 7600.719 7602.705 7604.743 7607.099
+        16       17      18       19       20       21
+1 7608.342 7609.154 7609.77 7610.249 7610.642 7610.642
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -479,13 +577,6 @@ attr(,"parameters")
 > # Print model info
 > print('HD_STME.z_rr2-update1')
 [1] "HD_STME.z_rr2-update1"
-> print(summary(HD_STME.z_rr2.asr)$call)
-asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep, 
-    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | Env), G.param = HD_STME.z_rr2.asr$G.param, 
-    R.param = HD_STME.z_rr2.asr$R.param, na.action = na.method(x = "include"), 
-    data = droplevels(filter(ILYT_Pheno, Trait == "HD")), maxit = 20, 
-    workspace = "16gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(HD_STME.z_rr2.asr)$aic)
@@ -494,6 +585,12 @@ attr(,"parameters")
 [1] 35
 > print(paste('convergence =',HD_STME.z_rr2.asr$converge))
 [1] "convergence = TRUE"
+> HD_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 7611.173 7611.299 7611.789 7612.129 7612.316 7612.408 7612.445
+         8        9       10       11       12
+1 7612.458 7612.463 7612.465 7612.465 7612.465
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -512,12 +609,6 @@ attr(,"parameters")
 > # Print model info
 > print('HD_STME.z_rr3')
 [1] "HD_STME.z_rr3"
-> print(summary(HD_STME.z_rr3.asr)$call)
-asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep, 
-    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
-    data = droplevels(filter(ILYT_Pheno, Trait == "HD")), maxit = 20, 
-    workspace = "20gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(HD_STME.z_rr3.asr)$aic)
@@ -526,6 +617,12 @@ attr(,"parameters")
 [1] 39
 > print(paste('convergence =',HD_STME.z_rr3.asr$converge))
 [1] "convergence = TRUE"
+> HD_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 6886.561 7274.667 7490.211 7561.624 7598.481 7611.312 7613.482
+         8        9       10      11       12       13       14
+1 7613.922 7614.025 7614.052 7614.06 7614.062 7614.063 7614.063
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -535,13 +632,6 @@ attr(,"parameters")
 > # Print model info
 > print('HD_STME.z_rr3-update1')
 [1] "HD_STME.z_rr3-update1"
-> print(summary(HD_STME.z_rr3.asr)$call)
-asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep, 
-    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | Env), G.param = HD_STME.z_rr3.asr$G.param, 
-    R.param = HD_STME.z_rr3.asr$R.param, na.action = na.method(x = "include"), 
-    data = droplevels(filter(ILYT_Pheno, Trait == "HD")), maxit = 20, 
-    workspace = "20gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(HD_STME.z_rr3.asr)$aic)
@@ -550,6 +640,10 @@ attr(,"parameters")
 [1] 39
 > print(paste('convergence =',HD_STME.z_rr3.asr$converge))
 [1] "convergence = TRUE"
+> HD_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3
+1    LogLik 7614.063 7614.063 7614.063
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -569,12 +663,6 @@ attr(,"parameters")
 > # Print model info
 > print('HT_STME.z_rr1')
 [1] "HT_STME.z_rr1"
-> print(summary(HT_STME.z_rr1.asr)$call)
-asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 1):vm(Gkeep, 
-    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
-    data = droplevels(filter(ILYT_Pheno, Trait == "HT")), maxit = 20, 
-    workspace = "16gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(HT_STME.z_rr1.asr)$aic)
@@ -583,6 +671,14 @@ attr(,"parameters")
 [1] 35
 > print(paste('convergence =',HT_STME.z_rr1.asr$converge))
 [1] "convergence = TRUE"
+> HT_STME.z_rr1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration         1         2         3         4         5         6
+1    LogLik -1101.849 -596.4248 -312.4979 -205.3836 -169.0712 -161.7484
+          7         8         9        10        11        12        13
+1 -159.9425 -159.4561 -159.3225 -159.2857 -159.2755 -159.2726 -159.2718
+         14
+1 -159.2718
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -601,12 +697,6 @@ attr(,"parameters")
 > # Print model info
 > print('HT_STME.z_rr2')
 [1] "HT_STME.z_rr2"
-> print(summary(HT_STME.z_rr2.asr)$call)
-asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep, 
-    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
-    data = droplevels(filter(ILYT_Pheno, Trait == "HT")), maxit = 20, 
-    workspace = "16gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(HT_STME.z_rr2.asr)$aic)
@@ -615,6 +705,14 @@ attr(,"parameters")
 [1] 41
 > print(paste('convergence =',HT_STME.z_rr2.asr$converge))
 [1] "convergence = TRUE"
+> HT_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration         1         2         3         4         5         6
+1    LogLik -1194.527 -608.7038 -303.9938 -197.0513 -160.7376 -153.3819
+          7         8         9        10        11        12        13
+1 -149.0205 -146.9301 -145.9131 -145.1315 -144.7678 -144.4677 -144.2851
+         14        15        16        17        18        19        20
+1 -144.2036 -144.1745 -144.1651 -144.1621 -144.1612 -144.1611 -144.1611
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -624,13 +722,6 @@ attr(,"parameters")
 > # Print model info
 > print('HT_STME.z_rr2-update1')
 [1] "HT_STME.z_rr2-update1"
-> print(summary(HT_STME.z_rr2.asr)$call)
-asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep, 
-    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | Env), G.param = HT_STME.z_rr2.asr$G.param, 
-    R.param = HT_STME.z_rr2.asr$R.param, na.action = na.method(x = "include"), 
-    data = droplevels(filter(ILYT_Pheno, Trait == "HT")), maxit = 20, 
-    workspace = "16gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(HT_STME.z_rr2.asr)$aic)
@@ -639,6 +730,10 @@ attr(,"parameters")
 [1] 41
 > print(paste('convergence =',HT_STME.z_rr2.asr$converge))
 [1] "convergence = TRUE"
+> HT_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration         1         2         3
+1    LogLik -144.1609 -144.1609 -144.1609
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -662,12 +757,6 @@ Warning messages:
 > # Print model info
 > print('HT_STME.z_rr3')
 [1] "HT_STME.z_rr3"
-> print(summary(HT_STME.z_rr3.asr)$call)
-asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep, 
-    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
-    data = droplevels(filter(ILYT_Pheno, Trait == "HT")), maxit = 20, 
-    workspace = "20gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(HT_STME.z_rr3.asr)$aic)
@@ -676,6 +765,14 @@ attr(,"parameters")
 [1] 46
 > print(paste('convergence =',HT_STME.z_rr3.asr$converge))
 [1] "convergence = FALSE"
+> HT_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration         1         2        3         4         5         6        7
+1    LogLik -1211.204 -978.4819 -573.696 -286.7804 -186.9404 -154.6904 -146.831
+          8         9        10        11        12        13        14
+1 -143.9292 -142.8114 -142.1792 -141.7102 -141.4282 -141.2697 -141.1869
+         15        16        17       18        19        20        21
+1 -141.1441 -141.1209 -141.1074 -141.099 -141.0934 -141.0896 -141.0896
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -688,13 +785,6 @@ In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep,  :
 > # Print model info
 > print('HT_STME.z_rr3-update1')
 [1] "HT_STME.z_rr3-update1"
-> print(summary(HT_STME.z_rr3.asr)$call)
-asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep, 
-    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | Env), G.param = HT_STME.z_rr3.asr$G.param, 
-    R.param = HT_STME.z_rr3.asr$R.param, na.action = na.method(x = "include"), 
-    data = droplevels(filter(ILYT_Pheno, Trait == "HT")), maxit = 20, 
-    workspace = "20gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(HT_STME.z_rr3.asr)$aic)
@@ -703,6 +793,36 @@ attr(,"parameters")
 [1] 46
 > print(paste('convergence =',HT_STME.z_rr3.asr$converge))
 [1] "convergence = TRUE"
+> HT_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1         2        3         4         5         6        7
+1    LogLik -141.087 -141.0866 -141.086 -141.0854 -141.0849 -141.0844 -141.084
+          8         9        10        11        12        13
+1 -141.0836 -141.0832 -141.0829 -141.0826 -141.0824 -141.0824
+> 
+> save.image('Data/STME.z_rr.RData')
+> 
+> # Update model
+> HT_STME.z_rr3.asr <- update(HT_STME.z_rr3.asr)
+Warning message:
+In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> 
+> # Print model info
+> print('HT_STME.z_rr3-update2')
+[1] "HT_STME.z_rr3-update2"
+> print('AIC')
+[1] "AIC"
+> print(summary(HT_STME.z_rr3.asr)$aic)
+[1] 374.1638
+attr(,"parameters")
+[1] 46
+> print(paste('convergence =',HT_STME.z_rr3.asr$converge))
+[1] "convergence = TRUE"
+> HT_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration         1         2         3
+1    LogLik -141.0819 -141.0819 -141.0819
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -722,12 +842,6 @@ attr(,"parameters")
 > # Print model info
 > print('MAT_STME.z_rr1')
 [1] "MAT_STME.z_rr1"
-> print(summary(MAT_STME.z_rr1.asr)$call)
-asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 1):vm(Gkeep, 
-    Ginv.sparse) + diag(Env):vm(Gkeep, Ginv.sparse), sparse = ~Env:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | Env), na.action = na.method(x = "include"), 
-    data = droplevels(filter(ILYT_Pheno, Trait == "MAT")), maxit = 20, 
-    workspace = "16gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(MAT_STME.z_rr1.asr)$aic)
@@ -736,11 +850,19 @@ attr(,"parameters")
 [1] 10
 > print(paste('convergence =',MAT_STME.z_rr1.asr$converge))
 [1] "convergence = TRUE"
+> MAT_STME.z_rr1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration         1         2         3         4         5         6
+1    LogLik -388.2735 -348.5642 -305.5528 -280.4365 -270.5863 -268.5396
+          7         8         9        10        11        12        13
+1 -267.9785 -267.7968 -267.7332 -267.7101 -267.7015 -267.6983 -267.6971
+         14        15
+1 -267.6967 -267.6967
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
 > # # End ----
 > 
 > proc.time()
-     user    system   elapsed 
-119669.16   4669.52  45395.51 
+      user     system    elapsed 
+128551.328   4689.066  50852.108 
