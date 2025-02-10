@@ -30,15 +30,12 @@ MTME.z_rr3a.asr <- asreml(
 
 # Print model info
 print('MTME.z-rr3a')
-print(summary(MTME.z_rr3a.asr)$call)
 print('AIC')
 print(summary(MTME.z_rr3a.asr)$aic)
 print(paste('convergence =', MTME.z_rr3a.asr$converge))
 MTME.z_rr3a.asr$trace |>
-  as.data.frame() |>
-  rownames_to_column('Iteration') |>
-  filter(Iteration=='LogLik') |>
-  print()
+  as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/MTME.z_rr3a.RData')
 
@@ -47,14 +44,39 @@ MTME.z_rr3a.asr <- update(MTME.z_rr3a.asr)
 
 # Print model info
 print('MTME.z-rr3a - Update 1')
-print(summary(MTME.z_rr3a.asr)$call)
 print('AIC')
 print(summary(MTME.z_rr3a.asr)$aic)
 print(paste('convergence =', MTME.z_rr3a.asr$converge))
 MTME.z_rr3a.asr$trace |>
-  as.data.frame() |>
-  rownames_to_column('Iteration') |>
-  filter(Iteration=='LogLik') |>
-  print()
+  as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
+
+save.image('Data/MTME.z_rr3a.RData')
+
+## Update2 model ----
+MTME.z_rr3a.asr <- update(MTME.z_rr3a.asr)
+
+# Print model info
+print('MTME.z-rr3a - Update 2')
+print('AIC')
+print(summary(MTME.z_rr3a.asr)$aic)
+print(paste('convergence =', MTME.z_rr3a.asr$converge))
+MTME.z_rr3a.asr$trace |>
+  as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
+
+save.image('Data/MTME.z_rr3a.RData')
+
+## Update3 model ----
+MTME.z_rr3a.asr <- update(MTME.z_rr3a.asr)
+
+# Print model info
+print('MTME.z-rr3a - Update 3')
+print('AIC')
+print(summary(MTME.z_rr3a.asr)$aic)
+print(paste('convergence =', MTME.z_rr3a.asr$converge))
+MTME.z_rr3a.asr$trace |>
+  as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/MTME.z_rr3a.RData')

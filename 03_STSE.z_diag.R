@@ -32,16 +32,12 @@ STSE.z.asr <- asreml(
   workspace = '20gb'
 )
 print('STSE.z')
-print(summary(STSE.z.asr)$call)
-print(STSE.z.asr$loglik)
 print('AIC')
 print(summary(STSE.z.asr)$aic)
 print(paste('convergence =',STSE.z.asr$converge))
 STSE.z.asr$trace |>
-  as.data.frame() |>
-  rownames_to_column('Iteration') |>
-  filter(Iteration=='LogLik') |>
-  print()
+  as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 # Heritability ----
 STSE.z_varcomp_df <- summary(STSE.z.asr)$varcomp |>
@@ -79,5 +75,5 @@ STSE.z_h2 <- cbind(
 
 # Save data ----
 save.image('Data/STSE.z_diag.RData')
-load('Data/STSE.z_diag.RData')
 
+# End ----
