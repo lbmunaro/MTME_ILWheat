@@ -25,20 +25,17 @@ MTME.z_rr4a.asr <- asreml(
   data = ILYT_Pheno,
   na.action = na.method(x = "include"),
   maxit = 20,
-  workspace = '48gb'
+  workspace = '36gb'
 )
 
 # Print model info
 print('MTME.z-rr4a')
-print(summary(MTME.z_rr4a.asr)$call)
 print('AIC')
 print(summary(MTME.z_rr4a.asr)$aic)
 print(paste('convergence =', MTME.z_rr4a.asr$converge))
 MTME.z_rr4a.asr$trace |>
-  as.data.frame() |>
-  rownames_to_column('Iteration') |>
-  filter(Iteration=='LogLik') |>
-  print()
+  as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/MTME.z_rr4a.RData')
 
@@ -47,14 +44,39 @@ MTME.z_rr4a.asr <- update(MTME.z_rr4a.asr)
 
 # Print model info
 print('MTME.z-rr4a - Update 1')
-print(summary(MTME.z_rr4a.asr)$call)
 print('AIC')
 print(summary(MTME.z_rr4a.asr)$aic)
 print(paste('convergence =', MTME.z_rr4a.asr$converge))
 MTME.z_rr4a.asr$trace |>
-  as.data.frame() |>
-  rownames_to_column('Iteration') |>
-  filter(Iteration=='LogLik') |>
-  print()
+  as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
+
+save.image('Data/MTME.z_rr4a.RData')
+
+## Update2 model ----
+MTME.z_rr4a.asr <- update(MTME.z_rr4a.asr)
+
+# Print model info
+print('MTME.z-rr4a - Update 2')
+print('AIC')
+print(summary(MTME.z_rr4a.asr)$aic)
+print(paste('convergence =', MTME.z_rr4a.asr$converge))
+MTME.z_rr4a.asr$trace |>
+  as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
+
+save.image('Data/MTME.z_rr4a.RData')
+
+## Update3 model ----
+MTME.z_rr4a.asr <- update(MTME.z_rr4a.asr)
+
+# Print model info
+print('MTME.z-rr4a - Update 3')
+print('AIC')
+print(summary(MTME.z_rr4a.asr)$aic)
+print(paste('convergence =', MTME.z_rr4a.asr$converge))
+MTME.z_rr4a.asr$trace |>
+  as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 save.image('Data/MTME.z_rr4a.RData')
