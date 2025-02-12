@@ -15,7 +15,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-Online License checked out Sat Feb  8 15:06:43 2025
+Online License checked out Tue Feb 11 09:21:30 2025
 [Previously saved workspace restored]
 
 > # Multi-Trait Multi-Environment models ----
@@ -65,7 +65,7 @@ Loading ASReml-R version 4.2
 +   data = ILYT_Pheno,
 +   na.action = na.method(x = "include"),
 +   maxit = 20,
-+   workspace = '24gb'
++   workspace = '16gb'
 + )
 Warning messages:
 1: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep,  :
@@ -76,11 +76,6 @@ Warning messages:
 > # Print model info
 > print('MTME.z-rr1a')
 [1] "MTME.z-rr1a"
-> print(summary(MTME.z_rr1a.asr)$call)
-asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep, 
-    Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse), sparse = ~TraitEnv:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | TraitEnv), na.action = na.method(x = "include"), 
-    data = ILYT_Pheno, maxit = 20, workspace = "24gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(MTME.z_rr1a.asr)$aic)
@@ -90,10 +85,8 @@ attr(,"parameters")
 > print(paste('convergence =', MTME.z_rr1a.asr$converge))
 [1] "convergence = FALSE"
 > MTME.z_rr1a.asr$trace |>
-+   as.data.frame() |>
-+   rownames_to_column('Iteration') |>
-+   filter(Iteration=='LogLik') |>
-+   print()
++   as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
   Iteration        1        2        3        4        5        6        7
 1    LogLik 9564.671 11154.12 12848.59 13778.61 14151.59 14321.12 14439.64
         8        9       10       11       12       13       14      15
@@ -114,12 +107,6 @@ Warning messages:
 > # Print model info
 > print('MTME.z-rr1a - Update 1')
 [1] "MTME.z-rr1a - Update 1"
-> print(summary(MTME.z_rr1a.asr)$call)
-asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep, 
-    Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse), sparse = ~TraitEnv:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | TraitEnv), G.param = MTME.z_rr1a.asr$G.param, 
-    R.param = MTME.z_rr1a.asr$R.param, na.action = na.method(x = "include"), 
-    data = ILYT_Pheno, maxit = 20, workspace = "24gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(MTME.z_rr1a.asr)$aic)
@@ -129,10 +116,8 @@ attr(,"parameters")
 > print(paste('convergence =', MTME.z_rr1a.asr$converge))
 [1] "convergence = FALSE"
 > MTME.z_rr1a.asr$trace |>
-+   as.data.frame() |>
-+   rownames_to_column('Iteration') |>
-+   filter(Iteration=='LogLik') |>
-+   print()
++   as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
   Iteration       1        2        3        4        5        6        7
 1    LogLik 14724.5 14725.15 14727.05 14728.69 14730.18 14731.62 14733.09
          8        9       10       11      12       13       14       15
@@ -153,12 +138,6 @@ Warning messages:
 > # Print model info
 > print('MTME.z-rr1a - Update 2')
 [1] "MTME.z-rr1a - Update 2"
-> print(summary(MTME.z_rr1a.asr)$call)
-asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep, 
-    Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse), sparse = ~TraitEnv:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | TraitEnv), G.param = MTME.z_rr1a.asr$G.param, 
-    R.param = MTME.z_rr1a.asr$R.param, na.action = na.method(x = "include"), 
-    data = ILYT_Pheno, maxit = 20, workspace = "24gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(MTME.z_rr1a.asr)$aic)
@@ -168,10 +147,8 @@ attr(,"parameters")
 > print(paste('convergence =', MTME.z_rr1a.asr$converge))
 [1] "convergence = FALSE"
 > MTME.z_rr1a.asr$trace |>
-+   as.data.frame() |>
-+   rownames_to_column('Iteration') |>
-+   filter(Iteration=='LogLik') |>
-+   print()
++   as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
   Iteration        1        2        3        4        5       6        7
 1    LogLik 14861.33 14867.27 14872.85 14881.84 14894.75 14903.8 14910.09
          8        9       10       11      12       13       14       15
@@ -190,12 +167,6 @@ In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep,  :
 > # Print model info
 > print('MTME.z-rr1a - Update 3')
 [1] "MTME.z-rr1a - Update 3"
-> print(summary(MTME.z_rr1a.asr)$call)
-asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep, 
-    Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse), sparse = ~TraitEnv:Gdrop, 
-    residual = ~dsum(~ar1(Col):ar1(Row) | TraitEnv), G.param = MTME.z_rr1a.asr$G.param, 
-    R.param = MTME.z_rr1a.asr$R.param, na.action = na.method(x = "include"), 
-    data = ILYT_Pheno, maxit = 20, workspace = "24gb")
 > print('AIC')
 [1] "AIC"
 > print(summary(MTME.z_rr1a.asr)$aic)
@@ -205,10 +176,8 @@ attr(,"parameters")
 > print(paste('convergence =', MTME.z_rr1a.asr$converge))
 [1] "convergence = TRUE"
 > MTME.z_rr1a.asr$trace |>
-+   as.data.frame() |>
-+   rownames_to_column('Iteration') |>
-+   filter(Iteration=='LogLik') |>
-+   print()
++   as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
   Iteration        1        2        3        4        5        6        7
 1    LogLik 14925.97 14925.99 14926.06 14926.11 14926.16 14926.19 14926.21
          8        9       10
@@ -218,4 +187,4 @@ attr(,"parameters")
 > 
 > proc.time()
      user    system   elapsed 
-64430.520  3033.475 21516.040 
+63712.767  2993.441 21810.109 

@@ -15,7 +15,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-Online License checked out Sun Feb  9 15:39:57 2025
+Online License checked out Tue Feb 11 09:21:44 2025
 [Previously saved workspace restored]
 
 > # Multi-Trait Multi-Environment models ----
@@ -167,4 +167,4 @@ attr(,"parameters")
 > 
 > proc.time()
      user    system   elapsed 
-70312.730  2892.863 26125.793 
+83039.626  4014.208 29953.510 
