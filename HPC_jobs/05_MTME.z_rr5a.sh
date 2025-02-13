@@ -3,7 +3,7 @@
 #SBATCH --time=06-00:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=20
-#SBATCH --mem=96G
+#SBATCH --mem=112G
 #SBATCH --job-name=MTzrr5a
 #SBATCH --account=aces
 #SBATCH --partition=aces
