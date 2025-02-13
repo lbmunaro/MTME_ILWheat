@@ -24,7 +24,7 @@ MTME.z_rr1a.asr <- asreml(
   sparse = ~ TraitEnv:Gdrop,
   data = ILYT_Pheno,
   na.action = na.method(x = "include"),
-  maxit = 20,
+  maxit = 40,
   workspace = '16gb'
 )
 
@@ -44,34 +44,6 @@ MTME.z_rr1a.asr <- update(MTME.z_rr1a.asr)
 
 # Print model info
 print('MTME.z-rr1a - Update 1')
-print('AIC')
-print(summary(MTME.z_rr1a.asr)$aic)
-print(paste('convergence =', MTME.z_rr1a.asr$converge))
-MTME.z_rr1a.asr$trace |>
-  as.data.frame() |> rownames_to_column('Iteration') |>
-  filter(Iteration=='LogLik') |> print()
-
-save.image('Data/MTME.z_rr1a.RData')
-
-## Update2 model ----
-MTME.z_rr1a.asr <- update(MTME.z_rr1a.asr)
-
-# Print model info
-print('MTME.z-rr1a - Update 2')
-print('AIC')
-print(summary(MTME.z_rr1a.asr)$aic)
-print(paste('convergence =', MTME.z_rr1a.asr$converge))
-MTME.z_rr1a.asr$trace |>
-  as.data.frame() |> rownames_to_column('Iteration') |>
-  filter(Iteration=='LogLik') |> print()
-
-save.image('Data/MTME.z_rr1a.RData')
-
-## Update3 model ----
-MTME.z_rr1a.asr <- update(MTME.z_rr1a.asr)
-
-# Print model info
-print('MTME.z-rr1a - Update 3')
 print('AIC')
 print(summary(MTME.z_rr1a.asr)$aic)
 print(paste('convergence =', MTME.z_rr1a.asr$converge))

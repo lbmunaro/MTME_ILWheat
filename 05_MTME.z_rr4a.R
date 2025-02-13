@@ -52,31 +52,3 @@ MTME.z_rr4a.asr$trace |>
   filter(Iteration=='LogLik') |> print()
 
 save.image('Data/MTME.z_rr4a.RData')
-
-## Update2 model ----
-MTME.z_rr4a.asr <- update(MTME.z_rr4a.asr)
-
-# Print model info
-print('MTME.z-rr4a - Update 2')
-print('AIC')
-print(summary(MTME.z_rr4a.asr)$aic)
-print(paste('convergence =', MTME.z_rr4a.asr$converge))
-MTME.z_rr4a.asr$trace |>
-  as.data.frame() |> rownames_to_column('Iteration') |>
-  filter(Iteration=='LogLik') |> print()
-
-save.image('Data/MTME.z_rr4a.RData')
-
-## Update3 model ----
-MTME.z_rr4a.asr <- update(MTME.z_rr4a.asr)
-
-# Print model info
-print('MTME.z-rr4a - Update 3')
-print('AIC')
-print(summary(MTME.z_rr4a.asr)$aic)
-print(paste('convergence =', MTME.z_rr4a.asr$converge))
-MTME.z_rr4a.asr$trace |>
-  as.data.frame() |> rownames_to_column('Iteration') |>
-  filter(Iteration=='LogLik') |> print()
-
-save.image('Data/MTME.z_rr4a.RData')
