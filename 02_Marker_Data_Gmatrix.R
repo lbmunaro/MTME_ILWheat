@@ -26,7 +26,7 @@ genotypes <- ILYT_Pheno |>
 genotypes <- unique(genotypes)
 
 ## Marker data ----
-Markers <- read.vcf('Data/imputed_24IL_all_regions_filtV3.vcf.gz') # Load VCF file containing genotype markers.
+Markers <- read.vcf('Data/imputed_24IL_all_regions_filtV3_filtered.vcf.gz') # Load VCF file containing genotype markers.
 
 # Subset marker data to match the genotypes with phenotypic data
 Markers <- select.inds(Markers, id %in% genotypes)
