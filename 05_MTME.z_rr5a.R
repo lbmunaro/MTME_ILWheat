@@ -25,7 +25,7 @@ MTME.z_rr5a.asr <- asreml(
   data = ILYT_Pheno,
   na.action = na.method(x = "include"),
   maxit = 40,
-  workspace = '64gb'
+  workspace = '88gb'
 )
 
 # Print model info
