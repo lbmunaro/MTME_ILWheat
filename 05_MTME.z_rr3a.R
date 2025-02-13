@@ -25,7 +25,7 @@ MTME.z_rr3a.asr <- asreml(
   data = ILYT_Pheno,
   na.action = na.method(x = "include"),
   maxit = 20,
-  workspace = '48gb'
+  workspace = '64gb'
 )
 
 # Print model info
@@ -40,6 +40,7 @@ MTME.z_rr3a.asr$trace |>
 save.image('Data/MTME.z_rr3a.RData')
 
 ## Update1 model ----
+load('Data/MTME.z_rr3a.RData')
 MTME.z_rr3a.asr <- update(MTME.z_rr3a.asr)
 
 # Print model info
