@@ -1,0 +1,164 @@
+
+R version 4.4.2 (2024-10-31) -- "Pile of Leaves"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: x86_64-redhat-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Single-Trait Multi-Environment models ----
+> # This script fits Single-Trait Multi-Environment models
+> 
+> # Objective ----
+> # - 
+> 
+> # Clean workspace
+> rm(list = objects())  # Removes all objects from the environment.
+> 
+> # Packages ----
+> library(tidyverse) # R packages for data science.
+── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+> library(asreml) # ASReml-R package.
+Loading required package: Matrix
+
+Attaching package: ‘Matrix’
+
+The following objects are masked from ‘package:tidyr’:
+
+    expand, pack, unpack
+
+Online License checked out Thu Feb  6 15:10:08 2025
+Loading ASReml-R version 4.2
+
+> 
+> # Use for HPC only
+> setwd('~/MTME_ILWheat/')
+> 
+> # Load data ----
+> ## Pheno & Ginv
+> load('Data/ILYT_Pheno-Gmatrix.RData')
+> 
+> # Fit models ----
+> 
+> ## GY ----
+> ### fa1----
+> # Run model
+> GY_STME_fa1.asr <- asreml(
++   Pheno ~ Env,
++   random = ~ fa(Env,1):vm(Gkeep, Ginv.sparse),
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
++   sparse = ~ Env:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'GY') |> droplevels(),
++   na.action = na.method(x = "include"),
++   maxit = 20,
++   workspace = '16gb'
++ )
+> # Print model info
+> print('GY_STME_fa1')
+[1] "GY_STME_fa1"
+> print(summary(GY_STME_fa1.asr)$call)
+asreml(fixed = Pheno ~ Env, random = ~fa(Env, 1):vm(Gkeep, Ginv.sparse), 
+    sparse = ~Env:Gdrop, residual = ~dsum(~ar1(Col):ar1(Row) | 
+        Env), na.action = na.method(x = "include"), data = droplevels(filter(ILYT_Pheno, 
+        Trait == "GY")), maxit = 20, workspace = "16gb")
+> print('AIC')
+[1] "AIC"
+> print(summary(GY_STME_fa1.asr)$aic)
+[1] 54585.24
+attr(,"parameters")
+[1] 60
+> print(paste('convergence =',GY_STME_fa1.asr$converge))
+[1] "convergence = TRUE"
+> 
+> save.image('Data/STME_mod.RData')
+> 
+> ### fa2----
+> # Run model
+> GY_STME_fa2.asr <- asreml(
++   Pheno ~ Env,
++   random = ~ fa(Env,2):vm(Gkeep, Ginv.sparse),
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
++   sparse = ~ Env:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'GY') |> droplevels(),
++   na.action = na.method(x = "include"),
++   maxit = 20,
++   workspace = '16gb'
++ )
+Warning message:
+In asreml(Pheno ~ Env, random = ~fa(Env, 2):vm(Gkeep, Ginv.sparse),  :
+  Some components changed by more than 1% on the last iteration
+> # Print model info
+> print('GY_STME_fa2')
+[1] "GY_STME_fa2"
+> print(summary(GY_STME_fa2.asr)$call)
+asreml(fixed = Pheno ~ Env, random = ~fa(Env, 2):vm(Gkeep, Ginv.sparse), 
+    sparse = ~Env:Gdrop, residual = ~dsum(~ar1(Col):ar1(Row) | 
+        Env), na.action = na.method(x = "include"), data = droplevels(filter(ILYT_Pheno, 
+        Trait == "GY")), maxit = 20, workspace = "16gb")
+> print('AIC')
+[1] "AIC"
+> print(summary(GY_STME_fa2.asr)$aic)
+[1] 54398.51
+attr(,"parameters")
+[1] 71
+> print(paste('convergence =',GY_STME_fa2.asr$converge))
+[1] "convergence = TRUE"
+> 
+> save.image('Data/STME_mod.RData')
+> 
+> # Update model
+> GY_STME_fa2.asr <- update(GY_STME_fa2.asr)
+Warning message:
+In asreml(fixed = Pheno ~ Env, random = ~fa(Env, 2):vm(Gkeep, Ginv.sparse),  :
+  Some components changed by more than 1% on the last iteration
+> 
+> # Print model info
+> print('GY_STME_fa2-update1')
+[1] "GY_STME_fa2-update1"
+> print(summary(GY_STME_fa2.asr)$call)
+asreml(fixed = Pheno ~ Env, random = ~fa(Env, 2):vm(Gkeep, Ginv.sparse), 
+    sparse = ~Env:Gdrop, residual = ~dsum(~ar1(Col):ar1(Row) | 
+        Env), G.param = GY_STME_fa2.asr$G.param, R.param = GY_STME_fa2.asr$R.param, 
+    na.action = na.method(x = "include"), data = droplevels(filter(ILYT_Pheno, 
+        Trait == "GY")), maxit = 20, workspace = "16gb")
+> print('AIC')
+[1] "AIC"
+> print(summary(GY_STME_fa2.asr)$aic)
+[1] 54396.51
+attr(,"parameters")
+[1] 70
+> print(paste('convergence =',GY_STME_fa2.asr$converge))
+[1] "convergence = TRUE"
+> 
+> save.image('Data/STME_mod.RData')
+> 
+> ### fa3----
+> # Run model
+> GY_STME_fa3.asr <- asreml(
++   Pheno ~ Env,
++   random = ~ fa(Env,3):vm(Gkeep, Ginv.sparse),
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
++   sparse = ~ Env:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'GY') |> droplevels(),
++   na.action = na.method(x = "include"),
++   maxit = 20,
++   workspace = '20gb'
++ )

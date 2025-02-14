@@ -1,0 +1,105 @@
+
+R version 4.4.2 (2024-10-31) -- "Pile of Leaves"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: x86_64-redhat-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Load required libraries
+> library(tidyverse)
+── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+> library(asreml)
+Loading required package: Matrix
+
+Attaching package: ‘Matrix’
+
+The following objects are masked from ‘package:tidyr’:
+
+    expand, pack, unpack
+
+Online License checked out Fri Feb  7 00:27:56 2025
+Loading ASReml-R version 4.2
+
+> library(doParallel)
+Loading required package: foreach
+
+Attaching package: ‘foreach’
+
+The following objects are masked from ‘package:purrr’:
+
+    accumulate, when
+
+Loading required package: iterators
+Loading required package: parallel
+> library(foreach)
+> 
+> # Set working directory (HPC-specific)
+> setwd('~/MTME_ILWheat/')
+> 
+> # Load data
+> load('Data/ILYT_Pheno-Gmatrix.RData')
+> 
+> # Define function to fit models with error handling
+> fit_model <- function(trait, factor_analysis, workspace_size = '20gb') {
++   result <- tryCatch({
++     model <- asreml(
++       Pheno_std ~ Env,
++       random = as.formula(paste0("~ fa(Env,", factor_analysis, "):vm(Gkeep, Ginv.sparse)")),
++       residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
++       sparse = ~ Env:Gdrop,
++       data = ILYT_Pheno |> filter(Trait == trait) |> droplevels(),
++       na.action = na.method(x = "include"),
++       maxit = 20,
++       workspace = workspace_size
++     )
++     
++     # Save model output
++     save(model, file = paste0("Data/STME.std_", trait, "_fa", factor_analysis, ".RData"))
++     
++     # Return model summary
++     list(
++       trait = trait,
++       fa = factor_analysis,
++       aic = summary(model)$aic,
++       convergence = model$converge
++     )
++   }, error = function(e) {
++     # Log error and return a message
++     error_msg <- paste(Sys.time(), "- Error fitting", trait, "fa", factor_analysis, ":", e$message)
++     write(error_msg, file = "STME_errors.log", append = TRUE)
++     return(error_msg)
++   })
++   
++   return(result)
++ }
+> 
+> # Define traits and factor analyses
+> traits <- c("GY", "TW", "HD", "HT", "MAT")
+> factor_analyses <- c(1, 2, 3)
+> 
+> # Setup parallel processing
+> num_cores <- detectCores() - 1  # Use one less than available cores
+> cl <- makeCluster(num_cores)
+Error in socketAccept(socket = socket, blocking = TRUE, open = "a+b",  : 
+  all 128 connections are in use
+Calls: makeCluster -> makePSOCKcluster -> socketAccept
+Execution halted
