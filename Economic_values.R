@@ -5,6 +5,8 @@ rm(list = objects())  # Removes all objects from the environment.
 library(tidyverse)
 #library(tibble)
 
+# Prices ----
+
 # Create a data frame for soybean prices
 prices <- tibble::tibble(
   year = rep(2015:2024, each = 12),
@@ -34,7 +36,6 @@ prices <- tibble::tibble(
          ratio = wheat_price / soy_price) |>
   glimpse()
 
-# update ----
 # Load necessary libraries
 #library(ggplot2)
 #library(ggside)
@@ -93,4 +94,50 @@ ggplot(prices, aes(x = date)) +
 ggsave('Figures/Figure3.tif', width = 7, height = 3, units = 'in', dpi = 300)
 ggsave('Figures/Figure3.png', width = 7, height = 3, units = 'in', dpi = 300)
 
-# Test weight
+# Test weight ----
+TW_discount <- read.csv('Data/TWDiscountTables2024.csv', na.strings = '-99') |>
+  mutate(TW_group = cut(TW, 
+                        breaks = seq(46, 60.5, by = 0.5), 
+                        labels = c(paste0(seq(46, 59.5, by = 0.5), '-', seq(46.4, 59.9, by = 0.5)), "58+"),
+                        right = FALSE)) |>
+  filter(!is.na(TW_group)) |>
+  group_by(TW_group) |>
+  summarise(across(starts_with("D2024"), ~ unique(.x), .names = "{.col}"),
+            TW = min(TW)) |>
+  relocate(TW,.before = TW_group) |>
+  rowwise() %>%
+  mutate(Average_Discount = mean(c_across(starts_with("D2024")), na.rm = TRUE),
+         Average_Discount = round(Average_Discount,2)) |>
+  pivot_longer(cols = 3:9, names_to = 'Source', values_to = 'Discount') |>
+  arrange(desc(TW)) |>
+#  mutate(Discount = str_replace(Discount,pattern = '-99', '-10')) |>
+  glimpse()
+
+# Define a set of 7 distinct shapes and colors
+custom_shapes <- c(16, 17, 18, 19, 15, 8, 7)  # 7 distinct shapes
+custom_colors <- c("red", "blue", "green", "purple", "orange", "brown", "pink")  # 7 colors
+
+# Modify the ggplot call
+ggplot(TW_discount, aes(x = TW, y = Discount)) +
+  geom_line(aes(y = Average_Discount), size = 0.8, linetype = 'dashed', color = "black") +  
+  geom_point(aes(color = Source, shape = Source), alpha = 0.7) +
+  scale_x_reverse(name = 'TW (lb/bu)', breaks = seq(40, 60, by = 1)) +
+  scale_y_continuous(name = 'Price discount (USD per bushel)', breaks = seq(0, -3.4, by = -0.5)) +
+  scale_color_manual(name = "Source", values = custom_colors, labels = (1:7)) +  
+  scale_shape_manual(name = "Source", values = custom_shapes, labels = (1:7)) +
+  theme_bw() +
+  theme(
+    panel.grid = element_blank(),
+    legend.title = element_text(size = 12, family = 'Times New Roman'),
+    legend.text = element_text(size = 10, family = 'Times New Roman'),
+    axis.text = element_text(size = 8, family = 'Times New Roman'),
+    axis.title = element_text(size = 10, family = 'Times New Roman'),
+    legend.position = c(0.2, 0.2),  # Position legend inside bottom-left
+    legend.background = element_rect(fill = "transparent", color = "transparent"),
+    legend.direction = "horizontal" 
+  ) +
+  annotate("segment", x = 55.4, xend = 55.6, y = -2.86, yend = -2.86, linetype = "dashed", size = 0.8) +
+  annotate("text", x = 55, y = -2.86, label = "Average", hjust = 0, size = 4, family = 'Times New Roman')
+
+ggsave('Figures/Figure4.tif', width = 7, height = 3, units = 'in', dpi = 300)
+ggsave('Figures/Figure4.png', width = 7, height = 3, units = 'in', dpi = 300)
