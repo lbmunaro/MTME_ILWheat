@@ -15,6 +15,9 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
+Online License checked out Thu Feb 13 13:07:52 2025
+[Previously saved workspace restored]
+
 > # Single-Trait Single-Environment model ----
 > # This script fits single-trait single-environment models
 > 
@@ -42,7 +45,6 @@ The following objects are masked from ‘package:tidyr’:
 
     expand, pack, unpack
 
-Online License checked out Fri Feb  7 15:32:47 2025
 Loading ASReml-R version 4.2
 
 > 
@@ -92,21 +94,23 @@ $ Gdrop      <fct> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,�
 + )
 > print('STSE.z')
 [1] "STSE.z"
-> print(summary(STSE.z.asr)$call)
-asreml(fixed = Pheno_z ~ TraitEnv, random = ~diag(TraitEnv):vm(Gkeep, 
-    Ginv.sparse), sparse = ~TraitEnv:Gdrop, residual = ~dsum(~ar1(Col):ar1(Row) | 
-    TraitEnv), na.action = na.method(x = "include"), data = ILYT_Pheno, 
-    maxit = 20, workspace = "20gb")
-> STSE.z.asr$loglik
-[1] 13260.07
 > print('AIC')
 [1] "AIC"
 > print(summary(STSE.z.asr)$aic)
-[1] -26208.14
+[1] -26198.74
 attr(,"parameters")
 [1] 156
 > print(paste('convergence =',STSE.z.asr$converge))
 [1] "convergence = TRUE"
+> STSE.z.asr$trace |>
++   as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 8985.604 10263.77 11655.83 12573.14 13055.61 13192.68 13233.91
+         8        9       10       11       12       13       14       15
+1 13247.73 13252.64 13254.39 13255.02 13255.24 13255.32 13255.35 13255.36
+        16       17       18
+1 13255.37 13255.37 13255.37
 > 
 > # Heritability ----
 > STSE.z_varcomp_df <- summary(STSE.z.asr)$varcomp |>
@@ -116,9 +120,9 @@ attr(,"parameters")
 Rows: 156
 Columns: 6
 $ rowname   <chr> "TraitEnv:vm(Gkeep, Ginv.sparse)!TraitEnv_GY-22-Adv", "Trait…
-$ component <dbl> 0.06795188, 0.11983912, 0.11203748, 0.15763479, 0.06858262, …
-$ std.error <dbl> 0.008699837, 0.010057853, 0.010305379, 0.009511795, 0.008308…
-$ z.ratio   <dbl> 7.810707, 11.914980, 10.871748, 16.572559, 8.254739, 8.98980…
+$ component <dbl> 0.06828031, 0.11923943, 0.11234918, 0.15782840, 0.06890550, …
+$ std.error <dbl> 0.008744482, 0.010041073, 0.010331750, 0.009522843, 0.008359…
+$ z.ratio   <dbl> 7.808388, 11.875169, 10.874168, 16.573665, 8.242673, 8.87462…
 $ bound     <chr> "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", …
 $ `%ch`     <dbl> 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.1, 0.0, 0.0, 0.0, 0.0, …
 > 
@@ -153,8 +157,8 @@ $ `%ch`     <dbl> 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.1, 0.0, 0.0, 0.0, 0.0, �
 > # Save data ----
 > save.image('Data/STSE.z_diag.RData')
 > 
-> 
+> # End ----
 > 
 > proc.time()
     user   system  elapsed 
-5674.065  313.060 1629.061 
+5622.540  349.826 1644.706 

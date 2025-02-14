@@ -15,7 +15,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-Online License checked out Sat Feb  8 11:57:16 2025
+Online License checked out Thu Feb 13 13:08:20 2025
 [Previously saved workspace restored]
 
 > # Single-Trait Multi-Environment models ----
@@ -76,7 +76,7 @@ Loading ASReml-R version 4.2
 > print('AIC')
 [1] "AIC"
 > print(summary(GY_STME.z_rr1.asr)$aic)
-[1] -6498.048
+[1] -6485.116
 attr(,"parameters")
 [1] 60
 > print(paste('convergence =',GY_STME.z_rr1.asr$converge))
@@ -84,11 +84,11 @@ attr(,"parameters")
 > GY_STME.z_rr1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
   Iteration        1        2        3        4        5        6        7
-1    LogLik 1391.558 2162.693 2820.629 3132.055 3263.125 3296.062 3305.067
-         8      9       10      11       12       13       14       15       16
-1 3307.757 3308.6 3308.876 3308.97 3309.004 3309.016 3309.021 3309.023 3309.024
+1    LogLik 1391.682 2161.598 2816.066 3126.486 3257.039 3289.754 3298.657
+        8       9       10       11       12      13       14       15       16
+1 3301.31 3302.14 3302.412 3302.504 3302.538 3302.55 3302.555 3302.557 3302.558
         17
-1 3309.024
+1 3302.558
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -113,19 +113,19 @@ In asreml(Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep, Ginv.sparse) +  :
 > print('AIC')
 [1] "AIC"
 > print(summary(GY_STME.z_rr2.asr)$aic)
-[1] -6684.782
+[1] -6670.784
 attr(,"parameters")
 [1] 71
 > print(paste('convergence =',GY_STME.z_rr2.asr$converge))
 [1] "convergence = TRUE"
 > GY_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
-  Iteration        1        2        3        4        5        6        7
-1    LogLik 1371.732 2298.823 2973.164 3261.054 3373.964 3401.163 3408.966
-         8       9       10       11       12      13       14       15      16
-1 3411.656 3412.69 3413.103 3413.273 3413.342 3413.37 3413.382 3413.388 3413.39
-        17       18
-1 3413.391 3413.391
+  Iteration        1        2       3        4        5        6        7
+1    LogLik 1364.176 2303.015 2973.02 3256.628 3367.619 3394.328 3402.016
+        8        9       10       11       12       13       14       15
+1 3404.68 3405.703 3406.109 3406.275 3406.343 3406.372 3406.384 3406.389
+        16       17       18
+1 3406.391 3406.392 3406.392
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -141,7 +141,7 @@ In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep,  :
 > print('AIC')
 [1] "AIC"
 > print(summary(GY_STME.z_rr2.asr)$aic)
-[1] -6684.783
+[1] -6670.785
 attr(,"parameters")
 [1] 71
 > print(paste('convergence =',GY_STME.z_rr2.asr$converge))
@@ -149,7 +149,7 @@ attr(,"parameters")
 > GY_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
   Iteration        1        2        3
-1    LogLik 3413.391 3413.391 3413.391
+1    LogLik 3406.393 3406.393 3406.393
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -165,7 +165,7 @@ In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep,  :
 > print('AIC')
 [1] "AIC"
 > print(summary(GY_STME.z_rr2.asr)$aic)
-[1] -6684.783
+[1] -6670.786
 attr(,"parameters")
 [1] 71
 > print(paste('convergence =',GY_STME.z_rr2.asr$converge))
@@ -173,7 +173,7 @@ attr(,"parameters")
 > GY_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
   Iteration        1        2        3
-1    LogLik 3413.391 3413.391 3413.391
+1    LogLik 3406.393 3406.393 3406.393
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -200,7 +200,7 @@ Warning messages:
 > print('AIC')
 [1] "AIC"
 > print(summary(GY_STME.z_rr3.asr)$aic)
-[1] -6705.955
+[1] -6691.554
 attr(,"parameters")
 [1] 81
 > print(paste('convergence =',GY_STME.z_rr3.asr$converge))
@@ -208,11 +208,11 @@ attr(,"parameters")
 > GY_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
   Iteration        1        2        3        4        5       6        7
-1    LogLik 1260.198 2320.034 3016.996 3289.146 3392.223 3416.84 3425.272
-         8        9      10       11       12      13       14       15
-1 3429.047 3431.023 3432.06 3432.766 3433.296 3433.59 3433.742 3433.852
-        16       17       18       19       20       21
-1 3433.922 3433.955 3433.968 3433.975 3433.978 3433.978
+1    LogLik 1261.916 2338.055 3034.132 3291.301 3386.966 3410.11 3417.756
+         8        9       10       11       12       13      14       15
+1 3422.308 3424.223 3425.278 3425.963 3426.331 3426.516 3426.64 3426.715
+       16       17       18       19       20       21
+1 3426.75 3426.765 3426.772 3426.775 3426.777 3426.777
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -228,7 +228,7 @@ In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep,  :
 > print('AIC')
 [1] "AIC"
 > print(summary(GY_STME.z_rr3.asr)$aic)
-[1] -6705.959
+[1] -6691.556
 attr(,"parameters")
 [1] 81
 > print(paste('convergence =',GY_STME.z_rr3.asr$converge))
@@ -236,15 +236,12 @@ attr(,"parameters")
 > GY_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
   Iteration        1        2        3
-1    LogLik 3433.979 3433.979 3433.979
+1    LogLik 3426.778 3426.778 3426.778
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
 > # Update model
 > GY_STME.z_rr3.asr <- update(GY_STME.z_rr3.asr)
-Warning message:
-In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep,  :
-  Some components changed by more than 1% on the last iteration
 > 
 > # Print model info
 > print('GY_STME.z_rr3-update2')
@@ -252,15 +249,15 @@ In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep,  :
 > print('AIC')
 [1] "AIC"
 > print(summary(GY_STME.z_rr3.asr)$aic)
-[1] -6705.96
+[1] -6691.557
 attr(,"parameters")
 [1] 81
 > print(paste('convergence =',GY_STME.z_rr3.asr$converge))
 [1] "convergence = TRUE"
 > GY_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
-  Iteration       1       2       3
-1    LogLik 3433.98 3433.98 3433.98
+  Iteration        1        2        3
+1    LogLik 3426.778 3426.778 3426.778
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -283,19 +280,19 @@ attr(,"parameters")
 > print('AIC')
 [1] "AIC"
 > print(summary(TW_STME.z_rr1.asr)$aic)
-[1] -12950.67
+[1] -12928.26
 attr(,"parameters")
 [1] 60
 > print(paste('convergence =',TW_STME.z_rr1.asr$converge))
 [1] "convergence = TRUE"
 > TW_STME.z_rr1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
-  Iteration       1        2        3        4        5        6        7
-1    LogLik 4700.78 5845.793 6241.264 6425.443 6505.664 6526.743 6532.647
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 4696.613 5838.536 6231.701 6414.707 6494.475 6515.492 6521.411
          8        9       10       11       12       13       14       15
-1 6534.425 6535.005 6535.209 6535.285 6535.314 6535.326 6535.331 6535.333
+1 6523.204 6523.793 6524.001 6524.079 6524.109 6524.121 6524.126 6524.128
         16       17
-1 6535.334 6535.334
+1 6524.129 6524.129
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -322,19 +319,19 @@ Warning messages:
 > print('AIC')
 [1] "AIC"
 > print(summary(TW_STME.z_rr2.asr)$aic)
-[1] -13129.23
+[1] -13106.64
 attr(,"parameters")
 [1] 71
 > print(paste('convergence =',TW_STME.z_rr2.asr$converge))
 [1] "convergence = FALSE"
 > TW_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
-  Iteration        1       2       3        4        5        6        7
-1    LogLik 4471.151 5979.92 6416.56 6555.989 6599.085 6620.054 6626.614
-         8       9       10       11      12       13       14       15
-1 6629.564 6631.43 6632.588 6633.362 6633.99 6634.523 6634.924 6635.195
-        16       17       18       19       20       21
-1 6635.366 6635.473 6635.541 6635.585 6635.615 6635.615
+  Iteration        1        2       3        4        5        6       7
+1    LogLik 4461.199 5977.442 6409.38 6545.738 6588.007 6608.569 6615.19
+         8       9       10       11       12       13       14       15
+1 6618.034 6619.81 6621.079 6621.934 6622.601 6623.153 6623.565 6623.849
+        16       17      18       19       20       21
+1 6624.032 6624.151 6624.23 6624.284 6624.321 6624.321
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -350,17 +347,17 @@ In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep,  :
 > print('AIC')
 [1] "AIC"
 > print(summary(TW_STME.z_rr2.asr)$aic)
-[1] -13129.35
+[1] -13106.81
 attr(,"parameters")
 [1] 71
 > print(paste('convergence =',TW_STME.z_rr2.asr$converge))
 [1] "convergence = TRUE"
 > TW_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
-  Iteration        1       2        3        4        5        6        7
-1    LogLik 6635.635 6635.64 6635.652 6635.661 6635.667 6635.671 6635.675
-         8        9
-1 6635.677 6635.677
+  Iteration        1        2       3        4        5        6        7
+1    LogLik 6624.348 6624.354 6624.37 6624.382 6624.391 6624.397 6624.401
+         8        9       10
+1 6624.405 6624.407 6624.407
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -376,7 +373,7 @@ In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep,  :
 > print('AIC')
 [1] "AIC"
 > print(summary(TW_STME.z_rr2.asr)$aic)
-[1] -13129.36
+[1] -13106.82
 attr(,"parameters")
 [1] 71
 > print(paste('convergence =',TW_STME.z_rr2.asr$converge))
@@ -384,7 +381,7 @@ attr(,"parameters")
 > TW_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
   Iteration        1        2        3
-1    LogLik 6635.678 6635.679 6635.679
+1    LogLik 6624.408 6624.409 6624.409
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -411,7 +408,7 @@ Warning messages:
 > print('AIC')
 [1] "AIC"
 > print(summary(TW_STME.z_rr3.asr)$aic)
-[1] -13220.09
+[1] -13197.67
 attr(,"parameters")
 [1] 81
 > print(paste('convergence =',TW_STME.z_rr3.asr$converge))
@@ -419,11 +416,11 @@ attr(,"parameters")
 > TW_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
   Iteration        1        2        3        4        5        6        7
-1    LogLik 4113.573 5978.064 6382.123 6561.284 6643.655 6669.237 6679.544
-         8        9       10       11       12       13       14       15
-1 6684.877 6687.306 6688.605 6689.417 6690.097 6690.563 6690.822 6690.949
+1    LogLik 4115.087 5975.431 6375.933 6551.655 6632.543 6652.692 6665.951
+         8        9       10      11       12      13       14       15
+1 6672.481 6675.413 6676.959 6677.91 6678.697 6679.24 6679.547 6679.699
         16       17       18       19       20       21
-1 6691.002 6691.025 6691.036 6691.042 6691.045 6691.045
+1 6679.767 6679.799 6679.816 6679.826 6679.833 6679.833
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -439,15 +436,17 @@ In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep,  :
 > print('AIC')
 [1] "AIC"
 > print(summary(TW_STME.z_rr3.asr)$aic)
-[1] -13220.1
+[1] -13197.69
 attr(,"parameters")
 [1] 81
 > print(paste('convergence =',TW_STME.z_rr3.asr$converge))
 [1] "convergence = TRUE"
 > TW_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
-  Iteration        1        2        3        4        5        6
-1    LogLik 6691.047 6691.048 6691.048 6691.049 6691.049 6691.049
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 6679.837 6679.838 6679.839 6679.841 6679.843 6679.844 6679.845
+         8
+1 6679.845
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -463,15 +462,15 @@ In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep,  :
 > print('AIC')
 [1] "AIC"
 > print(summary(TW_STME.z_rr3.asr)$aic)
-[1] -13220.1
+[1] -13197.69
 attr(,"parameters")
 [1] 81
 > print(paste('convergence =',TW_STME.z_rr3.asr$converge))
 [1] "convergence = TRUE"
 > TW_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
-  Iteration       1       2       3
-1    LogLik 6691.05 6691.05 6691.05
+  Iteration        1        2        3
+1    LogLik 6679.845 6679.845 6679.845
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -487,7 +486,7 @@ In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep,  :
 > print('AIC')
 [1] "AIC"
 > print(summary(TW_STME.z_rr3.asr)$aic)
-[1] -13220.1
+[1] -13197.69
 attr(,"parameters")
 [1] 81
 > print(paste('convergence =',TW_STME.z_rr3.asr$converge))
@@ -495,7 +494,7 @@ attr(,"parameters")
 > TW_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
   Iteration        1        2        3
-1    LogLik 6691.051 6691.051 6691.051
+1    LogLik 6679.846 6679.846 6679.846
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -518,17 +517,17 @@ attr(,"parameters")
 > print('AIC')
 [1] "AIC"
 > print(summary(HD_STME.z_rr1.asr)$aic)
-[1] -15105.18
+[1] -15094.45
 attr(,"parameters")
 [1] 30
 > print(paste('convergence =',HD_STME.z_rr1.asr$converge))
 [1] "convergence = TRUE"
 > HD_STME.z_rr1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
-  Iteration        1        2        3       4        5        6        7
-1    LogLik 5205.106 6815.856 7113.145 7420.99 7542.131 7576.249 7581.388
-         8        9       10       11       12       13       14
-1 7582.322 7582.525 7582.573 7582.584 7582.587 7582.588 7582.588
+  Iteration        1        2        3        4       5        6        7
+1    LogLik 5205.795 6813.579 7304.941 7510.357 7566.95 7575.439 7576.858
+         8        9      10       11       12       13
+1 7577.142 7577.205 7577.22 7577.223 7577.224 7577.224
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -555,19 +554,19 @@ Warning messages:
 > print('AIC')
 [1] "AIC"
 > print(summary(HD_STME.z_rr2.asr)$aic)
-[1] -15151.28
+[1] -15143.58
 attr(,"parameters")
 [1] 35
 > print(paste('convergence =',HD_STME.z_rr2.asr$converge))
 [1] "convergence = FALSE"
 > HD_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
-  Iteration        1        2        3       4        5        6        7
-1    LogLik 5026.196 6994.176 7208.042 7435.34 7536.108 7576.743 7587.938
-         8        9      10       11       12       13       14       15
-1 7590.607 7593.445 7596.05 7598.916 7600.719 7602.705 7604.743 7607.099
-        16       17      18       19       20       21
-1 7608.342 7609.154 7609.77 7610.249 7610.642 7610.642
+  Iteration        1       2        3        4        5        6        7
+1    LogLik 5049.677 6974.61 7196.064 7432.104 7543.675 7580.437 7589.534
+         8        9       10       11       12       13       14       15
+1 7592.119 7594.617 7597.143 7599.435 7601.936 7603.164 7603.962 7604.563
+        16      17       18       19       20       21
+1 7605.029 7605.41 7605.921 7606.436 7606.791 7606.791
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -580,17 +579,17 @@ attr(,"parameters")
 > print('AIC')
 [1] "AIC"
 > print(summary(HD_STME.z_rr2.asr)$aic)
-[1] -15154.93
+[1] -15144.27
 attr(,"parameters")
 [1] 35
 > print(paste('convergence =',HD_STME.z_rr2.asr$converge))
 [1] "convergence = TRUE"
 > HD_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
-  Iteration        1        2        3        4        5        6        7
-1    LogLik 7611.173 7611.299 7611.789 7612.129 7612.316 7612.408 7612.445
-         8        9       10       11       12
-1 7612.458 7612.463 7612.465 7612.465 7612.465
+  Iteration        1        2        3      4        5        6        7
+1    LogLik 7606.985 7607.002 7607.061 7607.1 7607.121 7607.131 7607.135
+         8        9       10
+1 7607.137 7607.137 7607.137
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -612,17 +611,17 @@ attr(,"parameters")
 > print('AIC')
 [1] "AIC"
 > print(summary(HD_STME.z_rr3.asr)$aic)
-[1] -15150.13
+[1] -15139.09
 attr(,"parameters")
 [1] 39
 > print(paste('convergence =',HD_STME.z_rr3.asr$converge))
 [1] "convergence = TRUE"
 > HD_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
-  Iteration        1        2        3        4        5        6        7
-1    LogLik 6886.561 7274.667 7490.211 7561.624 7598.481 7611.312 7613.482
-         8        9       10      11       12       13       14
-1 7613.922 7614.025 7614.052 7614.06 7614.062 7614.063 7614.063
+  Iteration        1        2        3        4        5        6       7
+1    LogLik 6879.698 7268.129 7484.528 7556.409 7592.017 7605.794 7607.97
+         8        9       10       11       12       13       14
+1 7608.408 7608.509 7608.535 7608.543 7608.545 7608.546 7608.546
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -635,7 +634,7 @@ attr(,"parameters")
 > print('AIC')
 [1] "AIC"
 > print(summary(HD_STME.z_rr3.asr)$aic)
-[1] -15150.13
+[1] -15139.09
 attr(,"parameters")
 [1] 39
 > print(paste('convergence =',HD_STME.z_rr3.asr$converge))
@@ -643,7 +642,7 @@ attr(,"parameters")
 > HD_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
   Iteration        1        2        3
-1    LogLik 7614.063 7614.063 7614.063
+1    LogLik 7608.546 7608.546 7608.546
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -666,7 +665,7 @@ attr(,"parameters")
 > print('AIC')
 [1] "AIC"
 > print(summary(HT_STME.z_rr1.asr)$aic)
-[1] 388.5436
+[1] 381.174
 attr(,"parameters")
 [1] 35
 > print(paste('convergence =',HT_STME.z_rr1.asr$converge))
@@ -674,11 +673,9 @@ attr(,"parameters")
 > HT_STME.z_rr1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
   Iteration         1         2         3         4         5         6
-1    LogLik -1101.849 -596.4248 -312.4979 -205.3836 -169.0712 -161.7484
-          7         8         9        10        11        12        13
-1 -159.9425 -159.4561 -159.3225 -159.2857 -159.2755 -159.2726 -159.2718
-         14
-1 -159.2718
+1    LogLik -1094.964 -593.6931 -309.7947 -202.0509 -165.3666 -158.0097
+          7         8        9     10        11        12       13       14
+1 -156.2325 -155.7626 -155.635 -155.6 -155.5904 -155.5877 -155.587 -155.587
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -694,25 +691,28 @@ attr(,"parameters")
 +   maxit = 20,
 +   workspace = '16gb'
 + )
+Warning message:
+In asreml(Pheno_z ~ Env, random = ~rr(Env, 2):vm(Gkeep, Ginv.sparse) +  :
+  Some components changed by more than 1% on the last iteration
 > # Print model info
 > print('HT_STME.z_rr2')
 [1] "HT_STME.z_rr2"
 > print('AIC')
 [1] "AIC"
 > print(summary(HT_STME.z_rr2.asr)$aic)
-[1] 370.3221
+[1] 366.5047
 attr(,"parameters")
 [1] 41
 > print(paste('convergence =',HT_STME.z_rr2.asr$converge))
 [1] "convergence = TRUE"
 > HT_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
-  Iteration         1         2         3         4         5         6
-1    LogLik -1194.527 -608.7038 -303.9938 -197.0513 -160.7376 -153.3819
-          7         8         9        10        11        12        13
-1 -149.0205 -146.9301 -145.9131 -145.1315 -144.7678 -144.4677 -144.2851
-         14        15        16        17        18        19        20
-1 -144.2036 -144.1745 -144.1651 -144.1621 -144.1612 -144.1611 -144.1611
+  Iteration         1        2         3         4         5         6
+1    LogLik -1150.626 -584.473 -296.5954 -190.8376 -154.6559 -146.5846
+          7         8         9        10        11       12        13
+1 -144.3683 -143.4299 -142.9214 -142.5867 -142.3914 -142.302 -142.2686
+         14        15        16        17
+1 -142.2573 -142.2535 -142.2523 -142.2523
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -725,15 +725,15 @@ attr(,"parameters")
 > print('AIC')
 [1] "AIC"
 > print(summary(HT_STME.z_rr2.asr)$aic)
-[1] 370.3217
+[1] 366.5039
 attr(,"parameters")
 [1] 41
 > print(paste('convergence =',HT_STME.z_rr2.asr$converge))
 [1] "convergence = TRUE"
 > HT_STME.z_rr2.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
-  Iteration         1         2         3
-1    LogLik -144.1609 -144.1609 -144.1609
+  Iteration        1         2         3
+1    LogLik -142.252 -142.2519 -142.2519
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -760,19 +760,21 @@ Warning messages:
 > print('AIC')
 [1] "AIC"
 > print(summary(HT_STME.z_rr3.asr)$aic)
-[1] 374.1792
+[1] 371.813
 attr(,"parameters")
 [1] 46
 > print(paste('convergence =',HT_STME.z_rr3.asr$converge))
 [1] "convergence = FALSE"
 > HT_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
-  Iteration         1         2        3         4         5         6        7
-1    LogLik -1211.204 -978.4819 -573.696 -286.7804 -186.9404 -154.6904 -146.831
-          8         9        10        11        12        13        14
-1 -143.9292 -142.8114 -142.1792 -141.7102 -141.4282 -141.2697 -141.1869
-         15        16        17       18        19        20        21
-1 -141.1441 -141.1209 -141.1074 -141.099 -141.0934 -141.0896 -141.0896
+  Iteration         1         2        3         4         5         6
+1    LogLik -1163.953 -610.0606 -290.659 -185.2003 -149.9424 -142.7365
+          7         8        9        10        11        12        13
+1 -140.9589 -140.3941 -140.175 -140.0751 -140.0182 -139.9892 -139.9755
+         14        15        16        17        18        19        20
+1 -139.9674 -139.9603 -139.9526 -139.9436 -139.9329 -139.9204 -139.9065
+         21
+1 -139.9065
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -788,17 +790,19 @@ In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep,  :
 > print('AIC')
 [1] "AIC"
 > print(summary(HT_STME.z_rr3.asr)$aic)
-[1] 374.1647
+[1] 371.5882
 attr(,"parameters")
 [1] 46
 > print(paste('convergence =',HT_STME.z_rr3.asr$converge))
 [1] "convergence = TRUE"
 > HT_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
-  Iteration        1         2        3         4         5         6        7
-1    LogLik -141.087 -141.0866 -141.086 -141.0854 -141.0849 -141.0844 -141.084
-          8         9        10        11        12        13
-1 -141.0836 -141.0832 -141.0829 -141.0826 -141.0824 -141.0824
+  Iteration         1         2         3         4         5         6
+1    LogLik -139.8915 -139.8877 -139.8751 -139.8629 -139.8511 -139.8393
+          7         8         9        10        11        12        13
+1 -139.8286 -139.8195 -139.8122 -139.8066 -139.8023 -139.7991 -139.7968
+         14        15        16
+1 -139.7952 -139.7941 -139.7941
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -814,7 +818,7 @@ In asreml(fixed = Pheno_z ~ Env, random = ~rr(Env, 3):vm(Gkeep,  :
 > print('AIC')
 [1] "AIC"
 > print(summary(HT_STME.z_rr3.asr)$aic)
-[1] 374.1638
+[1] 371.5863
 attr(,"parameters")
 [1] 46
 > print(paste('convergence =',HT_STME.z_rr3.asr$converge))
@@ -822,7 +826,7 @@ attr(,"parameters")
 > HT_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
   Iteration         1         2         3
-1    LogLik -141.0819 -141.0819 -141.0819
+1    LogLik -139.7933 -139.7932 -139.7932
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
@@ -845,7 +849,7 @@ attr(,"parameters")
 > print('AIC')
 [1] "AIC"
 > print(summary(MAT_STME.z_rr1.asr)$aic)
-[1] 555.3933
+[1] 554.8766
 attr(,"parameters")
 [1] 10
 > print(paste('convergence =',MAT_STME.z_rr1.asr$converge))
@@ -853,16 +857,16 @@ attr(,"parameters")
 > MAT_STME.z_rr1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
   Iteration         1         2         3         4         5         6
-1    LogLik -388.2735 -348.5642 -305.5528 -280.4365 -270.5863 -268.5396
-          7         8         9        10        11        12        13
-1 -267.9785 -267.7968 -267.7332 -267.7101 -267.7015 -267.6983 -267.6971
+1    LogLik -387.0504 -347.8088 -305.2012 -280.2378 -270.3715 -268.2949
+          7         8        9        10        11        12        13
+1 -267.7238 -267.5393 -267.475 -267.4517 -267.4432 -267.4399 -267.4387
          14        15
-1 -267.6967 -267.6967
+1 -267.4383 -267.4383
 > 
 > save.image('Data/STME.z_rr.RData')
 > 
 > # # End ----
 > 
 > proc.time()
-      user     system    elapsed 
-128551.328   4689.066  50852.108 
+     user    system   elapsed 
+156732.85   6803.05  51836.81 

@@ -15,6 +15,9 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
+Online License checked out Thu Feb 13 13:09:21 2025
+[Previously saved workspace restored]
+
 > # Multi-Trait Multi-Environment models ----
 > # This script fits Multi-Trait Multi-Environment models
 > 
@@ -42,7 +45,6 @@ The following objects are masked from ‘package:tidyr’:
 
     expand, pack, unpack
 
-Online License checked out Fri Feb  7 00:28:17 2025
 Loading ASReml-R version 4.2
 
 > 
@@ -53,26 +55,15 @@ Loading ASReml-R version 4.2
 > ## Pheno & Ginv
 > load('Data/ILYT_Pheno-Gmatrix.RData')
 > 
-> # Fit RR3a model ----
+> # Fit rr5a model ----
 > ## Run model ----
-> MTME.std_RR3a.asr <- asreml(
-+   Pheno_std ~ TraitEnv,
-+   random = ~ rr(TraitEnv,3):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse),
+> MTME.z_rr5a.asr <- asreml(
++   Pheno_z ~ TraitEnv,
++   random = ~ rr(TraitEnv,5):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse),
 +   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
 +   sparse = ~ TraitEnv:Gdrop,
 +   data = ILYT_Pheno,
 +   na.action = na.method(x = "include"),
-+   maxit = 20,
-+   workspace = '120gb'
++   maxit = 40,
++   workspace = '88gb'
 + )
-Error in asreml(Pheno_std ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  : 
-  Error   : The estimation was aborted; too many exceptions.
-Calls: asreml -> vs_Call -> vsn.tryCatch.W.E.rethrow
-In addition: Warning messages:
-1: In asreml(Pheno_std ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
-  Warning : Log-likelihood decreased to -55864.1; trying with reduced updates 0.211623
-2: In asreml(Pheno_std ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
-  Warning : Log-likelihood decreased to 32611.2; trying with reduced updates 0.457441E-01
-3: In asreml(Pheno_std ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
-  Warning : Log-likelihood decreased to 34373.9; trying with reduced updates 0.471214E-02
-Execution halted
