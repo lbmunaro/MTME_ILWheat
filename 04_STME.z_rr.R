@@ -26,7 +26,7 @@ GY_STME.z_rr1.asr <- asreml(
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'GY') |> droplevels(),
-  na.action = na.method(x = "include"),
+  na.action = na.method(x = 'include'),
   maxit = 20,
   workspace = '16gb'
 )
@@ -48,7 +48,7 @@ GY_STME.z_rr2.asr <- asreml(
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'GY') |> droplevels(),
-  na.action = na.method(x = "include"),
+  na.action = na.method(x = 'include'),
   maxit = 20,
   workspace = '16gb'
 )
@@ -96,7 +96,7 @@ GY_STME.z_rr3.asr <- asreml(
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'GY') |> droplevels(),
-  na.action = na.method(x = "include"),
+  na.action = na.method(x = 'include'),
   maxit = 20,
   workspace = '20gb'
 )
@@ -145,7 +145,7 @@ TW_STME.z_rr1.asr <- asreml(
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'TW') |> droplevels(),
-  na.action = na.method(x = "include"),
+  na.action = na.method(x = 'include'),
   maxit = 20,
   workspace = '16gb'
 )
@@ -167,7 +167,7 @@ TW_STME.z_rr2.asr <- asreml(
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'TW') |> droplevels(),
-  na.action = na.method(x = "include"),
+  na.action = na.method(x = 'include'),
   maxit = 20,
   workspace = '16gb'
 )
@@ -215,7 +215,7 @@ TW_STME.z_rr3.asr <- asreml(
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'TW') |> droplevels(),
-  na.action = na.method(x = "include"),
+  na.action = na.method(x = 'include'),
   maxit = 20,
   workspace = '20gb'
 )
@@ -277,7 +277,7 @@ HD_STME.z_rr1.asr <- asreml(
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'HD') |> droplevels(),
-  na.action = na.method(x = "include"),
+  na.action = na.method(x = 'include'),
   maxit = 20,
   workspace = '16gb'
 )
@@ -299,7 +299,7 @@ HD_STME.z_rr2.asr <- asreml(
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'HD') |> droplevels(),
-  na.action = na.method(x = "include"),
+  na.action = na.method(x = 'include'),
   maxit = 20,
   workspace = '16gb'
 )
@@ -334,7 +334,7 @@ HD_STME.z_rr3.asr <- asreml(
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'HD') |> droplevels(),
-  na.action = na.method(x = "include"),
+  na.action = na.method(x = 'include'),
   maxit = 20,
   workspace = '20gb'
 )
@@ -370,7 +370,7 @@ HT_STME.z_rr1.asr <- asreml(
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'HT') |> droplevels(),
-  na.action = na.method(x = "include"),
+  na.action = na.method(x = 'include'),
   maxit = 20,
   workspace = '16gb'
 )
@@ -392,7 +392,7 @@ HT_STME.z_rr2.asr <- asreml(
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'HT') |> droplevels(),
-  na.action = na.method(x = "include"),
+  na.action = na.method(x = 'include'),
   maxit = 20,
   workspace = '16gb'
 )
@@ -427,7 +427,7 @@ HT_STME.z_rr3.asr <- asreml(
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'HT') |> droplevels(),
-  na.action = na.method(x = "include"),
+  na.action = na.method(x = 'include'),
   maxit = 20,
   workspace = '20gb'
 )
@@ -476,7 +476,7 @@ MAT_STME.z_rr1.asr <- asreml(
   residual = ~ dsum(~ ar1(Col):ar1(Row) | Env),
   sparse = ~ Env:Gdrop,
   data = ILYT_Pheno |> filter(Trait == 'MAT') |> droplevels(),
-  na.action = na.method(x = "include"),
+  na.action = na.method(x = 'include'),
   maxit = 20,
   workspace = '16gb'
 )

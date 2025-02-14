@@ -27,7 +27,7 @@ STSE.z.asr <- asreml(
   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
   sparse = ~ TraitEnv:Gdrop,
   data = ILYT_Pheno,
-  na.action = na.method(x = "include"),
+  na.action = na.method(x = 'include'),
   maxit = 20,
   workspace = '20gb'
 )
@@ -48,9 +48,9 @@ STSE.z_varcomp_df <- summary(STSE.z.asr)$varcomp |>
 calculate_heritability <- function(varcomp_df, asreml_diagel) {
   # Function to perform one-by-one vpredict calculations
   vpredict_individual <- function(asreml_diagel, i, j) {
-    formula <- as.formula(paste0("V", i, "~V", i, "/(V", i, "+V", j, ")"))
+    formula <- as.formula(paste0('V', i, '~V', i, '/(V', i, '+V', j, ')'))
     result <- vpredict(asreml_diagel, formula)
-    return(data.frame(Index = i, Formula = paste0("V", i, "~V", i, "/(V", i, "+V", j, ")"), Result = result))
+    return(data.frame(Index = i, Formula = paste0('V', i, '~V', i, '/(V', i, '+V', j, ')'), Result = result))
   }
 
   # Initialize an empty dataframe to store results
@@ -72,6 +72,7 @@ STSE.z_h2 <- cbind(
   unique(ILYT_Pheno$TraitEnv),
   calculate_heritability(varcomp_df = STSE.z_varcomp_df, asreml_diagel = STSE.z.asr)
 )
+STSE.z_h2
 
 # Save data ----
 save.image('Data/STSE.z_diag.RData')

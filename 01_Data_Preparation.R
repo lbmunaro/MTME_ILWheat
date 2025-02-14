@@ -28,9 +28,9 @@ ILYT_Pheno_w <-
     maturity_time_spike_estimation_julian_date_jd_co_321_0501101
   ) |>
   # Simplify study name and convert it to a factor.
-  mutate(study_name=as.factor(gsub("^YT_", "", study_name)),
-         study_name=as.factor(gsub("^Addie_", "Adv_", study_name)),
-         study_name=str_replace(study_name, "(\\w+)_(\\d+)", "\\2-\\1"),
+  mutate(study_name=as.factor(gsub('^YT_', '', study_name)),
+         study_name=as.factor(gsub('^Addie_', 'Adv_', study_name)),
+         study_name=str_replace(study_name, '(\\w+)_(\\d+)', '\\2-\\1'),
          ) |>
   # Rename columns for easier reference.
   rename(
@@ -82,12 +82,12 @@ ILYT_Pheno <- ILYT_Pheno_w |>
   ungroup() |>
   # Assign NA to outliers
   # GY
-  mutate(Pheno= ifelse(Env=="22-Adv" & Col=="3" & Row=="17", NA, Pheno)) |>
-  #  mutate(Pheno= ifelse(Env=="Neo_24" & Col=="16" & Row=="24", NA, Pheno)) |>
+  mutate(Pheno= ifelse(Env=='22-Adv' & Col=='3' & Row=='17', NA, Pheno)) |>
+  #  mutate(Pheno= ifelse(Env=='Neo_24' & Col=='16' & Row=='24', NA, Pheno)) |>
   # TW
-  mutate(Pheno= ifelse(Trait=='TW' & Env=="24-Adv" & Col=="2" & Row=="24", NA, Pheno)) |>
-  mutate(Pheno= ifelse(Trait=='TW' & Env=="24-Stp" & Col=="12" & Row=="16", NA, Pheno)) |>
-  mutate(Pheno= ifelse(Trait=='TW' & Env=="24-Neo" & Col=="8" & Row=="6", NA, Pheno)) |>
+  mutate(Pheno= ifelse(Trait=='TW' & Env=='24-Adv' & Col=='2' & Row=='24', NA, Pheno)) |>
+  mutate(Pheno= ifelse(Trait=='TW' & Env=='24-Stp' & Col=='12' & Row=='16', NA, Pheno)) |>
+  mutate(Pheno= ifelse(Trait=='TW' & Env=='24-Neo' & Col=='8' & Row=='6', NA, Pheno)) |>
   # Standardize phenotypic values (Z-scores) for each trait.
   group_by(Trait) |>
   mutate(Pheno_SI = Pheno, # standard units
