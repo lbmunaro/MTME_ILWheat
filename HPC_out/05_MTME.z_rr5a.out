@@ -104,3 +104,23 @@ attr(,"parameters")
 > 
 > ## Update1 model ----
 > MTME.z_rr5a.asr <- update(MTME.z_rr5a.asr)
+
+ *** caught bus error ***
+address 0x7f59c40f8fb0, cause 'non-existent physical address'
+
+Traceback:
+ 1: doTryCatch(return(expr), name, parentenv, handler)
+ 2: tryCatchOne(expr, names, parentenv, handlers[[1L]])
+ 3: tryCatchList(expr, classes, parentenv, handlers)
+ 4: tryCatch(expr, error = function(e) e)
+ 5: withCallingHandlers(tryCatch(expr, error = function(e) e), warning = w.handler)
+ 6: vsn.tryCatch.W.E(expr)
+ 7: vsn.tryCatch.W.E.rethrow(.Call(.NAME, ..., PACKAGE = this_info$dll_name),     call. = this_call)
+ 8: vs_Call("vs_main", data, list(info = ginverse, obj = asr_grm(ginverse,     data = data), mef = mkr(mef)), R.param, G.param, predict,     options, CORE_VERSION = ddd$core_version)
+ 9: asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 5):vm(Gkeep,     Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse), sparse = ~TraitEnv:Gdrop,     residual = ~dsum(~ar1(Col):ar1(Row) | TraitEnv), na.action = na.method(x = "include"),     data = ILYT_Pheno, maxit = 40, workspace = "88gb", R.param = MTME.z_rr5a.asr$R.param,     G.param = MTME.z_rr5a.asr$G.param)
+10: eval(newcall, sys.parent())
+11: eval(newcall, sys.parent())
+12: update.asreml(MTME.z_rr5a.asr)
+13: update(MTME.z_rr5a.asr)
+14: update(MTME.z_rr5a.asr)
+An irrecoverable exception occurred. R is aborting now ...
