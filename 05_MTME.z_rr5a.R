@@ -24,8 +24,8 @@ MTME.z_rr5a.asr <- asreml(
   sparse = ~ TraitEnv:Gdrop,
   data = ILYT_Pheno,
   na.action = na.method(x = 'include'),
-  maxit = 40,
-  workspace = '88gb'
+  maxit = 80,
+  workspace = '96gb'
 )
 
 # Print model info
