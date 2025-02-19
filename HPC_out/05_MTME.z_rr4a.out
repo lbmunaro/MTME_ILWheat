@@ -96,3 +96,31 @@ Loading ASReml-R version 4.2
 > ## Update2 model ----
 > load('Data/MTME.z_rr4a.RData')
 > MTME.z_rr4a.asr <- update(MTME.z_rr4a.asr)
+Warning message:
+In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 4):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> 
+> # Print model info
+> print('MTME.z-rr4a - Update 2')
+[1] "MTME.z-rr4a - Update 2"
+> print('AIC')
+[1] "AIC"
+> print(summary(MTME.z_rr4a.asr)$aic)
+[1] -35859.79
+attr(,"parameters")
+[1] 306
+> print(paste('convergence =', MTME.z_rr4a.asr$converge))
+[1] "convergence = TRUE"
+> MTME.z_rr4a.asr$trace |>
++   as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 18235.53 18235.54 18235.56 18235.57 18235.59 18235.62 18235.67
+         8        9       10       11       12       13      14      15      16
+1 18235.72 18235.78 18235.83 18235.87 18235.89 18235.89 18235.9 18235.9 18235.9
+> 
+> save.image('Data/MTME.z_rr4a.RData')
+> 
+> proc.time()
+     user    system   elapsed 
+77794.689  4041.569 25453.717 
