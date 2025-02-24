@@ -21,12 +21,13 @@ varcomp <- summary(MTME.z_rr2a.asr)$varcomp |> as.data.frame() |> rownames_to_co
   glimpse()
 
 # Extract specific variances (diagonal elements)
-R <- varcomp$component[grep("^TraitEnv:vm", varcomp$rowname)]
+R <- varcomp$component[grep('^TraitEnv:vm', varcomp$rowname)]
 
 # Extract loadings (factor 1 & factor 2) from FA model
-L1 <- varcomp$component[grep("^rr\\(TraitEnv, 2\\):vm.*!fa1$", varcomp$rowname)]
-L2 <- varcomp$component[grep("^rr\\(TraitEnv, 2\\):vm.*!fa2$", varcomp$rowname)]
+L1 <- varcomp$component[grep('^rr\\(TraitEnv, 2\\):vm.*!fa1$', varcomp$rowname)]
+L2 <- varcomp$component[grep('^rr\\(TraitEnv, 2\\):vm.*!fa2$', varcomp$rowname)]
 L <- cbind(L1, L2)  # Combine factor loadings into a matrix
+L
 
 # Perform Singular Value Decomposition (SVD) for rotation
 svd <- svd(L) # Perform SVD on the loadings matrix

@@ -15,64 +15,71 @@ setwd('~/MTME_ILWheat/')
 ## Pheno & Ginv
 load('Data/ILYT_Pheno-Gmatrix.RData')
 
+# ILYT_Pheno |> 
+#   ggplot(aes(x=Col, y=Row, fill=Block)) +
+#   geom_tile() +
+#   facet_wrap(~Env)
 
-ILYT_Pheno |> glimpse()
-
-# Fit model ----
-## Run the model ----
-
-STSE.z.asr <- asreml(
+# Fit model 0----
+STSE.z.asr0 <- asreml(
   Pheno_z ~ TraitEnv,
   random = ~ diag(TraitEnv):vm(Gkeep, Ginv.sparse),
   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
   sparse = ~ TraitEnv:Gdrop,
   data = ILYT_Pheno,
   na.action = na.method(x = 'include'),
-  maxit = 20,
-  workspace = '20gb'
-)
-print('STSE.z')
-print('AIC')
-print(summary(STSE.z.asr)$aic)
-print(paste('convergence =',STSE.z.asr$converge))
-STSE.z.asr$trace |>
+  maxit = 13,
+  workspace = '16gb')
+STSE.z.asr0 <- update(STSE.z.asr0)
+
+print('STSE.z0')
+print(paste('convergence =',STSE.z.asr0$converge))
+STSE.z.asr0$trace |>
   as.data.frame() |> rownames_to_column('Iteration') |>
   filter(Iteration=='LogLik') |> print()
 
-# Heritability ----
-STSE.z_varcomp_df <- summary(STSE.z.asr)$varcomp |>
-  as.data.frame() |>
-  rownames_to_column() |>
-  glimpse()
+save.image('Data/STSE.z_diag.RData')
 
-calculate_heritability <- function(varcomp_df, asreml_diagel) {
-  # Function to perform one-by-one vpredict calculations
-  vpredict_individual <- function(asreml_diagel, i, j) {
-    formula <- as.formula(paste0('V', i, '~V', i, '/(V', i, '+V', j, ')'))
-    result <- vpredict(asreml_diagel, formula)
-    return(data.frame(Index = i, Formula = paste0('V', i, '~V', i, '/(V', i, '+V', j, ')'), Result = result))
-  }
+# Fit model 1----
+STSE.z.asr1 <- asreml(
+  Pheno_z ~ TraitEnv,
+  random = ~ diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
+    diag(TraitEnv):ide(Gkeep),
+  residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
+  sparse = ~ TraitEnv:Gdrop,
+  data = ILYT_Pheno,
+  na.action = na.method(x = 'include'),
+  maxit = 13,
+  workspace = '16gb')
+STSE.z.asr1 <- update(STSE.z.asr1)
 
-  # Initialize an empty dataframe to store results
-  vpredict_results <- data.frame()
+print('STSE.z1')
+print(paste('convergence =',STSE.z.asr1$converge))
+STSE.z.asr1$trace |>
+  as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
-  # Loop through each pair of indices (V1 to V39 and V40 to V154 incrementing by 3)
-  for (i in 1:39) {
-    j <- 37 + i * 3
-    if (j <= 154) {
-      result <- vpredict_individual(asreml_diagel, i, j)
-      vpredict_results <- rbind(vpredict_results, result)
-    }
-  }
+save.image('Data/STSE.z_diag.RData')
 
-  return(vpredict_results)
-}
+# Fit model 2----
+STSE.z.asr2 <- asreml(
+  Pheno_z ~ TraitEnv,
+  random = ~ diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
+    diag(TraitEnv):ide(Gkeep) +
+    diag(TraitEnv):Block,
+  residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
+  sparse = ~ TraitEnv:Gdrop,
+  data = ILYT_Pheno,
+  na.action = na.method(x = 'include'),
+  maxit = 13,
+  workspace = '16gb')
+STSE.z.asr2 <- update(STSE.z.asr2)
 
-STSE.z_h2 <- cbind(
-  unique(ILYT_Pheno$TraitEnv),
-  calculate_heritability(varcomp_df = STSE.z_varcomp_df, asreml_diagel = STSE.z.asr)
-)
-STSE.z_h2
+print('STSE.z2')
+print(paste('convergence =',STSE.z.asr2$converge))
+STSE.z.asr2$trace |>
+  as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
 
 # Save data ----
 save.image('Data/STSE.z_diag.RData')
