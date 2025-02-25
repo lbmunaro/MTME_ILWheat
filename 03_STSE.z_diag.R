@@ -15,11 +15,11 @@ setwd('~/MTME_ILWheat/')
 ## Pheno & Ginv
 load('Data/ILYT_Pheno-Gmatrix.RData')
 
-# ILYT_Pheno |> 
+# ILYT_Pheno |>
 #   ggplot(aes(x=Col, y=Row, fill=Block)) +
 #   geom_tile() +
 #   facet_wrap(~Env)
-
+# 
 # Fit model 0----
 STSE.z.asr0 <- asreml(
   Pheno_z ~ TraitEnv,
@@ -44,7 +44,7 @@ save.image('Data/STSE.z_diag.RData')
 STSE.z.asr1 <- asreml(
   Pheno_z ~ TraitEnv,
   random = ~ diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
-    diag(TraitEnv):ide(Gkeep),
+    diag(TraitEnv):Gkeep,
   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
   sparse = ~ TraitEnv:Gdrop,
   data = ILYT_Pheno,
@@ -65,7 +65,7 @@ save.image('Data/STSE.z_diag.RData')
 STSE.z.asr2 <- asreml(
   Pheno_z ~ TraitEnv,
   random = ~ diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
-    diag(TraitEnv):ide(Gkeep) +
+    diag(TraitEnv):Gkeep +
     diag(TraitEnv):Block,
   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
   sparse = ~ TraitEnv:Gdrop,
@@ -81,7 +81,6 @@ STSE.z.asr2$trace |>
   as.data.frame() |> rownames_to_column('Iteration') |>
   filter(Iteration=='LogLik') |> print()
 
-# Save data ----
 save.image('Data/STSE.z_diag.RData')
 
 # End ----

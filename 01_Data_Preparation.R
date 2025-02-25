@@ -58,6 +58,7 @@ ILYT_Pheno_w <-
   mutate_at(vars(GY:MAT), ~ifelse(.<=0,NA,.)) |>
   mutate_at(vars(GY:MAT), ~ifelse(Gen=='FILL',NA,.)) |>
   mutate(Gen = as.factor(ifelse(Gen=='FILL',NA,as.character(Gen)))) |>
+  mutate(Gen = as.factor(ifelse(Plot=='958'&Env=='24-Urb',NA,as.character(Gen)))) |>
   filter(Loc!='Belleville, IL') |>
   droplevels() |>
   # Display the dataset.

@@ -16,12 +16,14 @@ setwd('~/MTME_ILWheat/')
 ## Pheno & Ginv
 load('Data/ILYT_Pheno-Gmatrix.RData')
 
-# Fit rr3a model ----
+# Fit rr3ap model ----
 k <- 3
 ## Run model ----
-MTME.z_rr3a.asr <- asreml(
+MTME.z_rr3ap.asr <- asreml(
   Pheno_z ~ TraitEnv,
-  random = ~ rr(TraitEnv,3):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse),
+  random = ~ rr(TraitEnv,3):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
+    diag(TraitEnv):Gkeep +
+    diag(TraitEnv):Block,
   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
   sparse = ~ TraitEnv:Gdrop,
   data = ILYT_Pheno,
@@ -31,15 +33,15 @@ MTME.z_rr3a.asr <- asreml(
 )
 
 # Print model info
-print(paste('convergence =', MTME.z_rr3a.asr$converge))
-MTME.z_rr3a.asr$trace |>
+print(paste('convergence =', MTME.z_rr3ap.asr$converge))
+MTME.z_rr3ap.asr$trace |>
   as.data.frame() |> rownames_to_column('Iteration') |>
   filter(Iteration=='LogLik') |> print()
 
 # Save
-save.image('Data/MTME.z_rr3a.RData')
+save.image('Data/MTME.z_rr3ap.RData')
 
 # Update model ----
-MTME.z_rr3a.asr <- update_asreml(MTME.z_rr3a.asr, 
+MTME.z_rr3ap.asr <- update_asreml(MTME.z_rr3ap.asr, 
                                  max_updates = 10,
-                                 save_path = "Data/MTME.z_rr3a.RData")
+                                 save_path = "Data/MTME.z_rr3ap.RData")

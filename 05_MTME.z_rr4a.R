@@ -7,6 +7,7 @@ rm(list = objects())  # Removes all objects from the environment.
 # Packages ----
 library(tidyverse) # R packages for data science.
 library(asreml) # ASReml-R package.
+source("Functions_MTME.R")  # Load functions
 
 # Use for HPC only
 setwd('~/MTME_ILWheat/')
@@ -16,6 +17,7 @@ setwd('~/MTME_ILWheat/')
 load('Data/ILYT_Pheno-Gmatrix.RData')
 
 # Fit rr4a model ----
+k <- 4
 ## Run model ----
 MTME.z_rr4a.asr <- asreml(
   Pheno_z ~ TraitEnv,
@@ -24,45 +26,20 @@ MTME.z_rr4a.asr <- asreml(
   sparse = ~ TraitEnv:Gdrop,
   data = ILYT_Pheno,
   na.action = na.method(x = 'include'),
-  maxit = 80,
+  maxit = 13,
   workspace = '80gb'
 )
 
 # Print model info
-print('MTME.z-rr4a')
-print('AIC')
-print(summary(MTME.z_rr4a.asr)$aic)
 print(paste('convergence =', MTME.z_rr4a.asr$converge))
 MTME.z_rr4a.asr$trace |>
   as.data.frame() |> rownames_to_column('Iteration') |>
   filter(Iteration=='LogLik') |> print()
 
+# Save
 save.image('Data/MTME.z_rr4a.RData')
 
-## Update1 model ----
-MTME.z_rr4a.asr <- update(MTME.z_rr4a.asr)
-
-# Print model info
-print('MTME.z-rr4a - Update 1')
-print('AIC')
-print(summary(MTME.z_rr4a.asr)$aic)
-print(paste('convergence =', MTME.z_rr4a.asr$converge))
-MTME.z_rr4a.asr$trace |>
-  as.data.frame() |> rownames_to_column('Iteration') |>
-  filter(Iteration=='LogLik') |> print()
-
-save.image('Data/MTME.z_rr4a.RData')
-
-## Update2 model ----
-MTME.z_rr4a.asr <- update(MTME.z_rr4a.asr)
-
-# Print model info
-print('MTME.z-rr4a - Update 2')
-print('AIC')
-print(summary(MTME.z_rr4a.asr)$aic)
-print(paste('convergence =', MTME.z_rr4a.asr$converge))
-MTME.z_rr4a.asr$trace |>
-  as.data.frame() |> rownames_to_column('Iteration') |>
-  filter(Iteration=='LogLik') |> print()
-
-save.image('Data/MTME.z_rr4a.RData')
+# Update model ----
+MTME.z_rr4a.asr <- update_asreml(MTME.z_rr4a.asr, 
+                                 max_updates = 20,
+                                 save_path = "Data/MTME.z_rr4a.RData")
