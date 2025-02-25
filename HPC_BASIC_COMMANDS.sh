@@ -14,18 +14,18 @@ ssh lucasb4@cc-login.campuscluster.illinois.edu
 
 ## Transfer folder from home directory
 ### From home repository to HPC
-scp -r ~/Documents/MTME_ILWheat lucasb4@cc-login.campuscluster.illinois.edu:MTME_ILWheat
+scp -r ~/Documents/GitHub/MTME_ILWheat lucasb4@cc-login.campuscluster.illinois.edu:MTME_ILWheat
 
 ### From HPC
-scp -r lucasb4@cc-login.campuscluster.illinois.edu:MTME_ILWheat/HPC_out ~/Documents/MTME_ILWheat
+scp -r lucasb4@cc-login.campuscluster.illinois.edu:MTME_ILWheat/HPC_out ~/Documents/GitHub/MTME_ILWheat
 
 ## Transfer file
 ### To HPC
-scp -r ~/Documents/MTME_ILWheat/<filename> lucasb4@cc-login.campuscluster.illinois.edu:MTME_ILWheat/<filename>
+scp -r ~/Documents/GitHub/MTME_ILWheat/<filename> lucasb4@cc-login.campuscluster.illinois.edu:MTME_ILWheat/<filename>
 ### From HPC
-scp -r lucasb4@cc-login.campuscluster.illinois.edu:MTME_ILWheat/<filename> ~/Documents/MTME_ILWheat/<filename>
+scp -r lucasb4@cc-login.campuscluster.illinois.edu:MTME_ILWheat/<filename> ~/Documents/GitHub/MTME_ILWheat/<filename>
 
-scp -r lucasb4@cc-login.campuscluster.illinois.edu:MTME_ILWheat/Data/MTME* ~/Documents/MTME_ILWheat/Data/
+scp -r lucasb4@cc-login.campuscluster.illinois.edu:MTME_ILWheat/Data/MTME* ~/Documents/GitHub/MTME_ILWheat/Data/
 
 #BASIC COMMANDS
 
@@ -116,7 +116,7 @@ rm -i <string>
 # Script to commit and push large files (>100MB) to GitHub using Git LFS
 
 # Step 1: Navigate to the GitHub repository
-cd ~/Documents/MTME_ILWheat  # Change this path if needed
+cd ~/Documents/GitHub/MTME_ILWheat  # Change this path if needed
 
 # Step 2: Install Git LFS (if not installed)
 sudo apt update && sudo apt install git-lfs -y
