@@ -45,3 +45,6 @@ save.image('Data/MTME.z_rr2ap.RData')
 MTME.z_rr2ap.asr <- update_asreml(MTME.z_rr2ap.asr, 
                                  max_updates = 10,
                                  save_path = "Data/MTME.z_rr2ap.RData")
+
+# Save
+save.image('Data/MTME.z_rr2ap.RData')
