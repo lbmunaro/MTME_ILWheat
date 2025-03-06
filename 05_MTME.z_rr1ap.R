@@ -7,7 +7,7 @@ rm(list = objects())  # Removes all objects from the environment.
 # Packages ----
 library(tidyverse) # R packages for data science.
 library(asreml) # ASReml-R package.
-source("Functions_MTME.R")  # Load functions
+source('Functions_MTME.R')  # Load functions
 
 # Use for HPC only
 setwd('~/MTME_ILWheat/')
@@ -22,8 +22,8 @@ k <- 1
 MTME.z_rr1ap.asr <- asreml(
   Pheno_z ~ TraitEnv,
   random = ~ rr(TraitEnv,1):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
-    diag(TraitEnv):Gkeep +
-    diag(TraitEnv):Block,
+    diag(TraitEnv):Gkeep + # Specific non-additive effect
+    diag(TraitEnv):Block, # Block within TraitEnv
   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
   sparse = ~ TraitEnv:Gdrop,
   data = ILYT_Pheno,
@@ -44,7 +44,7 @@ save.image('Data/MTME.z_rr1ap.RData')
 # Update model ----
 MTME.z_rr1ap.asr <- update_asreml(MTME.z_rr1ap.asr, 
                                  max_updates = 10,
-                                 save_path = "Data/MTME.z_rr1ap.RData")
+                                 save_path = 'Data/MTME.z_rr1ap.RData')
 
 # Save
 save.image('Data/MTME.z_rr1ap.RData')

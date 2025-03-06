@@ -7,7 +7,7 @@ rm(list = objects())  # Removes all objects from the environment.
 # Packages ----
 library(tidyverse) # R packages for data science.
 library(asreml) # ASReml-R package.
-source("Functions_MTME.R")  # Load functions
+source('Functions_MTME.R')  # Load functions
 
 # Use for HPC only
 setwd('~/MTME_ILWheat/')
@@ -41,8 +41,8 @@ save.image('Data/MTME.z_rr6a.RData')
 
 # Update model ----
 MTME.z_rr6a.asr <- update_asreml(MTME.z_rr6a.asr, 
-                                 max_updates = 20,
-                                 save_path = "Data/MTME.z_rr6a.RData")
+                                 max_updates = 50,
+                                 save_path = 'Data/MTME.z_rr6a.RData')
 
 # Save
 save.image('Data/MTME.z_rr6a.RData')

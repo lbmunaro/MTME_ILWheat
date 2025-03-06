@@ -100,3 +100,26 @@ gebvs_asreml <- function(mod,k,data,TE_fct) {
   rownames(blup) <- GET
   return(blup)
 }
+
+# Gen Corr ----
+gcorr_asreml <- function(mod,k,data,TE_fct) {
+  # variance parameters
+  vparams <- mod$vparameters
+  # latent environmental covariates (loadings)
+  Lam <- matrix(vparams[grep('^rr.*fa', names(vparams))], ncol = k)
+  # Rotate
+  # Perform Singular Value Decomposition (SVD) for rotation
+  svd <- svd(Lam) # Perform SVD on the loadings matrix
+  # Compute rotated estimated loadings
+  LamStar <- Lam %*% svd$v
+  # specific variances
+  Psi <- diag(vparams[grep(paste0('^',TE_fct,'.*vm'), names(vparams))])
+  # Variance covariance matrix
+  Gvar <- LamStar%*%t(LamStar)+diag(Psi)
+  rownames(Gvar) <- levels(data$TraitEnv) # fix this
+  colnames(Gvar) <- levels(data$TraitEnv) # fix this
+  # Genetic correlation matrix
+  Cmat <- cov2cor(Gvar)
+  return(list(Gvar = Gvar, gcorr = Cmat))
+}
+
