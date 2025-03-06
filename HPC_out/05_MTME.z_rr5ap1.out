@@ -15,7 +15,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-Online License checked out Sun Feb  9 17:13:20 2025
+Online License checked out Mon Mar  3 10:41:24 2025
 [Previously saved workspace restored]
 
 > # Multi-Trait Multi-Environment models ----
@@ -47,6 +47,7 @@ The following objects are masked from ‘package:tidyr’:
 
 Loading ASReml-R version 4.2
 
+> source("Functions_MTME.R")  # Load functions
 > 
 > # Use for HPC only
 > setwd('~/MTME_ILWheat/')
@@ -55,27 +56,18 @@ Loading ASReml-R version 4.2
 > ## Pheno & Ginv
 > load('Data/ILYT_Pheno-Gmatrix.RData')
 > 
-> # Fit rr3ap model ----
+> # Fit rr5ap1 model ----
+> k <- 5
 > ## Run model ----
-> MTME.z_rr3ap.asr <- asreml(
+> MTME.z_rr5ap1.asr <- asreml(
 +   Pheno_z ~ TraitEnv,
-+   random = ~ rr(TraitEnv,3):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
-+     rr(TraitEnv,1):ide(Gkeep) + diag(TraitEnv):ide(Gkeep),
++   random = ~ rr(TraitEnv,5):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
++     rr(TraitEnv,1):Gkeep + diag(TraitEnv):Gkeep +
++     diag(TraitEnv):Block,
 +   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
 +   sparse = ~ TraitEnv:Gdrop,
 +   data = ILYT_Pheno,
-+   na.action = na.method(x = "include"),
-+   maxit = 20,
-+   workspace = '48gb'
++   na.action = na.method(x = 'include'),
++   maxit = 13,
++   workspace = '96gb'
 + )
-Error in asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  : 
-  Error   : The estimation was aborted; too many exceptions.
-Calls: asreml -> vs_Call -> vsn.tryCatch.W.E.rethrow
-In addition: Warning messages:
-1: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
-  Warning : Log-likelihood decreased to 11232.7; trying with reduced updates 0.202187
-2: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
-  Warning : Log-likelihood decreased to 11332.2; trying with reduced updates 0.118719
-3: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
-  Warning : Log-likelihood decreased to 11471.1; trying with reduced updates 0.641299E-01
-Execution halted

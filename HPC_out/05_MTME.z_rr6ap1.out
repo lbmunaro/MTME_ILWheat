@@ -15,6 +15,9 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
+Online License checked out Mon Mar  3 10:41:35 2025
+[Previously saved workspace restored]
+
 > # Multi-Trait Multi-Environment models ----
 > # This script fits Multi-Trait Multi-Environment models
 > 
@@ -42,9 +45,9 @@ The following objects are masked from ‘package:tidyr’:
 
     expand, pack, unpack
 
-Online License checked out Thu Feb  6 16:56:33 2025
 Loading ASReml-R version 4.2
 
+> source("Functions_MTME.R")  # Load functions
 > 
 > # Use for HPC only
 > setwd('~/MTME_ILWheat/')
@@ -53,26 +56,18 @@ Loading ASReml-R version 4.2
 > ## Pheno & Ginv
 > load('Data/ILYT_Pheno-Gmatrix.RData')
 > 
-> # Fit RR2a model ----
+> # Fit rr6ap1 model ----
+> k <- 6
 > ## Run model ----
-> MTME_RR2a.asr <- asreml(
-+   Pheno ~ TraitEnv,
-+   random = ~ rr(TraitEnv,2):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse),
+> MTME.z_rr6ap1.asr <- asreml(
++   Pheno_z ~ TraitEnv,
++   random = ~ rr(TraitEnv,6):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
++     rr(TraitEnv,1):Gkeep + diag(TraitEnv):Gkeep +
++     diag(TraitEnv):Block,
 +   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
 +   sparse = ~ TraitEnv:Gdrop,
 +   data = ILYT_Pheno,
-+   na.action = na.method(x = "include"),
-+   maxit = 20,
-+   workspace = '120gb'
++   na.action = na.method(x = 'include'),
++   maxit = 13,
++   workspace = '96gb'
 + )
-Error in asreml(Pheno ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  : 
-  Error   : The estimation was aborted; too many exceptions.
-Calls: asreml -> vs_Call -> vsn.tryCatch.W.E.rethrow
-In addition: Warning messages:
-1: In asreml(Pheno ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  :
-  Warning : Log-likelihood decreased to -144215.; trying with reduced updates 0.253366
-2: In asreml(Pheno ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  :
-  Warning : Log-likelihood decreased to -133436.; trying with reduced updates 0.575013E-01
-3: In asreml(Pheno ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  :
-  Warning : Log-likelihood decreased to -135003.; trying with reduced updates 0.120129
-Execution halted

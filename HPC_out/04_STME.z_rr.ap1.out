@@ -1,0 +1,682 @@
+
+R version 4.4.2 (2024-10-31) -- "Pile of Leaves"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: x86_64-redhat-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+Online License checked out Thu Feb 27 16:19:32 2025
+[Previously saved workspace restored]
+
+> # Single-Trait Multi-TraitEnvironment models ----
+> # This script fits Single-Trait Multi-TraitEnvironment models
+> 
+> # Clean workspace
+> rm(list = objects())  # Removes all objects from the TraitEnvironment.
+> 
+> # Packages ----
+> library(tidyverse) # R packages for data science.
+── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+> library(asreml) # ASReml-R package.
+Loading required package: Matrix
+
+Attaching package: ‘Matrix’
+
+The following objects are masked from ‘package:tidyr’:
+
+    expand, pack, unpack
+
+Loading ASReml-R version 4.2
+
+> source("Functions_MTME.R")  # Load functions
+> 
+> # Use for HPC only
+> setwd('~/MTME_ILWheat/')
+> 
+> # Load data ----
+> ## Pheno & Ginv
+> load('Data/ILYT_Pheno-Gmatrix.RData')
+> 
+> # Fit models ----
+> 
+> ## GY ----
+> ### rr1----
+> # Run model
+> GY_STME.z_rr1ap1.asr <- asreml(
++   Pheno_z ~ TraitEnv,
++   random = ~ rr(TraitEnv,1):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
++     rr(TraitEnv,1):Gkeep + diag(TraitEnv):Gkeep +
++     diag(TraitEnv):Block,
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
++   sparse = ~ TraitEnv:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'GY') |> droplevels(),
++   na.action = na.method(x = 'include'),
++   maxit = 13,
++   workspace = '16gb'
++ )
+Warning messages:
+1: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep,  :
+  Log-likelihood not converged
+2: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> # Print model info
+> print('GY_STME.z_rr1')
+[1] "GY_STME.z_rr1"
+> print(paste('convergence =',GY_STME.z_rr1ap1.asr$converge))
+[1] "convergence = FALSE"
+> GY_STME.z_rr1ap1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 1189.431 2466.166 3240.608 3506.776 3621.823 3648.649 3655.689
+         8        9       10       11       12       13       14
+1 3658.569 3660.171 3661.091 3661.658 3662.072 3662.383 3662.383
+> 
+> # Update model
+> GY_STME.z_rr1ap1.asr <- update_asreml(GY_STME.z_rr1ap1.asr, 
++                                      max_updates = 10,
++                                      save_path = "Data/STME.z_rr.ap1.RData")
+[1] "Update 1"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 3662.611 3662.661 3662.805 3662.911 3662.989 3663.045 3663.087
+         8       9       10       11       12       13       14
+1 3663.117 3663.14 3663.157 3663.169 3663.178 3663.185 3663.185
+[1] "Update 2"
+[1] "Convergence = TRUE"
+  Iteration        1        2        3        4      5      6
+1    LogLik 3663.191 3663.192 3663.195 3663.198 3663.2 3663.2
+[1] "Model successfully converged!"
+Warning messages:
+1: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep,  :
+  Log-likelihood not converged
+2: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+3: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> 
+> save.image('Data/STME.z_rr.ap1.RData')
+> 
+> ### rr2----
+> # Run model
+> GY_STME.z_rr2ap1.asr <- asreml(
++   Pheno_z ~ TraitEnv,
++   random = ~ rr(TraitEnv,2):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
++     rr(TraitEnv,1):Gkeep + diag(TraitEnv):Gkeep +
++     diag(TraitEnv):Block,
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
++   sparse = ~ TraitEnv:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'GY') |> droplevels(),
++   na.action = na.method(x = 'include'),
++   maxit = 13,
++   workspace = '16gb'
++ )
+Warning messages:
+1: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  :
+  Log-likelihood not converged
+2: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> # Print model info
+> print('GY_STME.z_rr2')
+[1] "GY_STME.z_rr2"
+> print(paste('convergence =',GY_STME.z_rr2ap1.asr$converge))
+[1] "convergence = FALSE"
+> GY_STME.z_rr2ap1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 1079.388 2582.157 3338.826 3594.928 3681.212 3717.945 3725.641
+         8       9       10       11       12       13       14
+1 3727.316 3727.88 3728.203 3728.432 3728.553 3728.592 3728.592
+> 
+> # Update model
+> GY_STME.z_rr2ap1.asr <- update_asreml(GY_STME.z_rr2ap1.asr, 
++                                      max_updates = 10,
++                                      save_path = "Data/STME.z_rr.ap1.RData")
+[1] "Update 1"
+[1] "Convergence = TRUE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 3728.601 3728.601 3728.603 3728.604 3728.605 3728.605 3728.606
+         8
+1 3728.606
+[1] "Model successfully converged!"
+Warning message:
+In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> 
+> save.image('Data/STME.z_rr.ap1.RData')
+> 
+> ### rr3----
+> # Run model
+> GY_STME.z_rr3ap1.asr <- asreml(
++   Pheno_z ~ TraitEnv,
++   random = ~ rr(TraitEnv,3):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
++     rr(TraitEnv,1):Gkeep + diag(TraitEnv):Gkeep +
++     diag(TraitEnv):Block,
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
++   sparse = ~ TraitEnv:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'GY') |> droplevels(),
++   na.action = na.method(x = 'include'),
++   maxit = 13,
++   workspace = '20gb'
++ )
+Warning messages:
+1: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
+  Log-likelihood not converged
+2: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> # Print model info
+> print('GY_STME.z_rr3')
+[1] "GY_STME.z_rr3"
+> print(paste('convergence =',GY_STME.z_rr3ap1.asr$converge))
+[1] "convergence = FALSE"
+> GY_STME.z_rr3ap1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration       1        2        3        4        5        6        7
+1    LogLik 954.622 2609.721 3381.996 3625.408 3703.867 3731.637 3743.544
+         8        9       10       11       12      13      14
+1 3746.203 3747.154 3747.721 3748.424 3749.481 3750.77 3750.77
+> 
+> # Update model
+> GY_STME.z_rr3ap1.asr <- update_asreml(GY_STME.z_rr3ap1.asr, 
++                                      max_updates = 10,
++                                      save_path = "Data/STME.z_rr.ap1.RData")
+[1] "Update 1"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 3751.623 3751.778 3752.141 3752.472 3752.724 3753.005 3753.258
+         8        9       10       11       12       13       14
+1 3753.444 3753.582 3753.698 3753.806 3753.908 3754.007 3754.007
+[1] "Update 2"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 3754.104 3754.131 3754.222 3754.313 3754.405 3754.497 3754.588
+         8        9       10       11       12       13       14
+1 3754.677 3754.764 3754.848 3754.927 3755.002 3755.071 3755.071
+[1] "Update 3"
+[1] "Convergence = TRUE"
+  Iteration        1       2        3       4        5        6        7
+1    LogLik 3755.134 3755.15 3755.202 3755.24 3755.266 3755.284 3755.297
+         8        9       10       11       12
+1 3755.305 3755.311 3755.315 3755.318 3755.318
+[1] "Model successfully converged!"
+Warning messages:
+1: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
+  Log-likelihood not converged
+2: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+3: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
+  Log-likelihood not converged
+4: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> 
+> save.image('Data/STME.z_rr.ap1.RData')
+> 
+> ## TW ----
+> ### rr1----
+> # Run model
+> TW_STME.z_rr1ap1.asr <- asreml(
++   Pheno_z ~ TraitEnv,
++   random = ~ rr(TraitEnv,1):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
++     rr(TraitEnv,1):Gkeep + diag(TraitEnv):Gkeep +
++     diag(TraitEnv):Block,
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
++   sparse = ~ TraitEnv:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'TW') |> droplevels(),
++   na.action = na.method(x = 'include'),
++   maxit = 13,
++   workspace = '16gb'
++ )
+Warning message:
+In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep,  :
+  Log-likelihood not converged
+> # Print model info
+> print('TW_STME.z_rr1')
+[1] "TW_STME.z_rr1"
+> print(paste('convergence =',TW_STME.z_rr1ap1.asr$converge))
+[1] "convergence = FALSE"
+> TW_STME.z_rr1ap1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 3607.115 6190.678 6701.213 6866.254 6910.715 6919.427 6922.637
+        8        9       10       11       12       13       14
+1 6924.03 6924.578 6924.776 6924.844 6924.868 6924.875 6924.875
+> 
+> # Update model
+> TW_STME.z_rr1ap1.asr <- update_asreml(TW_STME.z_rr1ap1.asr, 
++                                      max_updates = 10,
++                                      save_path = "Data/STME.z_rr.ap1.RData")
+[1] "Update 1"
+[1] "Convergence = TRUE"
+  Iteration        1        2        3
+1    LogLik 6924.878 6924.878 6924.878
+[1] "Model successfully converged!"
+> 
+> save.image('Data/STME.z_rr.ap1.RData')
+> 
+> ### rr2----
+> # Run model
+> TW_STME.z_rr2ap1.asr <- asreml(
++   Pheno_z ~ TraitEnv,
++   random = ~ rr(TraitEnv,2):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
++     rr(TraitEnv,1):Gkeep + diag(TraitEnv):Gkeep +
++     diag(TraitEnv):Block,
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
++   sparse = ~ TraitEnv:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'TW') |> droplevels(),
++   na.action = na.method(x = 'include'),
++   maxit = 13,
++   workspace = '16gb'
++ )
+Warning messages:
+1: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  :
+  Log-likelihood not converged
+2: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> # Print model info
+> print('TW_STME.z_rr2')
+[1] "TW_STME.z_rr2"
+> print(paste('convergence =',TW_STME.z_rr2ap1.asr$converge))
+[1] "convergence = FALSE"
+> TW_STME.z_rr2ap1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 3351.605 6270.852 6719.651 6886.222 6938.578 6964.644 6972.198
+         8        9       10      11       12       13       14
+1 6982.162 6993.029 6998.634 7000.72 7001.359 7001.497 7001.497
+> 
+> # Update model
+> TW_STME.z_rr2ap1.asr <- update_asreml(TW_STME.z_rr2ap1.asr, 
++                                      max_updates = 10,
++                                      save_path = "Data/STME.z_rr.ap1.RData")
+[1] "Update 1"
+[1] "Convergence = TRUE"
+  Iteration        1        2        3        4
+1    LogLik 7001.526 7001.528 7001.533 7001.533
+[1] "Model successfully converged!"
+Warning message:
+In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> 
+> save.image('Data/STME.z_rr.ap1.RData')
+> 
+> ### rr3----
+> # Run model
+> TW_STME.z_rr3ap1.asr <- asreml(
++   Pheno_z ~ TraitEnv,
++   random = ~ rr(TraitEnv,3):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
++     rr(TraitEnv,1):Gkeep + diag(TraitEnv):Gkeep +
++     diag(TraitEnv):Block,
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
++   sparse = ~ TraitEnv:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'TW') |> droplevels(),
++   na.action = na.method(x = 'include'),
++   maxit = 13,
++   workspace = '20gb'
++ )
+Warning messages:
+1: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
+  Log-likelihood not converged
+2: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> # Print model info
+> print('TW_STME.z_rr3')
+[1] "TW_STME.z_rr3"
+> print(paste('convergence =',TW_STME.z_rr3ap1.asr$converge))
+[1] "convergence = FALSE"
+> TW_STME.z_rr3ap1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 3034.524 5889.322 6494.413 6806.706 6969.112 7007.575 7017.582
+         8        9       10       11       12       13       14
+1 7022.478 7027.276 7031.248 7034.099 7036.697 7038.849 7038.849
+> 
+> # Update model
+> TW_STME.z_rr3ap1.asr <- update_asreml(TW_STME.z_rr3ap1.asr, 
++                                      max_updates = 10,
++                                      save_path = "Data/STME.z_rr.ap1.RData")
+[1] "Update 1"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6       7
+1    LogLik 7040.093 7040.286 7040.822 7041.171 7041.428 7041.645 7041.84
+         8        9       10       11       12       13       14
+1 7042.022 7042.196 7042.361 7042.514 7042.651 7042.767 7042.767
+[1] "Update 2"
+[1] "Convergence = TRUE"
+  Iteration       1        2        3        4        5        6        7
+1    LogLik 7042.86 7042.877 7042.913 7042.928 7042.935 7042.938 7042.939
+         8
+1 7042.939
+[1] "Model successfully converged!"
+Warning messages:
+1: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
+  Log-likelihood not converged
+2: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+3: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> 
+> save.image('Data/STME.z_rr.ap1.RData')
+> 
+> ## HD ----
+> ### rr1----
+> # Run model
+> HD_STME.z_rr1ap1.asr <- asreml(
++   Pheno_z ~ TraitEnv,
++   random = ~ rr(TraitEnv,1):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
++     rr(TraitEnv,1):Gkeep + diag(TraitEnv):Gkeep +
++     diag(TraitEnv):Block,
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
++   sparse = ~ TraitEnv:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'HD') |> droplevels(),
++   na.action = na.method(x = 'include'),
++   maxit = 13,
++   workspace = '16gb'
++ )
+Warning message:
+In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> # Print model info
+> print('HD_STME.z_rr1')
+[1] "HD_STME.z_rr1"
+> print(paste('convergence =',HD_STME.z_rr1ap1.asr$converge))
+[1] "convergence = TRUE"
+> HD_STME.z_rr1ap1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 3467.191 7271.858 7490.039 7685.061 7784.523 7820.241 7827.444
+         8        9       10       11       12       13
+1 7828.564 7829.462 7829.728 7829.744 7829.747 7829.747
+> 
+> # Update model
+> HD_STME.z_rr1ap1.asr <- update_asreml(HD_STME.z_rr1ap1.asr, 
++                                      max_updates = 10,
++                                      save_path = "Data/STME.z_rr.ap1.RData")
+[1] "Model successfully converged!"
+> 
+> save.image('Data/STME.z_rr.ap1.RData')
+> 
+> ### rr2----
+> # Run model
+> HD_STME.z_rr2ap1.asr <- asreml(
++   Pheno_z ~ TraitEnv,
++   random = ~ rr(TraitEnv,2):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
++     rr(TraitEnv,1):Gkeep + diag(TraitEnv):Gkeep +
++     diag(TraitEnv):Block,
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
++   sparse = ~ TraitEnv:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'HD') |> droplevels(),
++   na.action = na.method(x = 'include'),
++   maxit = 13,
++   workspace = '16gb'
++ )
+Warning messages:
+1: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  :
+  Log-likelihood not converged
+2: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> # Print model info
+> print('HD_STME.z_rr2')
+[1] "HD_STME.z_rr2"
+> print(paste('convergence =',HD_STME.z_rr2ap1.asr$converge))
+[1] "convergence = FALSE"
+> HD_STME.z_rr2ap1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 3333.963 6433.977 7527.681 7785.285 7826.799 7831.083 7832.078
+         8        9       10       11       12       13       14
+1 7832.722 7833.109 7833.382 7833.637 7833.809 7833.911 7833.911
+> 
+> # Update model
+> HD_STME.z_rr2ap1.asr <- update_asreml(HD_STME.z_rr2ap1.asr, 
++                                      max_updates = 10,
++                                      save_path = "Data/STME.z_rr.ap1.RData")
+[1] "Update 1"
+[1] "Convergence = TRUE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 7833.969 7833.976 7833.997 7834.011 7834.021 7834.026 7834.029
+        8        9       10
+1 7834.03 7834.031 7834.031
+[1] "Model successfully converged!"
+Warning message:
+In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> 
+> save.image('Data/STME.z_rr.ap1.RData')
+> 
+> ### rr3----
+> # Run model
+> HD_STME.z_rr3ap1.asr <- asreml(
++   Pheno_z ~ TraitEnv,
++   random = ~ rr(TraitEnv,3):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
++     rr(TraitEnv,1):Gkeep + diag(TraitEnv):Gkeep +
++     diag(TraitEnv):Block,
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
++   sparse = ~ TraitEnv:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'HD') |> droplevels(),
++   na.action = na.method(x = 'include'),
++   maxit = 13,
++   workspace = '20gb'
++ )
+Warning messages:
+1: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
+  Log-likelihood not converged
+2: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> # Print model info
+> print('HD_STME.z_rr3')
+[1] "HD_STME.z_rr3"
+> print(paste('convergence =',HD_STME.z_rr3ap1.asr$converge))
+[1] "convergence = FALSE"
+> HD_STME.z_rr3ap1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 4065.525 7082.936 7415.408 7632.942 7797.445 7829.507 7833.829
+         8        9       10       11      12       13       14
+1 7836.123 7837.105 7837.229 7837.276 7837.31 7837.331 7837.331
+> 
+> # Update model
+> HD_STME.z_rr3ap1.asr <- update_asreml(HD_STME.z_rr3ap1.asr, 
++                                      max_updates = 10,
++                                      save_path = "Data/STME.z_rr.ap1.RData")
+[1] "Update 1"
+[1] "Convergence = TRUE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 7837.342 7837.344 7837.349 7837.352 7837.354 7837.354 7837.354
+[1] "Model successfully converged!"
+Warning message:
+In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> 
+> save.image('Data/STME.z_rr.ap1.RData')
+> 
+> ## HT ----
+> ### rr1----
+> # Run model
+> HT_STME.z_rr1ap1.asr <- asreml(
++   Pheno_z ~ TraitEnv,
++   random = ~ rr(TraitEnv,1):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
++     rr(TraitEnv,1):Gkeep + diag(TraitEnv):Gkeep +
++     diag(TraitEnv):Block,
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
++   sparse = ~ TraitEnv:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'HT') |> droplevels(),
++   na.action = na.method(x = 'include'),
++   maxit = 13,
++   workspace = '16gb'
++ )
+> # Print model info
+> print('HT_STME.z_rr1')
+[1] "HT_STME.z_rr1"
+> print(paste('convergence =',HT_STME.z_rr1ap1.asr$converge))
+[1] "convergence = TRUE"
+> HT_STME.z_rr1ap1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration         1         2         3        4       5        6        7
+1    LogLik -1376.431 -349.5894 -53.28545 23.99491 49.7623 54.86497 55.91196
+         8        9       10       11       12       13
+1 56.12778 56.17305 56.18257 56.18458 56.18501 56.18501
+> 
+> # Update model
+> HT_STME.z_rr1ap1.asr <- update_asreml(HT_STME.z_rr1ap1.asr, 
++                                      max_updates = 10,
++                                      save_path = "Data/STME.z_rr.ap1.RData")
+[1] "Model successfully converged!"
+> 
+> save.image('Data/STME.z_rr.ap1.RData')
+> 
+> ### rr2----
+> # Run model
+> HT_STME.z_rr2ap1.asr <- asreml(
++   Pheno_z ~ TraitEnv,
++   random = ~ rr(TraitEnv,2):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
++     rr(TraitEnv,1):Gkeep + diag(TraitEnv):Gkeep +
++     diag(TraitEnv):Block,
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
++   sparse = ~ TraitEnv:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'HT') |> droplevels(),
++   na.action = na.method(x = 'include'),
++   maxit = 13,
++   workspace = '16gb'
++ )
+Warning messages:
+1: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  :
+  Log-likelihood not converged
+2: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> # Print model info
+> print('HT_STME.z_rr2')
+[1] "HT_STME.z_rr2"
+> print(paste('convergence =',HT_STME.z_rr2ap1.asr$converge))
+[1] "convergence = FALSE"
+> HT_STME.z_rr2ap1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration         1         2         3        4        5        6        7
+1    LogLik -1453.945 -339.4882 -51.56571 27.86888 50.60322 58.09402 61.40296
+         8        9       10       11       12       13       14
+1 62.11525 62.35434 62.46595 62.51268 62.53006 62.53655 62.53655
+> 
+> # Update model
+> HT_STME.z_rr2ap1.asr <- update_asreml(HT_STME.z_rr2ap1.asr, 
++                                      max_updates = 10,
++                                      save_path = "Data/STME.z_rr.ap1.RData")
+[1] "Update 1"
+[1] "Convergence = TRUE"
+  Iteration        1        2        3
+1    LogLik 62.53895 62.53924 62.53924
+[1] "Model successfully converged!"
+Warning message:
+In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> 
+> save.image('Data/STME.z_rr.ap1.RData')
+> 
+> ### rr3----
+> # Run model
+> HT_STME.z_rr3ap1.asr <- asreml(
++   Pheno_z ~ TraitEnv,
++   random = ~ rr(TraitEnv,3):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
++     rr(TraitEnv,1):Gkeep + diag(TraitEnv):Gkeep +
++     diag(TraitEnv):Block,
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
++   sparse = ~ TraitEnv:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'HT') |> droplevels(),
++   na.action = na.method(x = 'include'),
++   maxit = 13,
++   workspace = '20gb'
++ )
+Warning messages:
+1: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
+  Log-likelihood not converged
+2: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> # Print model info
+> print('HT_STME.z_rr3')
+[1] "HT_STME.z_rr3"
+> print(paste('convergence =',HT_STME.z_rr3ap1.asr$converge))
+[1] "convergence = FALSE"
+> HT_STME.z_rr3ap1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration         1         2         3        4        5        6        7
+1    LogLik -1474.556 -344.5017 -42.23999 34.32129 57.03748 64.26496 66.78591
+         8        9       10     11       12       13       14
+1 67.94316 68.21862 68.28742 68.305 68.30881 68.30963 68.30963
+> 
+> # Update model
+> HT_STME.z_rr3ap1.asr <- update_asreml(HT_STME.z_rr3ap1.asr, 
++                                      max_updates = 10,
++                                      save_path = "Data/STME.z_rr.ap1.RData")
+[1] "Update 1"
+[1] "Convergence = TRUE"
+  Iteration        1        2        3
+1    LogLik 68.30983 68.30985 68.30985
+[1] "Model successfully converged!"
+> 
+> save.image('Data/STME.z_rr.ap1.RData')
+> 
+> ## MAT ----
+> ### rr1----
+> # Run model
+> MAT_STME.z_rr1ap1.asr <- asreml(
++   Pheno_z ~ TraitEnv,
++   random = ~ rr(TraitEnv,1):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
++     rr(TraitEnv,1):Gkeep + diag(TraitEnv):Gkeep +
++     diag(TraitEnv):Block,
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
++   sparse = ~ TraitEnv:Gdrop,
++   data = ILYT_Pheno |> filter(Trait == 'MAT') |> droplevels(),
++   na.action = na.method(x = 'include'),
++   maxit = 13,
++   workspace = '16gb'
++ )
+Warning message:
+In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep,  :
+  Log-likelihood not converged
+> # Print model info
+> print('MAT_STME.z_rr1')
+[1] "MAT_STME.z_rr1"
+> print(paste('convergence =',MAT_STME.z_rr1ap1.asr$converge))
+[1] "convergence = FALSE"
+> MAT_STME.z_rr1ap1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration         1         2         3         4         5         6
+1    LogLik -369.9019 -357.3648 -322.1612 -282.3383 -259.7983 -250.9508
+          7         8         9        10        11        12        13
+1 -249.8869 -248.4209 -248.0116 -247.9347 -247.9137 -247.9069 -247.9048
+         14
+1 -247.9048
+> 
+> # Update model
+> MAT_STME.z_rr1ap1.asr <- update_asreml(MAT_STME.z_rr1ap1.asr, 
++                                       max_updates = 10,
++                                       save_path = "Data/STME.z_rr.ap1.RData")
+[1] "Update 1"
+[1] "Convergence = TRUE"
+  Iteration         1        2        3
+1    LogLik -247.9041 -247.904 -247.904
+[1] "Model successfully converged!"
+> 
+> save.image('Data/STME.z_rr.ap1.RData')
+> 
+> # End ----
+> 
+> proc.time()
+      user     system    elapsed 
+103918.911   4250.154  46823.613 

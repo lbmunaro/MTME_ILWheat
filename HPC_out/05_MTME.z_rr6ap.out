@@ -1,0 +1,182 @@
+
+R version 4.4.2 (2024-10-31) -- "Pile of Leaves"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: x86_64-redhat-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+Online License checked out Fri Feb 28 00:25:26 2025
+[Previously saved workspace restored]
+
+> # Multi-Trait Multi-Environment models ----
+> # This script fits Multi-Trait Multi-Environment models
+> 
+> # Clean workspace
+> rm(list = objects())  # Removes all objects from the environment.
+> 
+> # Packages ----
+> library(tidyverse) # R packages for data science.
+── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+> library(asreml) # ASReml-R package.
+Loading required package: Matrix
+
+Attaching package: ‘Matrix’
+
+The following objects are masked from ‘package:tidyr’:
+
+    expand, pack, unpack
+
+Loading ASReml-R version 4.2
+
+> source("Functions_MTME.R")  # Load functions
+> 
+> # Use for HPC only
+> setwd('~/MTME_ILWheat/')
+> 
+> # Load data ----
+> ## Pheno & Ginv
+> load('Data/ILYT_Pheno-Gmatrix.RData')
+> 
+> # Fit rr6ap model ----
+> k <- 6
+> ## Run model ----
+> MTME.z_rr6ap.asr <- asreml(
++   Pheno_z ~ TraitEnv,
++   random = ~ rr(TraitEnv,6):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
++     diag(TraitEnv):Gkeep +
++     diag(TraitEnv):Block,
++   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
++   sparse = ~ TraitEnv:Gdrop,
++   data = ILYT_Pheno,
++   na.action = na.method(x = 'include'),
++   maxit = 13,
++   workspace = '96gb'
++ )
+Warning messages:
+1: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 6):vm(Gkeep,  :
+  Log-likelihood not converged
+2: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 6):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> 
+> # Print model info
+> print(paste('convergence =', MTME.z_rr6ap.asr$converge))
+[1] "convergence = FALSE"
+> MTME.z_rr6ap.asr$trace |>
++   as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 8106.912 13523.79 16260.68 17693.79 18302.57 18579.74 18735.42
+        8        9       10      11       12       13       14
+1 18845.5 18938.35 19008.14 19052.1 19068.87 19088.08 19088.08
+> 
+> # Save
+> save.image('Data/MTME.z_rr6ap.RData')
+> 
+> # Update model ----
+> MTME.z_rr6ap.asr <- update_asreml(MTME.z_rr6ap.asr, 
++                                  max_updates = 20,
++                                  save_path = "Data/MTME.z_rr6ap.RData")
+[1] "Update 1"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 19109.48 19119.96 19138.87 19155.03 19169.92 19179.32 19184.94
+         8        9       10       11       12       13       14
+1 19189.38 19193.51 19198.69 19202.07 19205.32 19208.15 19208.15
+[1] "Update 2"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 19217.88 19218.88 19211.45 19211.71 19212.42 19213.31 19214.06
+         8        9       10       11       12       13       14
+1 19214.71 19215.17 19215.71 19216.16 19216.47 19216.77 19216.77
+[1] "Update 3"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3     4        5        6        7
+1    LogLik 19217.05 19217.21 19217.53 19218 19218.63 19219.38 19219.55
+         8        9       10       11       12       13       14
+1 19219.77 19220.11 19220.48 19220.56 19220.68 19220.87 19220.87
+[1] "Update 4"
+[1] "Convergence = FALSE"
+  Iteration       1        2        3        4       5        6        7
+1    LogLik 19221.1 19221.12 19221.21 19221.34 19221.5 19221.75 19222.07
+        8        9      10       11       12       13       14
+1 19222.1 19222.14 19222.2 19222.28 19222.41 19222.62 19222.62
+[1] "Update 5"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6       7
+1    LogLik 19222.91 19222.93 19222.96 19223.01 19223.07 19223.18 19223.2
+         8        9       10       11       12       13       14
+1 19223.22 19223.26 19223.33 19223.45 19223.46 19223.49 19223.49
+[1] "Update 6"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 19223.54 19223.54 19223.57 19223.62 19223.69 19223.83 19224.08
+        8        9      10       11       12       13       14
+1 19224.1 19224.14 19224.2 19224.28 19224.46 19224.48 19224.48
+[1] "Update 7"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 19224.52 19224.53 19224.57 19224.63 19224.73 19224.93 19224.96
+      8        9       10       11       12       13       14
+1 19225 19225.08 19225.19 19225.41 19225.44 19225.49 19225.49
+[1] "Update 8"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 19225.57 19225.58 19225.63 19225.72 19225.84 19226.09 19226.12
+         8        9      10       11      12       13       14
+1 19226.18 19226.27 19226.4 19226.66 19226.7 19226.75 19226.75
+[1] "Update 9"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3     4        5        6        7       8
+1    LogLik 19226.85 19226.85 19226.91 19227 19227.14 19227.17 19227.21 19227.3
+         9       10       11      12       13       14
+1 19227.44 19227.46 19227.51 19227.6 19227.72 19227.72
+[1] "Update 10"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3       4        5        6        7
+1    LogLik 19227.96 19227.97 19228.02 19228.1 19228.22 19228.43 19228.45
+         8        9       10       11      12       13       14
+1 19228.49 19228.56 19228.66 19228.84 19229.1 19229.12 19229.12
+[1] "Update 11"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 19229.15 19229.15 19229.18 19229.23 19229.29 19229.41 19229.58
+         8        9       10       11       12       13       14
+1 19229.59 19229.61 19229.64 19229.68 19229.75 19229.86 19229.86
+[1] "Update 12"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 19229.99 19229.99 19230.01 19230.02 19230.04 19230.07 19230.13
+         8        9      10       11       12       13       14
+1 19230.19 19230.25 19230.3 19230.33 19230.35 19230.36 19230.36
+[1] "Update 13"
+[1] "Convergence = TRUE"
+  Iteration        1       2        3       4       5
+1    LogLik 19238.28 19238.9 19238.59 19238.6 19238.6
+[1] "Model successfully converged!"
+There were 25 warnings (use warnings() to see them)
+> 
+> # Save
+> save.image('Data/MTME.z_rr6ap.RData')
+> 
+> proc.time()
+     user    system   elapsed 
+567814.75  26061.15 252944.74 

@@ -15,7 +15,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-Online License checked out Tue Feb 25 14:17:52 2025
+Online License checked out Wed Feb 26 11:57:07 2025
 [Previously saved workspace restored]
 
 > # Multi-Trait Multi-Environment models ----
@@ -56,87 +56,82 @@ Loading ASReml-R version 4.2
 > ## Pheno & Ginv
 > load('Data/ILYT_Pheno-Gmatrix.RData')
 > 
-> # Fit rr1a model ----
-> k <- 1
+> # Fit rr6a model ----
+> k <- 6
 > ## Run model ----
-> MTME.z_rr1a.asr <- asreml(
+> MTME.z_rr6a.asr <- asreml(
 +   Pheno_z ~ TraitEnv,
-+   random = ~ rr(TraitEnv,1):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse),
++   random = ~ rr(TraitEnv,6):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse),
 +   residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
 +   sparse = ~ TraitEnv:Gdrop,
 +   data = ILYT_Pheno,
 +   na.action = na.method(x = 'include'),
 +   maxit = 13,
-+   workspace = '16gb'
++   workspace = '96gb'
 + )
 Warning messages:
-1: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep,  :
+1: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 6):vm(Gkeep,  :
   Log-likelihood not converged
-2: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep,  :
+2: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 6):vm(Gkeep,  :
   Some components changed by more than 1% on the last iteration
 > 
 > # Print model info
-> print(paste('convergence =', MTME.z_rr1a.asr$converge))
+> print(paste('convergence =', MTME.z_rr6a.asr$converge))
 [1] "convergence = FALSE"
-> MTME.z_rr1a.asr$trace |>
+> MTME.z_rr6a.asr$trace |>
 +   as.data.frame() |> rownames_to_column('Iteration') |>
 +   filter(Iteration=='LogLik') |> print()
   Iteration        1        2        3        4        5        6        7
-1    LogLik 9527.381 11138.19 12851.52 13781.57 14163.06 14342.16 14472.65
-         8        9       10       11       12       13       14
-1 14548.51 14587.12 14626.11 14647.71 14664.93 14682.86 14682.86
+1    LogLik 8272.884 12611.09 15593.26 16961.02 17625.03 17951.22 18140.27
+        8        9       10      11       12       13       14
+1 18275.8 18395.98 18456.55 18503.9 18553.96 18592.26 18592.26
 > 
 > # Save
-> save.image('Data/MTME.z_rr1a.RData')
+> save.image('Data/MTME.z_rr6a.RData')
 > 
 > # Update model ----
-> MTME.z_rr1a.asr <- update_asreml(MTME.z_rr1a.asr, 
-+                                  max_updates = 10,
-+                                  save_path = "Data/MTME.z_rr1a.RData")
+> MTME.z_rr6a.asr <- update_asreml(MTME.z_rr6a.asr, 
++                                  max_updates = 20,
++                                  save_path = "Data/MTME.z_rr6a.RData")
 [1] "Update 1"
 [1] "Convergence = FALSE"
-  Iteration        1        2        3       4        5        6       7
-1    LogLik 14696.54 14700.71 14706.81 14714.7 14720.45 14724.97 14728.8
+  Iteration        1        2        3       4        5        6        7
+1    LogLik 18619.18 18631.59 18647.36 18665.2 18676.62 18686.82 18696.34
          8        9       10       11       12       13       14
-1 14732.33 14735.98 14740.22 14745.62 14752.96 14763.29 14763.29
+1 18705.42 18711.21 18715.42 18718.77 18721.55 18724.25 18724.25
 [1] "Update 2"
 [1] "Convergence = FALSE"
   Iteration        1        2        3        4        5        6        7
-1    LogLik 14777.82 14783.47 14794.17 14814.41 14835.81 14855.55 14871.48
-         8        9       10       11       12      13      14
-1 14884.04 14893.73 14900.87 14906.01 14909.56 14912.1 14912.1
+1    LogLik 18726.36 18727.66 18729.22 18731.34 18733.03 18734.41 18735.39
+        8        9       10       11       12       13       14
+1 18736.8 18738.49 18739.28 18739.84 18740.28 18740.65 18740.65
 [1] "Update 3"
 [1] "Convergence = FALSE"
-  Iteration        1       2        3        4        5        6       7
-1    LogLik 14914.01 14914.5 14915.83 14916.82 14917.55 14918.09 14918.5
-         8        9       10       11       12       13       14
-1 14918.81 14919.04 14919.22 14919.35 14919.45 14919.53 14919.53
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 18740.92 18741.08 18741.43 18741.69 18741.91 18742.25 18742.73
+        8        9       10       11       12       13       14
+1 18743.3 18743.46 18743.71 18744.09 18744.51 18745.08 18745.08
 [1] "Update 4"
-[1] "Convergence = TRUE"
-  Iteration        1       2        3        4       5        6        7
-1    LogLik 14919.59 14919.6 14919.64 14919.68 14919.7 14919.72 14919.74
-         8        9
-1 14919.75 14919.75
-[1] "Model successfully converged!"
-Warning messages:
-1: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep,  :
-  Log-likelihood not converged
-2: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep,  :
-  Some components changed by more than 1% on the last iteration
-3: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep,  :
-  Log-likelihood not converged
-4: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep,  :
-  Some components changed by more than 1% on the last iteration
-5: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep,  :
-  Log-likelihood not converged
-6: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep,  :
-  Some components changed by more than 1% on the last iteration
-7: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep,  :
-  Some components changed by more than 1% on the last iteration
-> 
-> # Save
-> save.image('Data/MTME.z_rr1a.RData')
-> 
-> proc.time()
-     user    system   elapsed 
-57709.501  2755.599 19968.825 
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 18745.18 18745.21 18745.33 18745.51 18745.73 18746.07 18746.53
+        8        9       10       11       12       13       14
+1 18746.6 18746.68 18746.78 18746.93 18747.18 18747.23 18747.23
+[1] "Update 5"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 18747.29 18747.31 18747.37 18747.47 18747.61 18747.86 18748.28
+         8        9       10       11       12       13       14
+1 18748.96 18749.06 18749.15 18749.27 18749.44 18749.48 18749.48
+[1] "Update 6"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 18749.55 18749.56 18749.64 18749.76 18749.94 18749.98 18750.05
+         8        9      10       11      12       13       14
+1 18750.17 18750.36 18750.4 18750.47 18750.6 18750.79 18750.79
+[1] "Update 7"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 18750.83 18750.84 18750.92 18751.06 18751.25 18751.63 18751.68
+         8        9       10      11       12       13       14
+1 18751.77 18751.91 18752.11 18752.5 18752.55 18752.63 18752.63
