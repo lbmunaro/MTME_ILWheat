@@ -23,7 +23,7 @@ scp -r lucasb4@cc-login.campuscluster.illinois.edu:MTME_ILWheat/HPC_out ~/Docume
 ### To HPC
 scp -r ~/Documents/GitHub/MTME_ILWheat/<filename> lucasb4@cc-login.campuscluster.illinois.edu:MTME_ILWheat/<filename>
 ### From HPC
-scp -r lucasb4@cc-login.campuscluster.illinois.edu:MTME_ILWheat/<filename> ~/Documents/GitHub/MTME_ILWheat/<filename>
+scp -r lucasb4@cc-login.campuscluster.illinois.edu:MTME_ILWheat/Data ~/Documents/GitHub/MTME_ILWheat
 
 scp -r lucasb4@cc-login.campuscluster.illinois.edu:MTME_ILWheat/Data/MTME* ~/Documents/GitHub/MTME_ILWheat/Data/
 
