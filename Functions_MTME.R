@@ -41,7 +41,7 @@ VaPct <- function(mod,k,data,TE_fct) {
   # variance parameters
   vparams <- mod$vparameters
   # latent environmental covariates (loadings)
-  Lam <- matrix(vparams[grep('^rr.*fa', names(vparams))], ncol = k)
+  Lam <- matrix(vparams[grep('^rr.*vm.*fa', names(vparams))], ncol = k)
   # specific variances
   Psi <- diag(vparams[grep(paste0('^',TE_fct,'.*vm'), names(vparams))])
   
@@ -67,7 +67,7 @@ gebvs_asreml <- function(mod,k,data,TE_fct) {
   # variance parameters
   vparams <- mod$vparameters
   # latent environmental covariates (loadings)
-  Lam <- matrix(vparams[grep('^rr.*fa', names(vparams))], ncol = k)
+  Lam <- matrix(vparams[grep('^rr.*vm.*fa', names(vparams))], ncol = k)
   # specific variances
   Psi <- diag(vparams[grep(paste0('^',TE_fct,'.*vm'), names(vparams))])
   
@@ -106,7 +106,7 @@ gcorr_asreml <- function(mod,k,data,TE_fct) {
   # variance parameters
   vparams <- mod$vparameters
   # latent environmental covariates (loadings)
-  Lam <- matrix(vparams[grep('^rr.*fa', names(vparams))], ncol = k)
+  Lam <- matrix(vparams[grep('^rr.*vm.*fa', names(vparams))], ncol = k)
   # Rotate
   # Perform Singular Value Decomposition (SVD) for rotation
   svd <- svd(Lam) # Perform SVD on the loadings matrix

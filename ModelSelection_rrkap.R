@@ -57,8 +57,9 @@ colors <- c(
 )
 
 ggplot(VaPct_rrap, aes(x=Trait, y=VaPct, fill=model)) +
-  geom_jitter(aes(color=model),position = position_dodge(width = 0.8), alpha=1) +  # Dodge boxplots
   geom_boxplot(position = position_dodge(width = 0.8), width = 0.5, alpha=0.5) +  # Dodge boxplots
+  geom_jitter(aes(color=model),position = position_dodge(width = 0.8),
+              alpha=0.75, shape=3, size=1) +  # Dodge boxplots
   
   scale_y_continuous(name = bquote(V[a] ~ 'explained (%)'),
                      breaks = seq(0, 100, by = 20)) +
