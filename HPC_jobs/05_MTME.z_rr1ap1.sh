@@ -4,7 +4,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=20
 #SBATCH --mem=36G
-#SBATCH --job-name=MTzrr1ap1
+#SBATCH --job-name=MTrr1ap1
 #SBATCH --account=aces
 #SBATCH --partition=aces
 #
