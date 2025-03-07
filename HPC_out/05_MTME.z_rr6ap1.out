@@ -71,3 +71,81 @@ Loading ASReml-R version 4.2
 +   maxit = 13,
 +   workspace = '96gb'
 + )
+Warning messages:
+1: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 6):vm(Gkeep,  :
+  Log-likelihood not converged
+2: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 6):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> 
+> # Print model info
+> print(paste('convergence =', MTME.z_rr6ap1.asr$converge))
+[1] "convergence = FALSE"
+> MTME.z_rr6ap1.asr$trace |>
++   as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration       1        2        3        4       5        6        7
+1    LogLik 7220.38 13585.36 15852.79 17184.99 17922.6 18360.87 18678.03
+         8        9       10       11       12       13       14
+1 18916.26 19082.12 19176.62 19258.18 19294.33 19327.78 19327.78
+> 
+> # Save
+> save.image('Data/MTME.z_rr6ap1.RData')
+> 
+> # Update model ----
+> MTME.z_rr6ap1.asr <- update_asreml(MTME.z_rr6ap1.asr, 
++                                  max_updates = 50,
++                                  save_path = "Data/MTME.z_rr6ap1.RData")
+[1] "Update 1"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 19349.73 19357.96 19371.78 19386.32 19393.96 19399.57 19403.47
+         8        9       10      11       12       13       14
+1 19407.25 19410.42 19413.79 19416.7 19419.02 19421.56 19421.56
+[1] "Update 2"
+[1] "Convergence = FALSE"
+  Iteration       1        2        3        4        5        6       7
+1    LogLik 19423.9 19424.85 19427.35 19430.01 19433.36 19436.22 19439.2
+         8        9      10       11       12       13       14
+1 19442.51 19446.09 19450.9 19457.73 19464.67 19470.97 19470.97
+[1] "Update 3"
+[1] "Convergence = FALSE"
+  Iteration        1        2       3       4        5        6        7
+1    LogLik 19476.52 19477.78 19480.2 19483.3 19485.71 19488.14 19489.89
+         8        9       10       11       12       13       14
+1 19491.29 19492.37 19493.43 19494.59 19495.82 19497.11 19497.11
+[1] "Update 4"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 19498.36 19498.53 19499.18 19499.56 19499.98 19500.45 19500.69
+         8        9       10      11       12       13       14
+1 19500.99 19501.36 19501.75 19501.9 19502.07 19502.28 19502.28
+[1] "Update 5"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 19502.52 19502.55 19502.62 19502.77 19502.93 19503.14 19503.37
+         8        9       10       11      12    13    14
+1 19503.62 19503.69 19503.75 19503.82 19503.9 19504 19504
+[1] "Update 6"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4       5        6        7
+1    LogLik 19504.13 19504.15 19504.19 19504.24 19504.3 19504.38 19504.49
+         8        9       10       11       12       13       14
+1 19504.62 19504.77 19504.91 19505.02 19505.11 19505.19 19505.19
+[1] "Update 7"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 19505.23 19505.24 19505.26 19505.28 19505.29 19505.31 19505.33
+         8        9       10       11      12       13       14
+1 19505.34 19505.36 19505.37 19505.39 19505.4 19505.42 19505.42
+[1] "Update 8"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 19505.43 19505.44 19505.45 19505.46 19505.46 19505.47 19505.48
+         8       9       10       11       12       13       14
+1 19505.49 19505.5 19505.51 19505.53 19505.54 19505.56 19505.56
+[1] "Update 9"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 19513.38 19513.89 19505.65 19505.65 19505.66 19505.67 19505.68
+         8        9       10       11       12       13       14
+1 19505.69 19505.71 19505.72 19505.75 19505.78 19505.84 19505.84

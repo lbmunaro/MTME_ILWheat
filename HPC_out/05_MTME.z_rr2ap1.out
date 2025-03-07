@@ -71,3 +71,108 @@ Loading ASReml-R version 4.2
 +   maxit = 13,
 +   workspace = '24gb'
 + )
+Warning messages:
+1: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  :
+  Log-likelihood not converged
+2: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 2):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> 
+> # Print model info
+> print(paste('convergence =', MTME.z_rr2ap1.asr$converge))
+[1] "convergence = FALSE"
+> MTME.z_rr2ap1.asr$trace |>
++   as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3        4       5        6        7
+1    LogLik 9097.375 13289.08 15399.71 16635.91 17247.6 17617.49 17868.29
+         8        9       10      11       12       13       14
+1 18066.69 18141.24 18199.27 18227.6 18243.65 18254.39 18254.39
+> 
+> # Save
+> save.image('Data/MTME.z_rr2ap1.RData')
+> 
+> # Update model ----
+> MTME.z_rr2ap1.asr <- update_asreml(MTME.z_rr2ap1.asr, 
++                                  max_updates = 50,
++                                  save_path = "Data/MTME.z_rr2ap1.RData")
+[1] "Update 1"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 18262.28 18264.68 18268.54 18272.61 18275.29 18277.35 18278.94
+        8        9       10       11      12      13      14
+1 18280.2 18281.05 18281.87 18282.52 18283.2 18283.9 18283.9
+[1] "Update 2"
+[1] "Convergence = FALSE"
+  Iteration        1        2       3        4        5        6        7
+1    LogLik 18284.61 18284.78 18285.4 18286.04 18286.69 18287.35 18288.01
+         8        9       10       11      12      13      14
+1 18288.67 18289.32 18289.96 18290.59 18291.2 18291.8 18291.8
+[1] "Update 3"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 18292.27 18292.41 18292.92 18293.45 18293.99 18294.54 18295.09
+         8        9      10       11       12       13       14
+1 18295.63 18296.17 18296.7 18297.23 18297.75 18298.26 18298.26
+[1] "Update 4"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6       7
+1    LogLik 18298.76 18298.89 18299.32 18299.76 18300.21 18300.66 18301.1
+         8        9       10       11       12       13       14
+1 18301.55 18301.98 18302.41 18302.84 18303.26 18303.67 18303.67
+[1] "Update 5"
+[1] "Convergence = FALSE"
+  Iteration        1       2        3        4        5        6        7     8
+1    LogLik 18312.02 18312.3 18304.52 18304.59 18304.93 18305.29 18305.64 18306
+         9       10       11       12       13       14
+1 18306.36 18306.72 18307.08 18307.44 18307.81 18307.81
+[1] "Update 6"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 18308.17 18308.26 18308.58 18308.92 18309.26 18309.62 18309.99
+         8        9       10       11       12       13       14
+1 18310.36 18310.74 18311.13 18311.54 18311.95 18312.37 18312.37
+[1] "Update 7"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 18312.81 18312.93 18313.34 18313.77 18314.23 18314.71 18315.21
+         8        9      10       11       12      13      14
+1 18315.72 18316.26 18316.8 18317.36 18317.93 18318.5 18318.5
+[1] "Update 8"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 18319.08 18319.24 18319.77 18320.31 18320.85 18321.38 18321.91
+         8        9       10       11       12       13       14
+1 18322.41 18322.89 18323.35 18323.78 18324.19 18324.56 18324.56
+[1] "Update 9"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5     6       7        8
+1    LogLik 18324.91 18324.99 18325.27 18325.54 18325.78 18326 18326.2 18326.39
+         9      10       11       12       13       14
+1 18326.55 18326.7 18326.83 18326.94 18327.05 18327.05
+[1] "Update 10"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5       6        7
+1    LogLik 18327.14 18327.16 18327.23 18327.29 18327.35 18327.4 18327.44
+         8        9       10       11      12       13       14
+1 18327.48 18327.52 18327.55 18327.58 18327.6 18327.62 18327.62
+[1] "Update 11"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6       7
+1    LogLik 18327.64 18327.64 18327.66 18327.67 18327.68 18327.69 18327.7
+         8        9       10       11       12       13       14
+1 18327.71 18327.72 18327.72 18327.73 18327.73 18327.74 18327.74
+[1] "Update 12"
+[1] "Convergence = TRUE"
+  Iteration       1        2        3        4        5        6        7
+1    LogLik 18335.7 18335.92 18336.21 18336.25 18336.02 18327.75 18327.75
+         8
+1 18327.75
+[1] "Model successfully converged!"
+There were 25 warnings (use warnings() to see them)
+> 
+> # Save
+> save.image('Data/MTME.z_rr2ap1.RData')
+> 
+> proc.time()
+     user    system   elapsed 
+230210.60  13188.03  76769.09 

@@ -15,7 +15,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-Online License checked out Wed Feb 26 11:57:07 2025
+Online License checked out Tue Mar  4 16:04:34 2025
 [Previously saved workspace restored]
 
 > # Multi-Trait Multi-Environment models ----
@@ -91,7 +91,7 @@ Warning messages:
 > 
 > # Update model ----
 > MTME.z_rr6a.asr <- update_asreml(MTME.z_rr6a.asr, 
-+                                  max_updates = 20,
++                                  max_updates = 50,
 +                                  save_path = "Data/MTME.z_rr6a.RData")
 [1] "Update 1"
 [1] "Convergence = FALSE"
@@ -117,21 +117,3 @@ Warning messages:
 1    LogLik 18745.18 18745.21 18745.33 18745.51 18745.73 18746.07 18746.53
         8        9       10       11       12       13       14
 1 18746.6 18746.68 18746.78 18746.93 18747.18 18747.23 18747.23
-[1] "Update 5"
-[1] "Convergence = FALSE"
-  Iteration        1        2        3        4        5        6        7
-1    LogLik 18747.29 18747.31 18747.37 18747.47 18747.61 18747.86 18748.28
-         8        9       10       11       12       13       14
-1 18748.96 18749.06 18749.15 18749.27 18749.44 18749.48 18749.48
-[1] "Update 6"
-[1] "Convergence = FALSE"
-  Iteration        1        2        3        4        5        6        7
-1    LogLik 18749.55 18749.56 18749.64 18749.76 18749.94 18749.98 18750.05
-         8        9      10       11      12       13       14
-1 18750.17 18750.36 18750.4 18750.47 18750.6 18750.79 18750.79
-[1] "Update 7"
-[1] "Convergence = FALSE"
-  Iteration        1        2        3        4        5        6        7
-1    LogLik 18750.83 18750.84 18750.92 18751.06 18751.25 18751.63 18751.68
-         8        9       10      11       12       13       14
-1 18751.77 18751.91 18752.11 18752.5 18752.55 18752.63 18752.63
