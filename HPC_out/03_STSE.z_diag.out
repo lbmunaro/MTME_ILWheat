@@ -322,3 +322,67 @@ Notice  : There is no Variance: Job may fail.
 1    LogLik 15856.92 15856.53 15858.36 15856.41 15857.1 15856 15856.88 15856.35
         9       10       11       12      13      14
 1 15856.8 15857.75 15856.26 15856.38 15856.6 15856.6
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+[1] "Update 6"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 15856.54 15856.24 15856.46 15856.51 15856.73 15856.53 15857.79
+        8        9       10       11       12       13       14
+1 15857.1 15856.51 15857.08 15857.45 15857.04 15856.39 15856.39
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+[1] "Update 7"
+[1] "Convergence = TRUE"
+  Iteration        1        2        3       4        5        6        7
+1    LogLik 15856.65 15856.44 15856.79 15856.6 15856.48 15856.84 15856.44
+         8        9       10       11       12       13
+1 15858.08 15856.97 15857.37 15856.93 15856.92 15856.92
+[1] "Model successfully converged!"
+Warning messages:
+1: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~diag(TraitEnv):vm(Gkeep,  :
+  Log-likelihood not converged
+2: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~diag(TraitEnv):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+3: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~diag(TraitEnv):vm(Gkeep,  :
+  Warning : 476 more singularities detected in the design. Reset tol if the new df are correct.
+4: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~diag(TraitEnv):vm(Gkeep,  :
+  Log-likelihood not converged
+5: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~diag(TraitEnv):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+6: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~diag(TraitEnv):vm(Gkeep,  :
+  Log-likelihood not converged
+7: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~diag(TraitEnv):vm(Gkeep,  :
+  Log-likelihood not converged
+8: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~diag(TraitEnv):vm(Gkeep,  :
+  Log-likelihood not converged
+9: In asreml(fixed = Pheno_z ~ TraitEnv, random = ~diag(TraitEnv):vm(Gkeep,  :
+  Log-likelihood not converged
+> 
+> save.image('Data/STSE.z_diag.RData')
+> # End ----
+> 
+> proc.time()
+      user     system    elapsed 
+116903.522   7578.514  28774.892 
