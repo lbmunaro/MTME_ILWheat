@@ -4,7 +4,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=16
 #SBATCH --mem=48G
-#SBATCH --job-name=STME.zrrap
+#SBATCH --job-name=STrrap
 #SBATCH --account=aces
 #SBATCH --partition=aces
 #
