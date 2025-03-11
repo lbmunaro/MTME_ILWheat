@@ -94,6 +94,81 @@ GY_STME.z_rr3.asr <- update_asreml(GY_STME.z_rr3.asr,
 
 save.image('Data/STME.z_rr.a.RData')
 
+### rr4----
+# Run model
+GY_STME.z_rr4.asr <- asreml(
+  Pheno_z ~ TraitEnv,
+  random = ~ rr(TraitEnv,4):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse),
+  residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
+  sparse = ~ TraitEnv:Gdrop,
+  data = ILYT_Pheno |> filter(Trait == 'GY') |> droplevels(),
+  na.action = na.method(x = 'include'),
+  maxit = 13,
+  workspace = '20gb'
+)
+# Print model info
+print('GY_STME.z_rr4')
+print(paste('convergence =',GY_STME.z_rr4.asr$converge))
+GY_STME.z_rr4.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
+
+# Update model
+GY_STME.z_rr4.asr <- update_asreml(GY_STME.z_rr4.asr, 
+                                   max_updates = 10,
+                                   save_path = 'Data/STME.z_rr.a.RData')
+
+save.image('Data/STME.z_rr.a.RData')
+
+### rr5----
+# Run model
+GY_STME.z_rr5.asr <- asreml(
+  Pheno_z ~ TraitEnv,
+  random = ~ rr(TraitEnv,5):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse),
+  residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
+  sparse = ~ TraitEnv:Gdrop,
+  data = ILYT_Pheno |> filter(Trait == 'GY') |> droplevels(),
+  na.action = na.method(x = 'include'),
+  maxit = 13,
+  workspace = '20gb'
+)
+# Print model info
+print('GY_STME.z_rr5')
+print(paste('convergence =',GY_STME.z_rr5.asr$converge))
+GY_STME.z_rr5.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
+
+# Update model
+GY_STME.z_rr5.asr <- update_asreml(GY_STME.z_rr5.asr, 
+                                   max_updates = 10,
+                                   save_path = 'Data/STME.z_rr.a.RData')
+
+save.image('Data/STME.z_rr.a.RData')
+
+### rr6----
+# Run model
+GY_STME.z_rr6.asr <- asreml(
+  Pheno_z ~ TraitEnv,
+  random = ~ rr(TraitEnv,6):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse),
+  residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
+  sparse = ~ TraitEnv:Gdrop,
+  data = ILYT_Pheno |> filter(Trait == 'GY') |> droplevels(),
+  na.action = na.method(x = 'include'),
+  maxit = 13,
+  workspace = '20gb'
+)
+# Print model info
+print('GY_STME.z_rr6')
+print(paste('convergence =',GY_STME.z_rr6.asr$converge))
+GY_STME.z_rr6.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
+
+# Update model
+GY_STME.z_rr6.asr <- update_asreml(GY_STME.z_rr6.asr, 
+                                   max_updates = 10,
+                                   save_path = 'Data/STME.z_rr.a.RData')
+
+save.image('Data/STME.z_rr.a.RData')
+
 ## TW ----
 ### rr1----
 # Run model
@@ -165,6 +240,81 @@ TW_STME.z_rr3.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
 
 # Update model
 TW_STME.z_rr3.asr <- update_asreml(TW_STME.z_rr3.asr, 
+                                   max_updates = 10,
+                                   save_path = 'Data/STME.z_rr.a.RData')
+
+save.image('Data/STME.z_rr.a.RData')
+
+### rr4----
+# Run model
+TW_STME.z_rr4.asr <- asreml(
+  Pheno_z ~ TraitEnv,
+  random = ~ rr(TraitEnv,4):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse),
+  residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
+  sparse = ~ TraitEnv:Gdrop,
+  data = ILYT_Pheno |> filter(Trait == 'TW') |> droplevels(),
+  na.action = na.method(x = 'include'),
+  maxit = 13,
+  workspace = '20gb'
+)
+# Print model info
+print('TW_STME.z_rr4')
+print(paste('convergence =',TW_STME.z_rr4.asr$converge))
+TW_STME.z_rr4.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
+
+# Update model
+TW_STME.z_rr4.asr <- update_asreml(TW_STME.z_rr4.asr, 
+                                   max_updates = 10,
+                                   save_path = 'Data/STME.z_rr.a.RData')
+
+save.image('Data/STME.z_rr.a.RData')
+
+### rr5----
+# Run model
+TW_STME.z_rr5.asr <- asreml(
+  Pheno_z ~ TraitEnv,
+  random = ~ rr(TraitEnv,5):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse),
+  residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
+  sparse = ~ TraitEnv:Gdrop,
+  data = ILYT_Pheno |> filter(Trait == 'TW') |> droplevels(),
+  na.action = na.method(x = 'include'),
+  maxit = 13,
+  workspace = '20gb'
+)
+# Print model info
+print('TW_STME.z_rr5')
+print(paste('convergence =',TW_STME.z_rr5.asr$converge))
+TW_STME.z_rr5.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
+
+# Update model
+TW_STME.z_rr5.asr <- update_asreml(TW_STME.z_rr5.asr, 
+                                   max_updates = 10,
+                                   save_path = 'Data/STME.z_rr.a.RData')
+
+save.image('Data/STME.z_rr.a.RData')
+
+### rr6----
+# Run model
+TW_STME.z_rr6.asr <- asreml(
+  Pheno_z ~ TraitEnv,
+  random = ~ rr(TraitEnv,6):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse),
+  residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv),
+  sparse = ~ TraitEnv:Gdrop,
+  data = ILYT_Pheno |> filter(Trait == 'TW') |> droplevels(),
+  na.action = na.method(x = 'include'),
+  maxit = 13,
+  workspace = '20gb'
+)
+# Print model info
+print('TW_STME.z_rr6')
+print(paste('convergence =',TW_STME.z_rr6.asr$converge))
+TW_STME.z_rr6.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
+  filter(Iteration=='LogLik') |> print()
+
+# Update model
+TW_STME.z_rr6.asr <- update_asreml(TW_STME.z_rr6.asr, 
                                    max_updates = 10,
                                    save_path = 'Data/STME.z_rr.a.RData')
 

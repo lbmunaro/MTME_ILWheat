@@ -12,7 +12,8 @@ load('Data/MTME.z_rr4ap1.RData')
 load('Data/MTME.z_rr5ap1.RData')
 # load('Data/MTME.z_rr6ap1.RData')
 
-lrt.asreml(MTME.z_rr1ap1.asr,MTME.z_rr2ap1.asr,MTME.z_rr3ap1.asr#,MTME.z_rr4ap1.asr,MTME.z_rr5ap1.asr,MTME.z_rr6ap1.asr
+lrt.asreml(MTME.z_rr1ap1.asr,MTME.z_rr2ap1.asr,MTME.z_rr3ap1.asr,MTME.z_rr4ap1.asr,MTME.z_rr5ap1.asr
+           #MTME.z_rr6ap1.asr
            )
 
 rr1ap1 <- VaPct(mod = MTME.z_rr1ap1.asr, k = 1,

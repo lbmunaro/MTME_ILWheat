@@ -2,32 +2,32 @@ rm(list=ls())
 
 library(asreml)
 library(tidyverse)
-load('Data/STME.z_rr.ap.RData')
+load('Data/STME.z_rr.ap1.RData')
 source('Functions_MTME.R')
 
 # GY
-lrt.asreml(GY_STME.z_rr1ap.asr, GY_STME.z_rr2ap.asr, GY_STME.z_rr3ap.asr)
+lrt.asreml(GY_STME.z_rr1ap1.asr, GY_STME.z_rr2ap1.asr, GY_STME.z_rr3ap1.asr)
 # TW
-lrt.asreml(TW_STME.z_rr1ap.asr, TW_STME.z_rr2ap.asr, TW_STME.z_rr3ap.asr)
+lrt.asreml(TW_STME.z_rr1ap1.asr, TW_STME.z_rr2ap1.asr, TW_STME.z_rr3ap1.asr)
 # HD
-lrt.asreml(HD_STME.z_rr1ap.asr, HD_STME.z_rr2ap.asr, HD_STME.z_rr3ap.asr)
+lrt.asreml(HD_STME.z_rr1ap1.asr, HD_STME.z_rr2ap1.asr, HD_STME.z_rr3ap1.asr)
 # HT
-lrt.asreml(HT_STME.z_rr1ap.asr, HT_STME.z_rr2ap.asr, HT_STME.z_rr3ap.asr)
+lrt.asreml(HT_STME.z_rr1ap1.asr, HT_STME.z_rr2ap1.asr, HT_STME.z_rr3ap1.asr)
 
-rm(list = setdiff(ls(), c('GY_STME.z_rr3ap.asr',
-                          'TW_STME.z_rr3ap.asr',
-                          'HD_STME.z_rr2ap.asr',
-                          'HT_STME.z_rr3ap.asr',
-                          'MAT_STME.z_rr1ap.asr',
+rm(list = setdiff(ls(), c('GY_STME.z_rr3ap1.asr',
+                          'TW_STME.z_rr3ap1.asr',
+                          'HD_STME.z_rr2ap1.asr',
+                          'HT_STME.z_rr3ap1.asr',
+                          'MAT_STME.z_rr1ap1.asr',
                           'ILYT_Pheno')))
 
 source('Functions_MTME.R')
 
-GY_rr3ap <- VaPct(GY_STME.z_rr3ap.asr, k = 3, data = ILYT_Pheno, TE_fct = 'TraitEnv')$TraitEnv_VaPct
-TW_rr3ap <- VaPct(TW_STME.z_rr3ap.asr, k = 3, data = ILYT_Pheno, TE_fct = 'TraitEnv')$TraitEnv_VaPct
-HD_rr2ap <- VaPct(HD_STME.z_rr2ap.asr, k = 2, data = ILYT_Pheno, TE_fct = 'TraitEnv')$TraitEnv_VaPct
-HT_rr3ap <- VaPct(HT_STME.z_rr3ap.asr, k = 3, data = ILYT_Pheno, TE_fct = 'TraitEnv')$TraitEnv_VaPct
-MAT_rr1ap <- VaPct(MAT_STME.z_rr1ap.asr, k = 1, data = ILYT_Pheno, TE_fct = 'TraitEnv')$TraitEnv_VaPct |>
+GY_rr3ap <- VaPct(GY_STME.z_rr3ap1.asr, k = 3, data = ILYT_Pheno, TE_fct = 'TraitEnv')$TraitEnv_VaPct
+TW_rr3ap <- VaPct(TW_STME.z_rr3ap1.asr, k = 3, data = ILYT_Pheno, TE_fct = 'TraitEnv')$TraitEnv_VaPct
+HD_rr2ap <- VaPct(HD_STME.z_rr2ap1.asr, k = 2, data = ILYT_Pheno, TE_fct = 'TraitEnv')$TraitEnv_VaPct
+HT_rr3ap <- VaPct(HT_STME.z_rr3ap1.asr, k = 3, data = ILYT_Pheno, TE_fct = 'TraitEnv')$TraitEnv_VaPct
+MAT_rr1ap <- VaPct(MAT_STME.z_rr1ap1.asr, k = 1, data = ILYT_Pheno, TE_fct = 'TraitEnv')$TraitEnv_VaPct |>
   glimpse()
 
 VaPct_STSE.ap <- data.frame(TraitEnv = levels(ILYT_Pheno$TraitEnv)) |>
@@ -76,15 +76,15 @@ ggsave('Figures/Figure5.4.png', width = 7, height = 3, units = 'in', dpi = 300)
 
 # gebvs ----
 STME.ap_gebvs <- rbind(
-  gebvs_asreml(GY_STME.z_rr3ap.asr, k = 3, 
+  gebvs_asreml(GY_STME.z_rr3ap1.asr, k = 3, 
                data = ILYT_Pheno, TE_fct = 'TraitEnv'),
-  gebvs_asreml(TW_STME.z_rr3ap.asr, k = 3, 
+  gebvs_asreml(TW_STME.z_rr3ap1.asr, k = 3, 
                data = ILYT_Pheno, TE_fct = 'TraitEnv'),
-  gebvs_asreml(HD_STME.z_rr2ap.asr, k = 2, 
+  gebvs_asreml(HD_STME.z_rr2ap1.asr, k = 2, 
                data = ILYT_Pheno, TE_fct = 'TraitEnv'),
-  gebvs_asreml(HT_STME.z_rr3ap.asr, k = 3, 
+  gebvs_asreml(HT_STME.z_rr3ap1.asr, k = 3, 
                data = ILYT_Pheno, TE_fct = 'TraitEnv'),
-  gebvs_asreml(MAT_STME.z_rr1ap.asr, k = 1, 
+  gebvs_asreml(MAT_STME.z_rr1ap1.asr, k = 1, 
                data = ILYT_Pheno, TE_fct = 'TraitEnv')
 ) |>
   rename(TraitEnv=TE_fct,

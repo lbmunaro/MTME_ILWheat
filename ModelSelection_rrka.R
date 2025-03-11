@@ -3,6 +3,7 @@
 rm(list=ls())
 
 library(tidyverse)
+library(asreml)
 source('Functions_MTME.R')
 
 load('Data/MTME.z_rr1a.RData')
@@ -10,6 +11,8 @@ load('Data/MTME.z_rr2a.RData')
 load('Data/MTME.z_rr3a.RData')
 load('Data/MTME.z_rr4a.RData')
 load('Data/MTME.z_rr5a.RData')
+
+lrt.asreml(MTME.z_rr1a.asr, MTME.z_rr2a.asr, MTME.z_rr3a.asr, MTME.z_rr4a.asr, MTME.z_rr5a.asr)
 
 rr1a <- VaPct(mod = MTME.z_rr1a.asr, k = 1,
               data = ILYT_Pheno, TE_fct = 'TraitEnv')$TraitEnv_VaPct
