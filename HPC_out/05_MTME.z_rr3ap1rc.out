@@ -1,0 +1,305 @@
+
+R version 4.4.2 (2024-10-31) -- "Pile of Leaves"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: x86_64-redhat-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+Online License checked out Mon Mar 10 20:34:19 2025
+[Previously saved workspace restored]
+
+> # Multi-Trait Multi-Environment models ----
+> # This script fits Multi-Trait Multi-Environment models
+> 
+> # Clean workspace
+> rm(list = objects())  # Removes all objects from the environment.
+> 
+> # Packages ----
+> library(tidyverse) # R packages for data science.
+── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+> library(asreml) # ASReml-R package.
+Loading required package: Matrix
+
+Attaching package: ‘Matrix’
+
+The following objects are masked from ‘package:tidyr’:
+
+    expand, pack, unpack
+
+Loading ASReml-R version 4.2
+
+> source('Functions_MTME.R')  # Load functions
+> 
+> # Use for HPC only
+> setwd('~/MTME_ILWheat/')
+> 
+> # Load data ----
+> ## Pheno & Ginv
+> load('Data/ILYT_Pheno-Gmatrix.RData')
+> 
+> # Create columns for each nlevels(Trait) within each Env
+> ILYT_PhenoTr <- ILYT_Pheno |>
++   # Create a unique identifier 'IDEU' for each experimental unit using Env, Col, and Row
++   mutate(IDEU = paste(Env,Col,Row,sep = '-'), IDEU = as.factor(IDEU)) |>
++   group_by(Env) |>
++   mutate(nTrait = length(unique(Trait))) |>
++   # Create new columns (Tr2 to Tr5) based on the number of traits present in each 'Env'
++   mutate(Tr2 = ifelse(nTrait==2,as.character(Trait),NA), Tr2 = as.factor(Tr2),
++          Tr3 = ifelse(nTrait==3,as.character(Trait),NA), Tr3 = as.factor(Tr3),
++          Tr4 = ifelse(nTrait==4,as.character(Trait),NA), Tr4 = as.factor(Tr4),
++          Tr5 = ifelse(nTrait==5,as.character(Trait),NA), Tr5 = as.factor(Tr5)) |>
++   ungroup() |>
++   droplevels() |>
++   arrange(IDEU, TraitEnv) |>
++   glimpse()
+Rows: 38,792
+Columns: 24
+$ Pheno      <dbl> 78.59641, 59.26283, 81.92365, 60.64956, 70.60811, 58.16354,…
+$ Pheno_SI   <dbl> 5285.68, 762.83, 5509.44, 780.68, 4748.46, 748.68, 5381.87,…
+$ Pheno_z    <dbl> -1.09868454, -0.09749654, -0.90053521, 0.32590315, -1.57441…
+$ Pheno_std  <dbl> 0.7980023, 0.9930956, 0.8317844, 1.0163337, 0.7168959, 0.97…
+$ Pheno_mean <dbl> 6526.3688, 766.9403, 6526.3688, 766.9403, 6526.3688, 766.94…
+$ Pheno_sd   <dbl> 1129.24933, 42.15875, 1129.24933, 42.15875, 1129.24933, 42.…
+$ TraitEnv   <fct> GY-22-Adv, TW-22-Adv, GY-22-Adv, TW-22-Adv, GY-22-Adv, TW-2…
+$ Trait      <fct> GY, TW, GY, TW, GY, TW, GY, TW, GY, TW, GY, TW, GY, TW, GY,…
+$ Env        <fct> 22-Adv, 22-Adv, 22-Adv, 22-Adv, 22-Adv, 22-Adv, 22-Adv, 22-…
+$ Year       <fct> 2022, 2022, 2022, 2022, 2022, 2022, 2022, 2022, 2022, 2022,…
+$ Loc        <fct> "Addieville, IL", "Addieville, IL", "Addieville, IL", "Addi…
+$ Block      <fct> 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2,…
+$ Col        <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+$ Row        <fct> 1, 1, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 1…
+$ Plot       <fct> 1, 1, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 1…
+$ IDEU       <fct> 22-Adv-1-1, 22-Adv-1-1, 22-Adv-1-10, 22-Adv-1-10, 22-Adv-1-…
+$ Gen        <fct> 2020-5361, 2020-5361, 19-25245, 19-25245, 2020-13223, 2020-…
+$ Gkeep      <fct> 2020-5361, 2020-5361, 19-25245, 19-25245, 2020-13223, 2020-…
+$ Gdrop      <fct> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+$ nTrait     <int> 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,…
+$ Tr2        <fct> GY, TW, GY, TW, GY, TW, GY, TW, GY, TW, GY, TW, GY, TW, GY,…
+$ Tr3        <fct> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+$ Tr4        <fct> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+$ Tr5        <fct> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+> 
+> # Create vectors with the unique environments included in each of the Tr2:Tr5 columns
+> tr2 <- ILYT_PhenoTr |> filter(!is.na(Tr2)) |> droplevels() |> group_by(Env) |>
++   summarise(Env = unique(Env)) |> pull(Env); tr2
+[1] 22-Adv 22-Stp 23-Adv 24-Adv 24-Stp
+Levels: 22-Adv 22-Stp 23-Adv 24-Adv 24-Stp
+> tr3 <- ILYT_PhenoTr |> filter(!is.na(Tr3)) |> droplevels() |> group_by(Env) |>
++   summarise(Env = unique(Env)) |> pull(Env); tr3
+[1] 23-Stp
+Levels: 23-Stp
+> tr4 <- ILYT_PhenoTr |> filter(!is.na(Tr4)) |> droplevels() |> group_by(Env) |>
++   summarise(Env = unique(Env)) |> pull(Env); tr4
+[1] 22-Neo 22-Urb 23-Neo 24-Neo
+Levels: 22-Neo 22-Urb 23-Neo 24-Neo
+> tr5 <- ILYT_PhenoTr |> filter(!is.na(Tr5)) |> droplevels() |> group_by(Env) |>
++   summarise(Env = unique(Env)) |> pull(Env); tr5
+[1] 23-Urb 24-Urb
+Levels: 23-Urb 24-Urb
+> 
+> # Fit rr3ap1rc model ----
+> k <- 3
+> ## Run model ----
+> MTME.z_rr3ap1rc.asr <- asreml(
++   Pheno_z ~ TraitEnv,
++   random = ~ rr(TraitEnv,3):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
++     rr(TraitEnv,1):Gkeep + diag(TraitEnv):Gkeep +
++     diag(TraitEnv):Block +
++     at(TraitEnv):ar1v(Col):ar1(Row),
++   residual = ~ dsum(~ IDEU:corgh(Tr2) | Env, levels = tr2) +
++     dsum(~ IDEU:corgh(Tr3) | Env, levels = tr3) +
++     dsum(~ IDEU:corgh(Tr4) | Env, levels = tr4) +
++     dsum(~ IDEU:corgh(Tr5) | Env, levels = tr5),
++   sparse = ~ TraitEnv:Gdrop,
++   data = ILYT_PhenoTr,
++   na.action = na.method(x = 'include'),
++   maxit = 13,
++   workspace = '72gb'
++ )
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Warning messages:
+1: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
+  Log-likelihood not converged
+2: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 3):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> 
+> # Print model info
+> print(paste('convergence =', MTME.z_rr3ap1rc.asr$converge))
+[1] "convergence = FALSE"
+> MTME.z_rr3ap1rc.asr$trace |>
++   as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration        1        2        3        4        5        6       7
+1    LogLik 8409.628 12383.91 13543.13 14964.63 15725.04 16444.86 17068.9
+         8       9       10       11       12       13       14
+1 17574.06 18005.4 18793.13 19323.08 19832.78 20120.77 20120.77
+> 
+> # Save
+> save.image('Data/MTME.z_rr3ap1rc.RData')
+> 
+> # Update model ----
+> MTME.z_rr3ap1rc.asr <- update_asreml(MTME.z_rr3ap1rc.asr, 
++                                  max_updates = 50,
++                                  save_path = 'Data/MTME.z_rr3ap1rc.RData')
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+[1] "Update 1"
+[1] "Convergence = FALSE"
+  Iteration       1        2        3        4        5        6        7
+1    LogLik 20306.3 20323.44 20285.85 20348.99 20402.67 20475.29 20543.74
+         8        9       10       11       12       13       14
+1 20487.88 20508.35 20524.51 20567.33 20595.89 20610.44 20610.44
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+[1] "Update 2"
+[1] "Convergence = FALSE"
+  Iteration       1        2        3        4        5       6        7
+1    LogLik 20623.7 20629.06 20635.19 20644.88 20658.56 20667.4 20672.33
+         8        9       10       11    12       13       14
+1 20676.14 20679.16 20681.07 20683.85 20688 20689.28 20689.28
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+[1] "Update 3"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 20691.99 20692.41 20694.44 20693.04 20695.49 20697.42 20699.66
+         8        9       10       11       12      13      14
+1 20700.34 20701.97 20703.28 20703.89 20705.12 20706.5 20706.5
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+[1] "Update 4"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 20666.76 20668.84 20671.31 20673.27 20675.93 20677.35 20679.05
+         8        9       10       11       12       13       14
+1 20679.17 20682.21 20683.62 20685.53 20687.29 20689.57 20689.57
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+[1] "Update 5"
+[1] "Convergence = FALSE"
+  Iteration       1        2        3       4       5        6        7
+1    LogLik 20692.9 20693.17 20693.91 20694.6 20697.8 20700.37 20704.15
+         8        9       10       11      12       13       14
+1 20707.41 20710.38 20713.96 20717.58 20721.3 20724.06 20724.06
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+[1] "Update 6"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3       4        5        6        7
+1    LogLik 20727.15 20728.04 20730.31 20737.7 20738.69 20741.53 20745.76
+         8        9       10       11       12       13       14
+1 20638.69 20715.18 20738.08 20750.73 20754.77 20757.97 20757.97
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+[1] "Update 7"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 20759.83 20760.33 20762.19 20764.71 20765.44 20767.23 20769.91
+         8       9       10       11       12       13       14
+1 20769.82 20770.7 20772.55 20772.88 20774.97 20773.84 20773.84

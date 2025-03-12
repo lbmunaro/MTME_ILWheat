@@ -1,0 +1,231 @@
+
+R version 4.4.2 (2024-10-31) -- "Pile of Leaves"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: x86_64-redhat-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+Online License checked out Mon Mar 10 10:23:59 2025
+[Previously saved workspace restored]
+
+> # Multi-Trait Multi-Environment models ----
+> # This script fits Multi-Trait Multi-Environment models
+> 
+> # Clean workspace
+> rm(list = objects())  # Removes all objects from the environment.
+> 
+> # Packages ----
+> library(tidyverse) # R packages for data science.
+── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+> library(asreml) # ASReml-R package.
+Loading required package: Matrix
+
+Attaching package: ‘Matrix’
+
+The following objects are masked from ‘package:tidyr’:
+
+    expand, pack, unpack
+
+Loading ASReml-R version 4.2
+
+> source('Functions_MTME.R')  # Load functions
+> 
+> # Use for HPC only
+> setwd('~/MTME_ILWheat/')
+> 
+> # Load data ----
+> ## Pheno & Ginv
+> load('Data/ILYT_Pheno-Gmatrix.RData')
+> 
+> # Create columns for each nlevels(Trait) within each Env
+> ILYT_PhenoTr <- ILYT_Pheno |>
++   # Create a unique identifier 'IDEU' for each experimental unit using Env, Col, and Row
++   mutate(IDEU = paste(Env,Col,Row,sep = '-'), IDEU = as.factor(IDEU)) |>
++   group_by(Env) |>
++   mutate(nTrait = length(unique(Trait))) |>
++   # Create new columns (Tr2 to Tr5) based on the number of traits present in each 'Env'
++   mutate(Tr2 = ifelse(nTrait==2,as.character(Trait),NA), Tr2 = as.factor(Tr2),
++          Tr3 = ifelse(nTrait==3,as.character(Trait),NA), Tr3 = as.factor(Tr3),
++          Tr4 = ifelse(nTrait==4,as.character(Trait),NA), Tr4 = as.factor(Tr4),
++          Tr5 = ifelse(nTrait==5,as.character(Trait),NA), Tr5 = as.factor(Tr5)) |>
++   ungroup() |>
++   droplevels() |>
++   arrange(IDEU, TraitEnv) |>
++   glimpse()
+Rows: 38,792
+Columns: 24
+$ Pheno      <dbl> 78.59641, 59.26283, 81.92365, 60.64956, 70.60811, 58.16354,…
+$ Pheno_SI   <dbl> 5285.68, 762.83, 5509.44, 780.68, 4748.46, 748.68, 5381.87,…
+$ Pheno_z    <dbl> -1.09868454, -0.09749654, -0.90053521, 0.32590315, -1.57441…
+$ Pheno_std  <dbl> 0.7980023, 0.9930956, 0.8317844, 1.0163337, 0.7168959, 0.97…
+$ Pheno_mean <dbl> 6526.3688, 766.9403, 6526.3688, 766.9403, 6526.3688, 766.94…
+$ Pheno_sd   <dbl> 1129.24933, 42.15875, 1129.24933, 42.15875, 1129.24933, 42.…
+$ TraitEnv   <fct> GY-22-Adv, TW-22-Adv, GY-22-Adv, TW-22-Adv, GY-22-Adv, TW-2…
+$ Trait      <fct> GY, TW, GY, TW, GY, TW, GY, TW, GY, TW, GY, TW, GY, TW, GY,…
+$ Env        <fct> 22-Adv, 22-Adv, 22-Adv, 22-Adv, 22-Adv, 22-Adv, 22-Adv, 22-…
+$ Year       <fct> 2022, 2022, 2022, 2022, 2022, 2022, 2022, 2022, 2022, 2022,…
+$ Loc        <fct> "Addieville, IL", "Addieville, IL", "Addieville, IL", "Addi…
+$ Block      <fct> 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2,…
+$ Col        <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+$ Row        <fct> 1, 1, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 1…
+$ Plot       <fct> 1, 1, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 1…
+$ IDEU       <fct> 22-Adv-1-1, 22-Adv-1-1, 22-Adv-1-10, 22-Adv-1-10, 22-Adv-1-…
+$ Gen        <fct> 2020-5361, 2020-5361, 19-25245, 19-25245, 2020-13223, 2020-…
+$ Gkeep      <fct> 2020-5361, 2020-5361, 19-25245, 19-25245, 2020-13223, 2020-…
+$ Gdrop      <fct> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+$ nTrait     <int> 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,…
+$ Tr2        <fct> GY, TW, GY, TW, GY, TW, GY, TW, GY, TW, GY, TW, GY, TW, GY,…
+$ Tr3        <fct> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+$ Tr4        <fct> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+$ Tr5        <fct> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+> 
+> # Create vectors with the unique environments included in each of the Tr2:Tr5 columns
+> tr2 <- ILYT_PhenoTr |> filter(!is.na(Tr2)) |> droplevels() |> group_by(Env) |>
++   summarise(Env = unique(Env)) |> pull(Env); tr2
+[1] 22-Adv 22-Stp 23-Adv 24-Adv 24-Stp
+Levels: 22-Adv 22-Stp 23-Adv 24-Adv 24-Stp
+> tr3 <- ILYT_PhenoTr |> filter(!is.na(Tr3)) |> droplevels() |> group_by(Env) |>
++   summarise(Env = unique(Env)) |> pull(Env); tr3
+[1] 23-Stp
+Levels: 23-Stp
+> tr4 <- ILYT_PhenoTr |> filter(!is.na(Tr4)) |> droplevels() |> group_by(Env) |>
++   summarise(Env = unique(Env)) |> pull(Env); tr4
+[1] 22-Neo 22-Urb 23-Neo 24-Neo
+Levels: 22-Neo 22-Urb 23-Neo 24-Neo
+> tr5 <- ILYT_PhenoTr |> filter(!is.na(Tr5)) |> droplevels() |> group_by(Env) |>
++   summarise(Env = unique(Env)) |> pull(Env); tr5
+[1] 23-Urb 24-Urb
+Levels: 23-Urb 24-Urb
+> 
+> # Fit rr1ap1rc model ----
+> k <- 1
+> ## Run model ----
+> MTME.z_rr1ap1rc.asr <- asreml(
++   Pheno_z ~ TraitEnv,
++   random = ~ rr(TraitEnv,1):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
++     rr(TraitEnv,1):Gkeep + diag(TraitEnv):Gkeep + 
++     diag(TraitEnv):Block +
++     at(TraitEnv):ar1v(Col):ar1(Row),
++   residual = ~ dsum(~ IDEU:corgh(Tr2) | Env, levels = tr2) +
++     dsum(~ IDEU:corgh(Tr3) | Env, levels = tr3) +
++     dsum(~ IDEU:corgh(Tr4) | Env, levels = tr4) +
++     dsum(~ IDEU:corgh(Tr5) | Env, levels = tr5),
++   sparse = ~ TraitEnv:Gdrop,
++   data = ILYT_PhenoTr,
++   na.action = na.method(x = 'include'),
++   maxit = 13,
++   workspace = '24gb'
++ )
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Warning messages:
+1: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep,  :
+  Log-likelihood not converged
+2: In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep,  :
+  Some components changed by more than 1% on the last iteration
+> 
+> # Print model info
+> print(paste('convergence =', MTME.z_rr1ap1rc.asr$converge))
+[1] "convergence = FALSE"
+> MTME.z_rr1ap1rc.asr$trace |>
++   as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration      1        2        3        4        5        6        7
+1    LogLik 9088.1 11862.09 13598.09 14860.19 15748.36 16443.17 16883.92
+        8        9       10       11       12       13       14
+1 17310.7 17594.18 17807.44 17951.24 18141.78 18262.98 18262.98
+> 
+> # Save
+> save.image('Data/MTME.z_rr1ap1rc.RData')
+> 
+> # Update model ----
+> MTME.z_rr1ap1rc.asr <- update_asreml(MTME.z_rr1ap1rc.asr, 
++                                  max_updates = 100,
++                                  save_path = 'Data/MTME.z_rr1ap1rc.RData')
+[1] "Update 1"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4       5        6        7
+1    LogLik 18369.29 18408.26 18468.08 18532.69 18590.9 18666.11 18721.93
+         8        9       10       11       12       13       14
+1 18777.96 18834.96 18895.04 18974.67 19028.29 19074.15 19074.15
+[1] "Update 2"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6       7
+1    LogLik 19125.27 19138.05 19157.84 19172.94 19185.66 19196.38 19203.6
+         8        9       10      11       12       13       14
+1 19209.02 19213.46 19216.26 19218.2 19219.58 19220.61 19220.61
+[1] "Update 3"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 19221.28 19221.41 19221.75 19221.97 19222.12 19222.24 19222.32
+         8        9       10       11       12       13       14
+1 19222.39 19222.44 19222.47 19222.51 19222.53 19222.56 19222.56
+[1] "Update 4"
+[1] "Convergence = FALSE"
+  Iteration        1        2       3        4        5        6        7
+1    LogLik 19222.58 19222.58 19222.6 19222.62 19222.63 19222.65 19222.66
+         8        9      10       11       12       13       14
+1 19222.68 19222.69 19222.7 19222.72 19222.73 19222.74 19222.74
+[1] "Update 5"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5       6        7
+1    LogLik 19222.75 19222.76 19222.77 19222.78 19222.79 19222.8 19222.81
+         8        9       10       11       12       13       14
+1 19222.82 19222.83 19222.84 19222.85 19222.86 19222.86 19222.86
+[1] "Update 6"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4       5       6        7
+1    LogLik 19222.87 19222.87 19222.88 19222.89 19222.9 19222.9 19222.91
+         8        9       10       11       12       13       14
+1 19222.92 19222.93 19222.93 19222.94 19222.95 19222.95 19222.95
+[1] "Update 7"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 19222.96 19222.96 19222.97 19222.97 19222.98 19222.98 19222.99
+         8     9    10       11       12       13       14
+1 19222.99 19223 19223 19223.01 19223.01 19223.02 19223.02
+[1] "Update 8"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 19223.02 19223.02 19223.03 19223.03 19223.03 19223.04 19223.04
+         8        9       10       11       12       13       14
+1 19223.04 19223.05 19223.05 19223.06 19223.06 19223.06 19223.06
+[1] "Update 9"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 19223.07 19223.07 19223.07 19223.07 19223.07 19223.08 19223.08
+         8        9       10       11       12       13       14
+1 19223.08 19223.08 19223.09 19223.09 19223.09 19223.09 19223.09
+[1] "Update 10"
+[1] "Convergence = TRUE"
+  Iteration       1       2       3
+1    LogLik 19223.1 19223.1 19223.1
+[1] "Model successfully converged!"
+There were 16 warnings (use warnings() to see them)
+> 
+> # Save
+> save.image('Data/MTME.z_rr1ap1rc.RData')
+> 
+> proc.time()
+     user    system   elapsed 
+299384.25  13287.73 108806.06 
