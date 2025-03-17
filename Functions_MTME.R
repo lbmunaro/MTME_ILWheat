@@ -116,8 +116,8 @@ gcorr_asreml <- function(mod,k,data,TE_fct) {
   Psi <- diag(vparams[grep(paste0('^',TE_fct,'.*vm'), names(vparams))])
   # Variance covariance matrix
   Gvar <- LamStar%*%t(LamStar)+diag(Psi)
-  rownames(Gvar) <- levels(data$TraitEnv) # fix this
-  colnames(Gvar) <- levels(data$TraitEnv) # fix this
+  rownames(Gvar) <- levels(data$TraitEnv)
+  colnames(Gvar) <- levels(data$TraitEnv)
   # Genetic correlation matrix
   Cmat <- cov2cor(Gvar)
   return(list(Gvar = Gvar, gcorr = Cmat))
