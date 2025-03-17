@@ -224,3 +224,35 @@ ILYT_Pheno |>
   facet_wrap(~Trait, scales = 'free') +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Sparse testing ----
+
+ILYT_Pheno |>
+  filter(Trait=='GY') |>
+  group_by(Env, Gen) |>
+  summarise(n=n()) |>
+  ggplot(aes(x=Gen, y=Env, fill = factor(n))) +
+  geom_tile(na.rm = T) +
+  scale_fill_manual(values = c("1" = "#FF5F05", "2" = "#13294B"), 
+                    name = "Rep") +
+  theme_bw() +
+  theme(axis.text.x = element_blank())
+
+ILYT_Pheno |>
+  filter(Trait == 'GY') |>
+  group_by(Env, Gen) |>
+  summarise(n = n()) |>
+  ggplot(aes(x = Gen, y = Env, fill = factor(n))) +
+  geom_tile(na.rm = TRUE) + 
+  scale_fill_manual(values = c("1" = "#FF5F05", "2" = "#13294B"), 
+                    name = "Rep", na.value = "white") +
+  theme_bw() +
+  theme(panel.background = element_rect(fill = "white", color = "white"),
+        plot.background = element_rect(fill = "white", color = "white"),
+        axis.text.x = element_blank(), 
+        axis.ticks.x = element_blank(), 
+        panel.grid = element_blank()) 
+  
+  
+nlevels(ILYT_Pheno$Gen)
+2995-2977

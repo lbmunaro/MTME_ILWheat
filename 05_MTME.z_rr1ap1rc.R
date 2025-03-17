@@ -78,3 +78,5 @@ MTME.z_rr1ap1rc.asr <- update_asreml(MTME.z_rr1ap1rc.asr,
 
 # Save
 save.image('Data/MTME.z_rr1ap1rc.RData')
+
+# End ----

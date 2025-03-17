@@ -23,11 +23,11 @@ MTME.z_rr1a.asr <- asreml(
   Pheno_z ~ TraitEnv, # Fixed effect
   random = ~ rr(TraitEnv,1):vm(Gkeep, Ginv.sparse) + # Common GTE effect
     diag(TraitEnv):vm(Gkeep, Ginv.sparse), # Specific GTE effect
-  residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv), # Independent Ar1xAr1 for each TraitEnv
+  residual = ~ dsum(~ ar1(Col):ar1(Row) | TraitEnv), # Ar1xAr1 for each TraitEnv
   sparse = ~ TraitEnv:Gdrop, # Genotypes without marker data
   data = ILYT_Pheno,
   na.action = na.method(x = 'include'),
-  maxit = 13, # Don't use it, changes step size. Use update instead - DT suggestion
+  maxit = 13, 
   workspace = '16gb'
 )
 

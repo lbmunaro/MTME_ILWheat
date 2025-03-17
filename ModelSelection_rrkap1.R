@@ -10,10 +10,10 @@ load('Data/MTME.z_rr2ap1.RData')
 load('Data/MTME.z_rr3ap1.RData')
 load('Data/MTME.z_rr4ap1.RData')
 load('Data/MTME.z_rr5ap1.RData')
-# load('Data/MTME.z_rr6ap1.RData')
+load('Data/MTME.z_rr6ap1.RData')
 
-lrt.asreml(MTME.z_rr1ap1.asr,MTME.z_rr2ap1.asr,MTME.z_rr3ap1.asr,MTME.z_rr4ap1.asr,MTME.z_rr5ap1.asr
-           #MTME.z_rr6ap1.asr
+lrt.asreml(MTME.z_rr1ap1.asr,MTME.z_rr2ap1.asr,MTME.z_rr3ap1.asr,
+           MTME.z_rr4ap1.asr,MTME.z_rr5ap1.asr, MTME.z_rr6ap1.asr
            )
 
 rr1ap1 <- VaPct(mod = MTME.z_rr1ap1.asr, k = 1,
@@ -26,8 +26,8 @@ rr4ap1 <- VaPct(mod = MTME.z_rr4ap1.asr, k = 4,
                data = ILYT_Pheno, TE_fct = 'TraitEnv')$TraitEnv_VaPct
 rr5ap1 <- VaPct(mod = MTME.z_rr5ap1.asr, k = 5,
                data = ILYT_Pheno, TE_fct = 'TraitEnv')$TraitEnv_VaPct
-# rr6ap1 <- VaPct(mod = MTME.z_rr6ap1.asr, k = 6,
-#               data = ILYT_Pheno, TE_fct = 'TraitEnv')$TraitEnv_VaPct
+rr6ap1 <- VaPct(mod = MTME.z_rr6ap1.asr, k = 6,
+               data = ILYT_Pheno, TE_fct = 'TraitEnv')$TraitEnv_VaPct
 
 VaPct_rrap1 <- data.frame(TraitEnv = levels(ILYT_Pheno$TraitEnv)) |>
   left_join(ILYT_Pheno |>
@@ -40,8 +40,8 @@ VaPct_rrap1 <- data.frame(TraitEnv = levels(ILYT_Pheno$TraitEnv)) |>
   left_join(rr3ap1|>rename(TraitEnv=TE_fct,rr3ap1=VaPct)) |>
   left_join(rr4ap1|>rename(TraitEnv=TE_fct,rr4ap1=VaPct)) |>
   left_join(rr5ap1|>rename(TraitEnv=TE_fct,rr5ap1=VaPct)) |>
-  # left_join(rr6ap1|>rename(TraitEnv=TE_fct,rr6ap1=VaPct)) |>
-  pivot_longer(cols = c(rr1ap1:rr5ap1), names_to = 'model', values_to = 'VaPct') |>
+  left_join(rr6ap1|>rename(TraitEnv=TE_fct,rr6ap1=VaPct)) |>
+  pivot_longer(cols = c(rr1ap1:rr6ap1), names_to = 'model', values_to = 'VaPct') |>
   arrange(model,TraitEnv) |>
   group_by(model) |>
   mutate(mean.rrk=mean(VaPct)) |>
@@ -54,8 +54,8 @@ colors <- c(
   'rr2ap1' = '#006230',
   'rr3ap1' = '#009FD4',
   'rr4ap1' = '#5C0E41',
-  'rr5ap1' = '#13294B'#,
-  # 'rr6ap1' = '#FF5F05'
+  'rr5ap1' = '#13294B',
+  'rr6ap1' = '#FF5F05'
 )
 
 ggplot(VaPct_rrap1, aes(x=Trait, y=VaPct, fill=model)) +

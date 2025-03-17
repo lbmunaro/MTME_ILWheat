@@ -11,8 +11,10 @@ load('Data/MTME.z_rr2a.RData')
 load('Data/MTME.z_rr3a.RData')
 load('Data/MTME.z_rr4a.RData')
 load('Data/MTME.z_rr5a.RData')
+load('Data/MTME.z_rr6a.RData')
 
-lrt.asreml(MTME.z_rr1a.asr, MTME.z_rr2a.asr, MTME.z_rr3a.asr, MTME.z_rr4a.asr, MTME.z_rr5a.asr)
+lrt.asreml(MTME.z_rr1a.asr, MTME.z_rr2a.asr, MTME.z_rr3a.asr, 
+           MTME.z_rr4a.asr, MTME.z_rr5a.asr, MTME.z_rr6a.asr)
 
 rr1a <- VaPct(mod = MTME.z_rr1a.asr, k = 1,
               data = ILYT_Pheno, TE_fct = 'TraitEnv')$TraitEnv_VaPct
@@ -23,6 +25,8 @@ rr3a <- VaPct(mod = MTME.z_rr3a.asr, k = 3,
 rr4a <- VaPct(mod = MTME.z_rr4a.asr, k = 4,
               data = ILYT_Pheno, TE_fct = 'TraitEnv')$TraitEnv_VaPct
 rr5a <- VaPct(mod = MTME.z_rr5a.asr, k = 5,
+              data = ILYT_Pheno, TE_fct = 'TraitEnv')$TraitEnv_VaPct
+rr6a <- VaPct(mod = MTME.z_rr6a.asr, k = 6,
               data = ILYT_Pheno, TE_fct = 'TraitEnv')$TraitEnv_VaPct
 
 VaPct_rra <- data.frame(TraitEnv = levels(ILYT_Pheno$TraitEnv)) |>
@@ -36,7 +40,8 @@ VaPct_rra <- data.frame(TraitEnv = levels(ILYT_Pheno$TraitEnv)) |>
   left_join(rr3a|>rename(TraitEnv=TE_fct,rr3a=VaPct)) |>
   left_join(rr4a|>rename(TraitEnv=TE_fct,rr4a=VaPct)) |>
   left_join(rr5a|>rename(TraitEnv=TE_fct,rr5a=VaPct)) |>
-  pivot_longer(cols = c(rr1a:rr5a), names_to = 'model', values_to = 'VaPct') |>
+  left_join(rr6a|>rename(TraitEnv=TE_fct,rr6a=VaPct)) |>
+  pivot_longer(cols = c(rr1a:rr6a), names_to = 'model', values_to = 'VaPct') |>
   arrange(model,TraitEnv) |>
   group_by(model) |>
   mutate(mean.rrk=mean(VaPct)) |>
@@ -49,7 +54,8 @@ colors <- c(
   'rr2a' = '#006230',
   'rr3a' = '#009FD4',
   'rr4a' = '#5C0E41',
-  'rr5a' = '#13294B'
+  'rr5a' = '#13294B',
+  'rr6a' = '#FF5F05'
 )
 
 
