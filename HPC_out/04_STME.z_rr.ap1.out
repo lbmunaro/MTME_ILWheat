@@ -1147,3 +1147,37 @@ In asreml(fixed = Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 5):vm(Gkeep,  :
 +   maxit = 13,
 +   workspace = '16gb'
 + )
+Warning message:
+In asreml(Pheno_z ~ TraitEnv, random = ~rr(TraitEnv, 1):vm(Gkeep,  :
+  Log-likelihood not converged
+> # Print model info
+> print('MAT_STME.z_rr1')
+[1] "MAT_STME.z_rr1"
+> print(paste('convergence =',MAT_STME.z_rr1ap1.asr$converge))
+[1] "convergence = FALSE"
+> MAT_STME.z_rr1ap1.asr$trace |> as.data.frame() |> rownames_to_column('Iteration') |>
++   filter(Iteration=='LogLik') |> print()
+  Iteration         1         2         3         4         5         6
+1    LogLik -369.9019 -357.3648 -322.1612 -282.3383 -259.7983 -250.9508
+          7         8         9        10        11        12        13
+1 -249.8869 -248.4209 -248.0116 -247.9347 -247.9137 -247.9069 -247.9048
+         14
+1 -247.9048
+> 
+> # Update model
+> MAT_STME.z_rr1ap1.asr <- update_asreml(MAT_STME.z_rr1ap1.asr, 
++                                       max_updates = 20,
++                                       save_path = 'Data/STME.z_rr.ap1.RData')
+[1] "Update 1"
+[1] "Convergence = TRUE"
+  Iteration         1        2        3
+1    LogLik -247.9041 -247.904 -247.904
+[1] "Model successfully converged!"
+> 
+> save.image('Data/STME.z_rr.ap1.RData')
+> 
+> # End ----
+> 
+> proc.time()
+     user    system   elapsed 
+351223.92  12725.31 173980.29 
