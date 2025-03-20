@@ -1,0 +1,137 @@
+
+R version 4.4.2 (2024-10-31) -- "Pile of Leaves"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: x86_64-redhat-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+Online License checked out Thu Mar 20 09:06:59 2025
+[Previously saved workspace restored]
+
+> # Multi-Trait Multi-Environment models ----
+> # This script fits Multi-Trait Multi-Environment models
+> 
+> # Clean workspace
+> rm(list = objects())  # Removes all objects from the environment.
+> 
+> # Packages ----
+> library(tidyverse) # R packages for data science.
+── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+> library(asreml) # ASReml-R package.
+Loading required package: Matrix
+
+Attaching package: ‘Matrix’
+
+The following objects are masked from ‘package:tidyr’:
+
+    expand, pack, unpack
+
+Loading ASReml-R version 4.2
+
+> source('Functions_MTME.R')  # Load functions
+> 
+> # Use for HPC only
+> setwd('~/MTME_ILWheat/')
+> 
+> # Load data ----
+> ## Pheno & Ginv
+> load('Data/ILYT_Pheno-Gmatrix.RData')
+> 
+> # Create columns for each nlevels(Trait) within each Env
+> ILYT_PhenoTr <- ILYT_Pheno |>
++   # Create a unique identifier 'IDEU' for each experimental unit using Env, Col, and Row
++   mutate(IDEU = paste(Env,Col,Row,sep = '-'), IDEU = as.factor(IDEU)) |>
++   group_by(Env) |>
++   mutate(nTrait = length(unique(Trait))) |>
++   # Create new columns (Tr2 to Tr5) based on the number of traits present in each 'Env'
++   mutate(Tr2 = ifelse(nTrait==2,as.character(Trait),NA), Tr2 = as.factor(Tr2),
++          Tr3 = ifelse(nTrait==3,as.character(Trait),NA), Tr3 = as.factor(Tr3),
++          Tr4 = ifelse(nTrait==4,as.character(Trait),NA), Tr4 = as.factor(Tr4),
++          Tr5 = ifelse(nTrait==5,as.character(Trait),NA), Tr5 = as.factor(Tr5)) |>
++   ungroup() |>
++   droplevels() |>
++   arrange(IDEU, TraitEnv) |>
++   glimpse()
+Rows: 38,792
+Columns: 24
+$ Pheno      <dbl> 78.59641, 59.26283, 81.92365, 60.64956, 70.60811, 58.16354,…
+$ Pheno_SI   <dbl> 5285.68, 762.83, 5509.44, 780.68, 4748.46, 748.68, 5381.87,…
+$ Pheno_z    <dbl> -1.09868454, -0.09749654, -0.90053521, 0.32590315, -1.57441…
+$ Pheno_std  <dbl> 0.7980023, 0.9930956, 0.8317844, 1.0163337, 0.7168959, 0.97…
+$ Pheno_mean <dbl> 6526.3688, 766.9403, 6526.3688, 766.9403, 6526.3688, 766.94…
+$ Pheno_sd   <dbl> 1129.24933, 42.15875, 1129.24933, 42.15875, 1129.24933, 42.…
+$ TraitEnv   <fct> GY-22-Adv, TW-22-Adv, GY-22-Adv, TW-22-Adv, GY-22-Adv, TW-2…
+$ Trait      <fct> GY, TW, GY, TW, GY, TW, GY, TW, GY, TW, GY, TW, GY, TW, GY,…
+$ Env        <fct> 22-Adv, 22-Adv, 22-Adv, 22-Adv, 22-Adv, 22-Adv, 22-Adv, 22-…
+$ Year       <fct> 2022, 2022, 2022, 2022, 2022, 2022, 2022, 2022, 2022, 2022,…
+$ Loc        <fct> "Addieville, IL", "Addieville, IL", "Addieville, IL", "Addi…
+$ Block      <fct> 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2,…
+$ Col        <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+$ Row        <fct> 1, 1, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 1…
+$ Plot       <fct> 1, 1, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 1…
+$ IDEU       <fct> 22-Adv-1-1, 22-Adv-1-1, 22-Adv-1-10, 22-Adv-1-10, 22-Adv-1-…
+$ Gen        <fct> 2020-5361, 2020-5361, 19-25245, 19-25245, 2020-13223, 2020-…
+$ Gkeep      <fct> 2020-5361, 2020-5361, 19-25245, 19-25245, 2020-13223, 2020-…
+$ Gdrop      <fct> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+$ nTrait     <int> 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,…
+$ Tr2        <fct> GY, TW, GY, TW, GY, TW, GY, TW, GY, TW, GY, TW, GY, TW, GY,…
+$ Tr3        <fct> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+$ Tr4        <fct> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+$ Tr5        <fct> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+> 
+> # Create vectors with the unique environments included in each of the Tr2:Tr5 columns
+> tr2 <- ILYT_PhenoTr |> filter(!is.na(Tr2)) |> droplevels() |> group_by(Env) |>
++   summarise(Env = unique(Env)) |> pull(Env); tr2
+[1] 22-Adv 22-Stp 23-Adv 24-Adv 24-Stp
+Levels: 22-Adv 22-Stp 23-Adv 24-Adv 24-Stp
+> tr3 <- ILYT_PhenoTr |> filter(!is.na(Tr3)) |> droplevels() |> group_by(Env) |>
++   summarise(Env = unique(Env)) |> pull(Env); tr3
+[1] 23-Stp
+Levels: 23-Stp
+> tr4 <- ILYT_PhenoTr |> filter(!is.na(Tr4)) |> droplevels() |> group_by(Env) |>
++   summarise(Env = unique(Env)) |> pull(Env); tr4
+[1] 22-Neo 22-Urb 23-Neo 24-Neo
+Levels: 22-Neo 22-Urb 23-Neo 24-Neo
+> tr5 <- ILYT_PhenoTr |> filter(!is.na(Tr5)) |> droplevels() |> group_by(Env) |>
++   summarise(Env = unique(Env)) |> pull(Env); tr5
+[1] 23-Urb 24-Urb
+Levels: 23-Urb 24-Urb
+> 
+> # Fit rr1aprc model ----
+> k <- 1
+> ## Run model ----
+> MTME.z_rr1aprc.asr <- asreml(
++   Pheno_z ~ TraitEnv,
++   random = ~ rr(TraitEnv,1):vm(Gkeep, Ginv.sparse) + diag(TraitEnv):vm(Gkeep, Ginv.sparse) +
++     diag(TraitEnv):Gkeep + 
++     diag(TraitEnv):Block +
++     at(TraitEnv):ar1v(Col):ar1(Row),
++   residual = ~ dsum(~ IDEU:corgh(Tr2) | Env, levels = tr2) +
++     dsum(~ IDEU:corgh(Tr3) | Env, levels = tr3) +
++     dsum(~ IDEU:corgh(Tr4) | Env, levels = tr4) +
++     dsum(~ IDEU:corgh(Tr5) | Env, levels = tr5),
++   sparse = ~ TraitEnv:Gdrop,
++   data = ILYT_PhenoTr,
++   na.action = na.method(x = 'include'),
++   maxit = 13,
++   workspace = '24gb'
++ )

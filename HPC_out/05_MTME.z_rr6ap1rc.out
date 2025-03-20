@@ -418,3 +418,155 @@ Notice  : There is no Variance: Job may fail.
 1    LogLik 21283.7 21283.38 21283.57 21283.24 21283.2 21283.24 21284.29
          8        9       10       11       12       13       14
 1 21283.88 21282.92 21283.29 21283.69 21285.08 21284.21 21284.21
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+[1] "Update 14"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4       5        6        7
+1    LogLik 21283.24 21283.74 21283.04 21283.43 21283.3 21283.42 21283.98
+         8        9      10       11       12       13       14
+1 21283.57 21283.34 21283.1 21283.53 21283.89 21283.51 21283.51
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+[1] "Update 15"
+[1] "Convergence = FALSE"
+  Iteration     1        2        3        4        5       6       7       8
+1    LogLik 21284 21283.91 21284.15 21284.03 21283.47 21280.8 21280.8 21280.8
+         9       10       11    12       13       14
+1 21280.83 21280.86 21280.92 21281 21281.18 21281.18
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+[1] "Update 16"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 21283.98 21283.62 21283.75 21284.02 21283.74 21283.63 21283.65
+         8        9       10       11       12       13       14
+1 21283.95 21284.17 21284.29 21283.81 21284.16 21284.35 21284.35
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+[1] "Update 17"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 21283.95 21285.01 21285.08 21283.94 21284.13 21284.71 21284.14
+         8        9       10       11       12       13       14
+1 21284.31 21283.66 21284.32 21284.26 21284.44 21285.15 21285.15
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+[1] "Update 18"
+[1] "Convergence = FALSE"
+  Iteration     1        2        3        4        5        6        7
+1    LogLik 21284 21285.67 21284.77 21284.83 21286.03 21285.99 21284.07
+         8        9       10       11       12       13       14
+1 21284.79 21284.89 21285.31 21284.72 21285.67 21284.94 21284.94
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+[1] "Update 19"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3       4        5        6        7
+1    LogLik 21284.88 21285.29 21284.65 21284.6 21284.48 21284.61 21285.22
+         8        9       10       11       12       13       14
+1 21286.43 21286.58 21285.49 21285.02 21285.12 21284.34 21284.34
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+[1] "Update 20"
+[1] "Convergence = FALSE"
+  Iteration        1        2        3        4        5        6        7
+1    LogLik 21284.75 21284.82 21284.58 21284.95 21284.68 21284.59 21284.97
+         8        9       10       11       12       13       14
+1 21284.96 21284.71 21284.43 21284.57 21285.61 21285.24 21285.24
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+Notice  : There is no Variance: Job may fail.
+[1] "Update 21"
+[1] "Convergence = FALSE"
+  Iteration       1        2       3        4        5        6        7
+1    LogLik 21284.8 21285.48 21285.5 21286.41 21284.74 21285.28 21285.25
+         8        9       10       11       12       13       14
+1 21284.67 21284.82 21284.81 21285.01 21286.45 21286.03 21286.03
