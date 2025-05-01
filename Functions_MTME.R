@@ -101,6 +101,40 @@ gebvs_asreml <- function(mod,k,data,TE_fct) {
   return(blup)
 }
 
+gebvs_common_asreml <- function(mod,k,data,TE_fct) {
+  # variance parameters
+  vparams <- mod$vparameters
+  # latent environmental covariates (loadings)
+  Lam <- matrix(vparams[grep('^rr.*vm.*fa', names(vparams))], ncol = k)
+  # specific variances
+  Psi <- diag(vparams[grep(paste0('^',TE_fct,'.*vm'), names(vparams))])
+  
+  # coefficients
+  coefs <- mod$coefficients$random
+  # genotype scores (slopes)
+  f <- coefs[grep('Comp', rownames(coefs))]
+  Lamf <- c(matrix(f, ncol = k) %*% t(Lam)) # common GET effects
+
+  # get gebv for each genotype, by trait-environment combination
+  
+  # vector of GET
+  effects_all <- rownames(coefs)
+  head(effects_all)
+  effects_GET <- effects_all[grepl(paste0('^',TE_fct,'.*vm'), effects_all)]
+  head(effects_GET)
+  GET <- sub(paste0(TE_fct,'_'), '', effects_GET)
+  GET <- sub(':vm\\(.*?\\)', '', GET)
+  head(GET)
+  
+  split_GET <- do.call(rbind, strsplit(GET, '_', fixed = TRUE))
+  
+  blup <- data.frame(TE_fct=split_GET[,1],
+                     G_fct=split_GET[,2],
+                     blup=Lamf)
+  rownames(blup) <- GET
+  return(blup)
+}
+
 # Gen Corr ----
 gcorr_asreml <- function(mod,k,data,TE_fct) {
   # variance parameters
@@ -115,7 +149,7 @@ gcorr_asreml <- function(mod,k,data,TE_fct) {
   # specific variances
   Psi <- diag(vparams[grep(paste0('^',TE_fct,'.*vm'), names(vparams))])
   # Variance covariance matrix
-  Gvar <- LamStar%*%t(LamStar)+diag(Psi)
+  Gvar <- LamStar%*%t(LamStar)+Psi
   rownames(Gvar) <- levels(data$TraitEnv)
   colnames(Gvar) <- levels(data$TraitEnv)
   # Genetic correlation matrix
